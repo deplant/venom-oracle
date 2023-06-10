@@ -90,7 +90,6 @@ public class TokenSequenceTest {
 		CONFIG.addKeys("tip3RootKeys", tip3Owner.credentials());
 		CONFIG.addContract("tip3Root", tip3Root);
 
-
 		logger.log(System.Logger.Level.DEBUG, "TIP3 Root: " + tip3Root.address());
 
 		REFRESH();
@@ -114,7 +113,11 @@ public class TokenSequenceTest {
 		                                    MessageFlag.EXACT_VALUE_GAS,
 		                                    true, TIP3TokenRoot.DEFAULT_ABI(), TIP3TokenWallet.DEFAULT_ABI());
 
-		var tip3OwnerWallet = new TIP3TokenWallet(SDK, tip3Root.walletOf(new Address(tip3Owner.address())).get().value0().makeAddrStd());
+		var tip3OwnerWallet = new TIP3TokenWallet(SDK,
+		                                          tip3Root.walletOf(new Address(tip3Owner.address()))
+		                                                  .get()
+		                                                  .value0()
+		                                                  .makeAddrStd());
 
 		Thread.sleep(1000);
 
@@ -169,7 +172,11 @@ public class TokenSequenceTest {
 		                                      MessageFlag.EXACT_VALUE_GAS,
 		                                      true, TIP3TokenRoot.DEFAULT_ABI());
 
-		var faucetWallet = new TIP3TokenWallet(SDK, tip3Root.walletOf(new Address(faucet.address())).get().value0().makeAddrStd());
+		var faucetWallet = new TIP3TokenWallet(SDK,
+		                                       tip3Root.walletOf(new Address(faucet.address()))
+		                                               .get()
+		                                               .value0()
+		                                               .makeAddrStd());
 
 		CONFIG.addContract("faucetWallet", faucetWallet);
 
@@ -182,7 +189,7 @@ public class TokenSequenceTest {
 		// Get from Faucet
 		// ****************************************************************
 
-		var faucetPayload = faucet
+		faucet
 				.faucet(false)
 				.sendFromTree(tip3Owner,
 				              CurrencyUnit.VALUE(EVER, "0.1"),
@@ -190,9 +197,10 @@ public class TokenSequenceTest {
 				              MessageFlag.EXACT_VALUE_GAS,
 				              true, TIP3TokenRoot.DEFAULT_ABI(), TIP3TokenWallet.DEFAULT_ABI());
 
-		assertEquals(amountToTransfer.subtract(defaultFaucetAmount),faucetWallet.balance().get().value0());
+		assertEquals(amountToTransfer.subtract(defaultFaucetAmount), faucetWallet.balance().get().value0());
 
-		assertEquals(mintedAmount.subtract(amountToTransfer).add(defaultFaucetAmount), tip3OwnerWallet.balance().get().value0());
+		assertEquals(mintedAmount.subtract(amountToTransfer).add(defaultFaucetAmount),
+		             tip3OwnerWallet.balance().get().value0());
 
 		logger.log(System.Logger.Level.DEBUG, "Faucet Wallet balance: " + faucetWallet.balance().get().value0());
 		logger.log(System.Logger.Level.DEBUG, "TIP3 Wallet balance: " + tip3OwnerWallet.balance().get().value0());

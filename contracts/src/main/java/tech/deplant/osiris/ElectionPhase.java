@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum ElectionPhase {
 	FAILURE(0),
-	IDLE(1),
+	READY(1),
 	COMMIT(2),
 	REVEAL(3),
 	SUCCESS(4);

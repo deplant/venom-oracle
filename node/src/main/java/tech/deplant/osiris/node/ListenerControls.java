@@ -5,6 +5,7 @@ import io.helidon.scheduling.Scheduling;
 import io.helidon.scheduling.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tech.deplant.java4ever.binding.EverSdkException;
 import tech.deplant.java4ever.utils.Objs;
 
 import java.util.concurrent.ExecutionException;
@@ -74,18 +75,14 @@ public abstract class ListenerControls {
 
 	abstract protected void mainLoop();
 
-	abstract protected void mainLoopIteration() throws ExecutionException, InterruptedException, JsonProcessingException;
+	abstract protected void mainLoopIteration(Object obj) throws ExecutionException, InterruptedException, JsonProcessingException, EverSdkException;
 
 
-	public void mainLoopIterationWrapper() {
+	public void mainLoopIterationWrapper(Object obj) {
 		try {
-			mainLoopIteration();
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
+			mainLoopIteration(obj);
+		} catch (ExecutionException | InterruptedException | JsonProcessingException | EverSdkException ex) {
+			log.error(ex);
 		}
 	}
 

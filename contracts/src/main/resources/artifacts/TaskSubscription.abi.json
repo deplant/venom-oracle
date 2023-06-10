@@ -64,6 +64,7 @@
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_taskAddress","type":"address"},
 		{"name":"_oracleAddress","type":"address"},
-		{"name":"_lastTx","type":"uint64"}
+		{"name":"_lastTx","type":"uint64"},
+		{"name":"nonce_","type":"uint8"}
 	]
 }

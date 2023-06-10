@@ -25,7 +25,8 @@ public class TestContext {
 
 	public static final System.Logger logger = System.getLogger(TestContext.class.getName());
 
-	public static final String EXPLORER_CONFIG_PATH = System.getProperty("user.home") + "/.deplant/explorer.json";
+	public static final String EXPLORER_VENOM_DEVNET_PATH = System.getProperty("user.home") + "/.deplant/explorer-venom-devnet.json";
+	public static final String EXPLORER_LOCAL_NODE_PATH = System.getProperty("user.home") + "/.deplant/explorer-se.json";
 	public static final String LOCAL_CONFIG_PATH = System.getProperty("user.home") + "/.deplant/local.json";
 	public final static StoredTaskTemplate[] TEMPLATES = {new EverUsdMedianizedTemplate()};
 	public final static String CUSTOM_TASK_STATE_1 = """
@@ -118,14 +119,11 @@ public class TestContext {
 
 	public static void INIT() throws IOException {
 
-		OnchainConfig explorerConfig = null;
+		OnchainConfig explorerLocalNodeConf = OnchainConfig.LOAD_IF_EXISTS(EXPLORER_LOCAL_NODE_PATH);
+
+		OnchainConfig explorerVenomDevNetConf = OnchainConfig.LOAD_IF_EXISTS(EXPLORER_VENOM_DEVNET_PATH);
+
 		LocalConfig environmentConfig = null;
-		try {
-			explorerConfig = OnchainConfig.LOAD(EXPLORER_CONFIG_PATH);
-		} catch (Exception e) {
-			explorerConfig = OnchainConfig.EMPTY(EXPLORER_CONFIG_PATH);
-			warn(logger, e.getMessage());
-		}
 		try {
 			environmentConfig = LocalConfig.LOAD(LOCAL_CONFIG_PATH);
 		} catch (Exception e) {
@@ -139,14 +137,14 @@ public class TestContext {
 
 		}
 		SDK_LOCAL_NODE = Sdk.builder()
-		         .explorerConfig(explorerConfig)
+		         .explorerConfig(explorerLocalNodeConf)
 		         .environmentConfig(environmentConfig)
 		         .networkEndpoints(System.getenv("LOCAL_NODE_ENDPOINT"))
 		         .build(AbsolutePathLoader.ofSystemEnv("TON_CLIENT_LIB"));
 
 
 		SDK_VENOM_DEVNET = Sdk.builder()
-		                      .explorerConfig(explorerConfig)
+		                      .explorerConfig(explorerVenomDevNetConf)
 		                      .environmentConfig(environmentConfig)
 		                      .networkEndpoints("https://gql-devnet.venom.network/graphql")
 		                      .build(AbsolutePathLoader.ofSystemEnv("TON_CLIENT_LIB"));

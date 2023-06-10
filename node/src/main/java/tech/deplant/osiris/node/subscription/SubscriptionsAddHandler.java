@@ -3,9 +3,10 @@ package tech.deplant.osiris.node.subscription;
 import io.helidon.webserver.Handler;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
-import tech.deplant.osiris.node.OracleNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tech.deplant.osiris.TaskType;
+import tech.deplant.osiris.node.OracleNode;
 
 public record SubscriptionsAddHandler(OracleNode node) implements Handler {
 
@@ -14,12 +15,14 @@ public record SubscriptionsAddHandler(OracleNode node) implements Handler {
 	@Override
 	public void accept(final ServerRequest req, final ServerResponse res) {
 		final String taskAddress = req.path().param("task");
+		final String type = req.path().param("type");
 		try {
-			logger.debug(taskAddress);
-			node().subscriptionManager().subscribe(taskAddress);
-			res.send("Subscribed to: " + taskAddress);
+			logger.debug("Address:" + taskAddress);
+			node().subscriptionManager().subscribe(taskAddress, TaskType.valueOf(type.toUpperCase()));
+			res.send("Subscribed. Type: %s. Address: %s".formatted(type, taskAddress));
 		} catch (final Exception ex) {
 			logger.error(ex);
+			res.send("Error! " + ex);
 		}
 	}
 }

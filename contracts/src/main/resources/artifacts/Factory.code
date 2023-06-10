@@ -242,7 +242,7 @@ DICTUSETREF
 SETGLOB 11
 .loc Factory.tsol, 0
 
-.macro acceptFactorySettingsUpdate
+.macro acceptTaskStorageAddress
 DROP
 GETGLOB 6
 THROWIFNOT 76
@@ -252,23 +252,35 @@ IFREF {
 	CALL $c4_to_c7$
 }
 .loc Factory.tsol, 65
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDREF
+ENDS
+CTOS
+LDMSGADDR
 ENDS
 .loc Factory.tsol, 0
 CALLREF {
-	CALL $acceptFactorySettingsUpdate_340a1e02_internal_macro$
+	CALL $acceptTaskStorageAddress_4904ef1a_internal_macro$
 }
 CALLREF {
 	CALL $c7_to_c4$
 }
 THROW 0
 
-.macro acceptFactorySettingsUpdate_340a1e02_internal_macro
+.macro acceptTaskStorageAddress_4904ef1a_internal_macro
 .loc Factory.tsol, 65
 DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc Factory.tsol, 148
+.loc Factory.tsol, 152
 PUSHINT 25000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -281,6 +293,61 @@ CALLREF {
 PUSHINT 0
 RAWRESERVE
 .loc Factory.tsol, 66
+SWAP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 1
+STUR 111
+SWAP
+NEWC
+STSLICECONST x79a88707
+STSLICE
+STBREFR
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc Factory.tsol, 0
+
+.macro acceptFactorySettingsUpdate
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc Factory.tsol, 69
+ENDS
+.loc Factory.tsol, 0
+CALLREF {
+	CALL $acceptFactorySettingsUpdate_340a1e02_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro acceptFactorySettingsUpdate_340a1e02_internal_macro
+.loc Factory.tsol, 69
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc Factory.tsol, 152
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc Factory.tsol, 70
 GETGLOB 9
 NEWC
 STSLICECONST x62_
@@ -324,7 +391,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc Factory.tsol, 69
+.loc Factory.tsol, 73
 LDU 8
 LDREF
 LDREF
@@ -341,12 +408,12 @@ IFREF {
 THROW 0
 
 .macro publishCustomTask_a0e35e7c_internal_macro
-.loc Factory.tsol, 69
+.loc Factory.tsol, 73
 DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc Factory.tsol, 148
+.loc Factory.tsol, 152
 PUSHINT 25000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -358,34 +425,34 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc Factory.tsol, 70
+.loc Factory.tsol, 74
 PUSHREF {
 	.blob x4e6f206c657373207468616e20332076616c696461746f727320706f737369626c65
 }
 PUSH S2
 GTINT 2
 THROWARGIFNOT 307
-.loc Factory.tsol, 71
+.loc Factory.tsol, 75
 PUSHREF {
 	.blob x56616c756520746f6f206c6f77
 }
 DEPTH
 ADDCONST -2
 PICK
-PUSHINT 2000000000
+PUSHINT 3000000000
 GEQ
 THROWARGIFNOT 666
-.loc Factory.tsol, 72
+.loc Factory.tsol, 76
 PUSHREFSLICE {
 	.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 }
-.loc Factory.tsol, 73
+.loc Factory.tsol, 77
 PUSH S5
 PUSHCONT {
 	PUSH S5
 	EQINT 1
 	PUSHCONT {
-		.loc Factory.tsol, 86
+		.loc Factory.tsol, 90
 		GETGLOB 10
 		PUSH S4
 		PUSHINT 1
@@ -439,7 +506,7 @@ PUSHCONT {
 		ENDC
 		CTOS
 		ROLLREV 3
-		PUSHINT 500000
+		PUSHINT 1000000
 		.loc ../contracts-common/std/GasManagement.tsol, 24
 		MYADDR
 		PARSEMSGADDR
@@ -509,7 +576,7 @@ PUSHCONT {
 		PUSH S5
 		EQINT 2
 		PUSHCONT {
-			.loc Factory.tsol, 98
+			.loc Factory.tsol, 102
 			GETGLOB 10
 			PUSH S4
 			PUSHINT 0
@@ -563,7 +630,7 @@ PUSHCONT {
 			ENDC
 			CTOS
 			ROLLREV 3
-			PUSHINT 500000
+			PUSHINT 1000000
 			.loc ../contracts-common/std/GasManagement.tsol, 24
 			MYADDR
 			PARSEMSGADDR
@@ -633,7 +700,7 @@ PUSHCONT {
 			PUSH S5
 			EQINT 3
 			PUSHCONT {
-				.loc Factory.tsol, 110
+				.loc Factory.tsol, 114
 				GETGLOB 10
 				PUSH S4
 				PUSHINT 1
@@ -687,7 +754,7 @@ PUSHCONT {
 				ENDC
 				CTOS
 				ROLLREV 3
-				PUSHINT 500000
+				PUSHINT 1000000
 				.loc ../contracts-common/std/GasManagement.tsol, 24
 				MYADDR
 				PARSEMSGADDR
@@ -754,7 +821,7 @@ PUSHCONT {
 				NIP
 			}
 			PUSHCONT {
-				.loc Factory.tsol, 122
+				.loc Factory.tsol, 126
 				THROW 306
 			}
 			IFELSE
@@ -764,7 +831,7 @@ PUSHCONT {
 	IFELSE
 }
 PUSHCONT {
-	.loc Factory.tsol, 74
+	.loc Factory.tsol, 78
 	GETGLOB 10
 	PUSH S4
 	PUSHINT 0
@@ -818,7 +885,7 @@ PUSHCONT {
 	ENDC
 	CTOS
 	ROLLREV 3
-	PUSHINT 500000
+	PUSHINT 1000000
 	.loc ../contracts-common/std/GasManagement.tsol, 24
 	MYADDR
 	PARSEMSGADDR
@@ -885,7 +952,7 @@ PUSHCONT {
 	NIP
 }
 IFELSE
-.loc Factory.tsol, 126
+.loc Factory.tsol, 130
 PUSHINT 500000000
 PUSHINT 2
 ROT
@@ -913,7 +980,7 @@ BLKDROP 5
 CALL $_getTaskAddress_3518d5c4_internal_macro$
 
 .macro _getTaskAddress_3518d5c4_internal_macro
-.loc Factory.tsol, 156
+.loc Factory.tsol, 160
 PUSHINT 0
 NEWC
 STU 256
@@ -954,7 +1021,7 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc Factory.tsol, 167
+.loc Factory.tsol, 171
 HASHCU
 NEWC
 STSLICECONST x801_
@@ -1306,7 +1373,7 @@ IFJMPREF {
 	}
 }
 DUP
-PUSHINT 1037637251
+PUSHINT 928281448
 LEQ
 IFJMPREF {
 	DUP
@@ -1322,22 +1389,28 @@ IFJMPREF {
 		CALL $setMinStake$
 	}
 	DUP
+	PUSHINT 881620284
+	EQUAL
+	IFJMPREF {
+		CALL $acceptTaskStorageAddress$
+	}
+	DUP
 	PUSHINT 928281448
 	EQUAL
 	IFJMPREF {
 		CALL $acceptFactorySettingsUpdate$
 	}
+}
+DUP
+PUSHINT 1743577355
+LEQ
+IFJMPREF {
 	DUP
 	PUSHINT 1037637251
 	EQUAL
 	IFJMPREF {
 		CALL $_token$
 	}
-}
-DUP
-PUSHINT 1756716863
-LEQ
-IFJMPREF {
 	DUP
 	PUSHINT 1538145811
 	EQUAL
@@ -1356,17 +1429,22 @@ IFJMPREF {
 	IFJMPREF {
 		CALL $setTaskCode$
 	}
+}
+DUP
+PUSHINT 1990425145
+LEQ
+IFJMPREF {
 	DUP
 	PUSHINT 1756716863
 	EQUAL
 	IFJMPREF {
 		CALL $constructor$
 	}
-}
-DUP
-PUSHINT 1990425145
-EQUAL
-IFJMPREF {
-	CALL $getTaskAddress$
+	DUP
+	PUSHINT 1990425145
+	EQUAL
+	IFJMPREF {
+		CALL $getTaskAddress$
+	}
 }
 

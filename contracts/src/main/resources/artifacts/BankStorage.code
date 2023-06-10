@@ -24,7 +24,7 @@ ENDS
 CTOS
 LDMSGADDR
 ENDS
-.loc BankStorage.tsol, 288
+.loc BankStorage.tsol, 289
 GETGLOB 9
 PARSEMSGADDR
 INDEX 3
@@ -34,14 +34,14 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 263
+	.loc BankStorage.tsol, 264
 	GETGLOB 10
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 309
-.loc BankStorage.tsol, 289
+.loc BankStorage.tsol, 290
 PUSH S3
 .loc ../contracts-common/std/GasManagement.tsol, 68
 XCHG S4
@@ -55,12 +55,22 @@ GETGLOB 12
 EQUAL
 THROWIFNOT 103
 .loc BankStorage.tsol, 39
-SETGLOB 16
+DEPTH
+ADDCONST -2
+PICK
+PUSH S2
+PUSHINT 400000000
+ADD
+UFITS 128
+GREATER
+THROWIFNOT 666
 .loc BankStorage.tsol, 40
+SETGLOB 16
+.loc BankStorage.tsol, 41
 DUP
 GTINT 0
 PUSHCONT {
-	.loc BankStorage.tsol, 41
+	.loc BankStorage.tsol, 42
 	GETGLOB 13
 	OVER
 	ADD
@@ -69,7 +79,7 @@ PUSHCONT {
 	.loc BankStorage.tsol, 0
 }
 IF
-.loc BankStorage.tsol, 281
+.loc BankStorage.tsol, 282
 DROP
 PUSHINT 25000
 GETGLOB 13
@@ -86,8 +96,8 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc BankStorage.tsol, 45
-PUSHINT 100000000
+.loc BankStorage.tsol, 46
+PUSHINT 200000000
 MYADDR
 GETGLOB 16
 TRUE
@@ -96,7 +106,7 @@ STSLICECONST x6_
 STI 1
 STSLICECONST x1_
 STSLICE
-PUSHINT 2820045005182170565370280386138670788247553
+PUSHINT 2836270932865091901709438187167483588247553
 STUR 143
 ROTREV
 PUSHSLICE x31edd4c7452373c7
@@ -132,7 +142,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 74
+.loc BankStorage.tsol, 75
 OVER
 PUSHCONT {
 	LDREF
@@ -152,7 +162,7 @@ CALLREF {
 THROW 0
 
 .macro onTokenRootCallback_44e1f4a4_internal_macro
-.loc BankStorage.tsol, 281
+.loc BankStorage.tsol, 282
 PUSHINT 25000
 GETGLOB 13
 GRAMTOGAS
@@ -172,12 +182,12 @@ RAWRESERVE
 GETGLOB 11
 .loc ../contracts-common/std/GasManagement.tsol, 68
 SWAP
-.loc BankStorage.tsol, 75
+.loc BankStorage.tsol, 76
 GETGLOB 9
 GETGLOB 16
 SDEQ
 THROWIFNOT 102
-.loc BankStorage.tsol, 77
+.loc BankStorage.tsol, 78
 SETGLOB 15
 .loc ../contracts-common/std/GasManagement.tsol, 35
 NEWC
@@ -199,7 +209,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 83
+.loc BankStorage.tsol, 84
 OVER
 PUSHCONT {
 	LDREF
@@ -225,7 +235,7 @@ CALLREF {
 THROW 0
 
 .macro addAllowance_cbcb5433_internal_macro
-.loc BankStorage.tsol, 83
+.loc BankStorage.tsol, 84
 DEPTH
 ADDCONST -5
 PICK
@@ -240,14 +250,30 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 84
+.loc BankStorage.tsol, 282
+PUSHINT 25000
+GETGLOB 13
+GRAMTOGAS
+ADD
+UFITS 128
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc BankStorage.tsol, 85
 TRIPLE
 GETGLOB 19
 SWAP
@@ -264,6 +290,17 @@ ROTREV
 PUSHINT 267
 DICTSETREF
 SETGLOB 19
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
 .loc BankStorage.tsol, 0
 
 .macro removeAllowance
@@ -275,7 +312,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 87
+.loc BankStorage.tsol, 88
 OVER
 PUSHCONT {
 	LDREF
@@ -295,7 +332,7 @@ CALLREF {
 THROW 0
 
 .macro removeAllowance_8af86cfa_internal_macro
-.loc BankStorage.tsol, 87
+.loc BankStorage.tsol, 88
 DEPTH
 ADDCONST -5
 PICK
@@ -310,19 +347,46 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 88
+.loc BankStorage.tsol, 282
+PUSHINT 25000
+GETGLOB 13
+GRAMTOGAS
+ADD
+UFITS 128
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc BankStorage.tsol, 89
 GETGLOB 19
 PUSHINT 267
 DICTDEL
 DROP
 SETGLOB 19
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
 .loc BankStorage.tsol, 0
 
 .macro transfer
@@ -334,7 +398,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 91
+.loc BankStorage.tsol, 92
 OVER
 PUSHCONT {
 	LDREF
@@ -358,7 +422,7 @@ CALLREF {
 THROW 0
 
 .macro transfer_b5aa1f01_internal_macro
-.loc BankStorage.tsol, 91
+.loc BankStorage.tsol, 92
 DEPTH
 ADDCONST -5
 PICK
@@ -373,14 +437,14 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 92
+.loc BankStorage.tsol, 93
 PUSHREFSLICE {
 	.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 }
@@ -398,7 +462,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 95
+.loc BankStorage.tsol, 96
 OVER
 PUSHCONT {
 	LDREF
@@ -429,7 +493,7 @@ CALLREF {
 THROW 0
 
 .macro requestTransfer_3a8e4f1a_internal_macro
-.loc BankStorage.tsol, 95
+.loc BankStorage.tsol, 96
 DEPTH
 ADDCONST -5
 PICK
@@ -444,14 +508,14 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 281
+.loc BankStorage.tsol, 282
 PUSHINT 25000
 GETGLOB 13
 GRAMTOGAS
@@ -467,13 +531,13 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc BankStorage.tsol, 96
+.loc BankStorage.tsol, 97
 ROLL 5
 PUSHINT 0
 CALLREF {
 	CALL $_getStorageAddress_cfd9db7f_internal_macro$
 }
-.loc BankStorage.tsol, 97
+.loc BankStorage.tsol, 98
 REVERSE 5, 1
 NEWC
 STSLICECONST x62_
@@ -506,7 +570,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 100
+.loc BankStorage.tsol, 101
 ENDS
 .loc BankStorage.tsol, 0
 CALLREF {
@@ -518,7 +582,7 @@ CALLREF {
 THROW 0
 
 .macro redeployTokenWallet_68141ced_internal_macro
-.loc BankStorage.tsol, 100
+.loc BankStorage.tsol, 101
 DEPTH
 ADDCONST -5
 PICK
@@ -533,14 +597,14 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 281
+.loc BankStorage.tsol, 282
 PUSHINT 25000
 GETGLOB 13
 GRAMTOGAS
@@ -556,7 +620,7 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc BankStorage.tsol, 101
+.loc BankStorage.tsol, 102
 PUSHINT 100000000
 MYADDR
 GETGLOB 16
@@ -600,7 +664,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 105
+.loc BankStorage.tsol, 106
 LDU 128
 ENDS
 .loc BankStorage.tsol, 0
@@ -613,7 +677,7 @@ CALLREF {
 THROW 0
 
 .macro depositValue_d2e07d4a_internal_macro
-.loc BankStorage.tsol, 105
+.loc BankStorage.tsol, 106
 DEPTH
 ADDCONST -5
 PICK
@@ -628,14 +692,14 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 106
+.loc BankStorage.tsol, 107
 PUSHINT 0
 CALLREF {
 	CALL $_increaseBalance_ed77d565_internal_macro$
@@ -662,7 +726,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 109
+.loc BankStorage.tsol, 110
 LDU 128
 ENDS
 .loc BankStorage.tsol, 0
@@ -675,7 +739,7 @@ CALLREF {
 THROW 0
 
 .macro withdrawValue_d11bd24d_internal_macro
-.loc BankStorage.tsol, 109
+.loc BankStorage.tsol, 110
 DEPTH
 ADDCONST -5
 PICK
@@ -690,19 +754,19 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 110
+.loc BankStorage.tsol, 111
 PUSHINT 0
 CALLREF {
 	CALL $_decreaseBalance_4dc3e50d_internal_macro$
 }
-.loc BankStorage.tsol, 111
+.loc BankStorage.tsol, 112
 GETGLOB 11
 NEWC
 STSLICECONST x62_
@@ -723,7 +787,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 114
+.loc BankStorage.tsol, 115
 LDU 128
 ENDS
 .loc BankStorage.tsol, 0
@@ -736,7 +800,7 @@ CALLREF {
 THROW 0
 
 .macro withdrawToken_b0394922_internal_macro
-.loc BankStorage.tsol, 114
+.loc BankStorage.tsol, 115
 DEPTH
 ADDCONST -5
 PICK
@@ -751,35 +815,38 @@ DUP
 PUSHCONT {
 	DROP
 	GETGLOB 9
-	.loc BankStorage.tsol, 274
+	.loc BankStorage.tsol, 275
 	GETGLOB 11
 	.loc BankStorage.tsol, 0
 	SDEQ
 }
 IF
 THROWIFNOT 201
-.loc BankStorage.tsol, 115
+.loc BankStorage.tsol, 116
 PUSHINT 0
 OVER
 CALLREF {
 	CALL $_decreaseBalance_4dc3e50d_internal_macro$
 }
-.loc BankStorage.tsol, 116
+.loc BankStorage.tsol, 117
 PUSHREF {
 }
-.loc BankStorage.tsol, 117
+.loc BankStorage.tsol, 118
 TRUE
-.loc BankStorage.tsol, 274
+.loc BankStorage.tsol, 275
 GETGLOB 11
 .loc BankStorage.tsol, 0
 PUSHINT 0
-.loc BankStorage.tsol, 274
+.loc BankStorage.tsol, 275
 GETGLOB 11
 .loc BankStorage.tsol, 0
 ROLL 5
 GETGLOB 15
+TRUE
 NEWC
-STSLICECONST x62_
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
 STSLICE
 PUSHINT 1
 STUR 111
@@ -809,7 +876,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 123
+.loc BankStorage.tsol, 124
 OVER
 PUSHCONT {
 	LDREF
@@ -836,7 +903,7 @@ CALLREF {
 THROW 0
 
 .macro acceptRequestTransfer_b2c213c9_internal_macro
-.loc BankStorage.tsol, 123
+.loc BankStorage.tsol, 124
 DEPTH
 ADDCONST -5
 PICK
@@ -862,14 +929,14 @@ IF
 THROWIFNOT 100
 .loc BankSecurity.tsol, 27
 DROP2
-.loc BankStorage.tsol, 124
+.loc BankStorage.tsol, 125
 PUSH3 S3, S4, S1
 PUSH S3
 CALLREF {
 	CALL $_hasAllowance_31cb5420_internal_macro$
 }
 PUSHCONT {
-	.loc BankStorage.tsol, 125
+	.loc BankStorage.tsol, 126
 	PUSH3 S4, S2, S1
 	PUSH S3
 	TRUE
@@ -892,7 +959,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc BankStorage.tsol, 133
+.loc BankStorage.tsol, 134
 OVER
 PUSHCONT {
 	LDREF
@@ -926,7 +993,7 @@ CALLREF {
 THROW 0
 
 .macro onAcceptTokensTransfer_e63f2284_internal_macro
-.loc BankStorage.tsol, 293
+.loc BankStorage.tsol, 294
 GETGLOB 9
 PARSEMSGADDR
 INDEX 3
@@ -937,14 +1004,14 @@ GETGLOB 15
 SDEQ
 AND
 THROWIFNOT 310
-.loc BankStorage.tsol, 142
+.loc BankStorage.tsol, 143
 PUSHINT 0
 DUP
-.loc BankStorage.tsol, 144
+.loc BankStorage.tsol, 145
 PUSHREFSLICE {
 	.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 }
-.loc BankStorage.tsol, 145
+.loc BankStorage.tsol, 146
 PUSH S3
 HASHCU
 PUSHREF {
@@ -952,7 +1019,7 @@ PUSHREF {
 HASHCU
 NEQ
 PUSHCONT {
-	.loc BankStorage.tsol, 146
+	.loc BankStorage.tsol, 147
 	PUSH S3
 	CTOS
 	LDI 1
@@ -965,15 +1032,15 @@ PUSHCONT {
 	.loc BankStorage.tsol, 0
 }
 IF
-.loc BankStorage.tsol, 148
+.loc BankStorage.tsol, 149
 PUSH2 S2, S7
 CALLREF {
 	CALL $_increaseBalance_ed77d565_internal_macro$
 }
-.loc BankStorage.tsol, 149
+.loc BankStorage.tsol, 150
 SWAP
 PUSHCONT {
-	.loc BankStorage.tsol, 150
+	.loc BankStorage.tsol, 151
 	PUSH3 S6, S1, S0
 	PUSH S8
 	GETGLOB 11
@@ -998,7 +1065,7 @@ PUSHCONT {
 	SENDRAWMSG
 }
 PUSHCONT {
-	.loc BankStorage.tsol, 152
+	.loc BankStorage.tsol, 153
 	PUSH S5
 	.loc ../contracts-common/std/GasManagement.tsol, 35
 	NEWC
@@ -1020,40 +1087,40 @@ BLKDROP 8
 CALL $_increaseBalance_ed77d565_internal_macro$
 
 .macro _increaseBalance_ed77d565_internal_macro
-.loc BankStorage.tsol, 160
+.loc BankStorage.tsol, 161
 OVER
 GTINT 0
 PUSHCONT {
-	.loc BankStorage.tsol, 161
+	.loc BankStorage.tsol, 162
 	GETGLOB 13
 	PUSH S2
 	ADD
 	UFITS 128
 	SETGLOB 13
-	.loc BankStorage.tsol, 281
-	PUSHINT 25000
-	GETGLOB 13
-	GRAMTOGAS
-	ADD
-	UFITS 128
-	.loc ../contracts-common/std/GasManagement.tsol, 24
-	MYADDR
-	PARSEMSGADDR
-	THIRD
-	CALLREF {
-		CALL $__gasToTon_macro$
-	}
-	.loc ../contracts-common/std/GasManagement.tsol, 0
-	PUSHINT 0
-	RAWRESERVE
 	.loc BankStorage.tsol, 0
 }
 IF
-.loc BankStorage.tsol, 164
+.loc BankStorage.tsol, 282
+PUSHINT 25000
+GETGLOB 13
+GRAMTOGAS
+ADD
+UFITS 128
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc BankStorage.tsol, 165
 DUP
 GTINT 0
 PUSHCONT {
-	.loc BankStorage.tsol, 165
+	.loc BankStorage.tsol, 166
 	GETGLOB 14
 	OVER
 	ADD
@@ -1062,71 +1129,58 @@ PUSHCONT {
 	.loc BankStorage.tsol, 0
 }
 IF
-.loc BankStorage.tsol, 167
-PUSHINT 0
-XCHG S2
-GETGLOB 11
-PUSHSLICE xc00000000000000000000000002dcc6031
-NEWC
-STSLICE
-STSLICE
-STU 128
-STU 128
-STU 8
-ENDC
-PUSHINT 0
-SENDRAWMSG
 .loc BankStorage.tsol, 0
+DROP2
 
 .globl	_decreaseBalance_4dc3e50d_internal
 .type	_decreaseBalance_4dc3e50d_internal, @function
 CALL $_decreaseBalance_4dc3e50d_internal_macro$
 
 .macro _decreaseBalance_4dc3e50d_internal_macro
-.loc BankStorage.tsol, 171
+.loc BankStorage.tsol, 172
 OVER
 GTINT 0
 PUSHCONT {
-	.loc BankStorage.tsol, 172
+	.loc BankStorage.tsol, 173
 	OVER
 	GETGLOB 13
 	LEQ
 	THROWIFNOT 311
-	.loc BankStorage.tsol, 173
+	.loc BankStorage.tsol, 174
 	GETGLOB 13
 	PUSH S2
 	SUB
 	UFITS 128
 	SETGLOB 13
-	.loc BankStorage.tsol, 281
-	PUSHINT 25000
-	GETGLOB 13
-	GRAMTOGAS
-	ADD
-	UFITS 128
-	.loc ../contracts-common/std/GasManagement.tsol, 24
-	MYADDR
-	PARSEMSGADDR
-	THIRD
-	CALLREF {
-		CALL $__gasToTon_macro$
-	}
-	.loc ../contracts-common/std/GasManagement.tsol, 0
-	PUSHINT 0
-	RAWRESERVE
 	.loc BankStorage.tsol, 0
 }
 IF
-.loc BankStorage.tsol, 176
+.loc BankStorage.tsol, 282
+PUSHINT 25000
+GETGLOB 13
+GRAMTOGAS
+ADD
+UFITS 128
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc BankStorage.tsol, 177
 DUP
 GTINT 0
 PUSHCONT {
-	.loc BankStorage.tsol, 177
+	.loc BankStorage.tsol, 178
 	DUP
 	GETGLOB 14
 	LEQ
 	THROWIFNOT 311
-	.loc BankStorage.tsol, 178
+	.loc BankStorage.tsol, 179
 	GETGLOB 14
 	OVER
 	SUB
@@ -1135,39 +1189,26 @@ PUSHCONT {
 	.loc BankStorage.tsol, 0
 }
 IF
-.loc BankStorage.tsol, 180
-PUSHINT 0
-XCHG S2
-GETGLOB 11
-PUSHSLICE xc000000000000000000000000018616fe4
-NEWC
-STSLICE
-STSLICE
-STU 128
-STU 128
-STU 8
-ENDC
-PUSHINT 0
-SENDRAWMSG
 .loc BankStorage.tsol, 0
+DROP2
 
 .globl	_transfer_de8aa31b_internal
 .type	_transfer_de8aa31b_internal, @function
 CALL $_transfer_de8aa31b_internal_macro$
 
 .macro _transfer_de8aa31b_internal_macro
-.loc BankStorage.tsol, 184
+.loc BankStorage.tsol, 185
 GETGLOB 15
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 312
-.loc BankStorage.tsol, 185
+.loc BankStorage.tsol, 186
 OVER2
 CALLREF {
 	CALL $_decreaseBalance_4dc3e50d_internal_macro$
 }
-.loc BankStorage.tsol, 186
+.loc BankStorage.tsol, 187
 ROLL 3
 ROT
 NEWC
@@ -1175,12 +1216,12 @@ STI 1
 STU 128
 STSLICE
 ENDC
-.loc BankStorage.tsol, 187
+.loc BankStorage.tsol, 188
 SWAP2
 CALLREF {
 	CALL $_getStorageAddress_cfd9db7f_internal_macro$
 }
-.loc BankStorage.tsol, 188
+.loc BankStorage.tsol, 189
 SWAP
 TRUE
 PUSH S2
@@ -1216,7 +1257,7 @@ SENDRAWMSG
 CALL $_hasAllowance_31cb5420_internal_macro$
 
 .macro _hasAllowance_31cb5420_internal_macro
-.loc BankStorage.tsol, 192
+.loc BankStorage.tsol, 193
 ROLL 3
 GETGLOB 19
 PUSHINT 267
@@ -1232,21 +1273,21 @@ IFREF {
 		TRIPLE
 	}
 }
-.loc BankStorage.tsol, 193
+.loc BankStorage.tsol, 194
 DUP
 ISNULL
 PUSHCONT {
-	.loc BankStorage.tsol, 197
+	.loc BankStorage.tsol, 198
 	BLKDROP 4
 	FALSE
 	.loc BankStorage.tsol, 0
 }
 PUSHCONT {
-	.loc BankStorage.tsol, 194
+	.loc BankStorage.tsol, 195
 	DUP
 	ISNULL
 	THROWIF 63
-	.loc BankStorage.tsol, 195
+	.loc BankStorage.tsol, 196
 	ROLL 3
 	OVER
 	FIRST
@@ -1270,10 +1311,10 @@ IFELSE
 CALL $_hasLocked_d515fd7b_internal_macro$
 
 .macro _hasLocked_d515fd7b_internal_macro
-.loc BankStorage.tsol, 202
+.loc BankStorage.tsol, 203
 PUSHINT 0
 DUP
-.loc BankStorage.tsol, 203
+.loc BankStorage.tsol, 204
 NEWDICT
 PAIR
 PUSH2 S2, S2
@@ -1319,7 +1360,7 @@ PUSHCONT {
 }
 WHILE
 DROP2
-.loc BankStorage.tsol, 205
+.loc BankStorage.tsol, 206
 PUSHINT 0
 PUSHCONT {
 	PUSH2 S0, S1
@@ -1327,18 +1368,18 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc BankStorage.tsol, 206
+	.loc BankStorage.tsol, 207
 	PUSH2 S0, S1
 	SECOND
 	PUSHINT 32
 	DICTUGET
 	THROWIFNOT 50
 	PLDU 64
-	.loc BankStorage.tsol, 208
+	.loc BankStorage.tsol, 209
 	PUSH2 S0, S5
 	GEQ
 	PUSHCONT {
-		.loc BankStorage.tsol, 209
+		.loc BankStorage.tsol, 210
 		PUSH2 S0, S4
 		PUSHINT 64
 		DICTUGET
@@ -1357,7 +1398,7 @@ PUSHCONT {
 		NOW
 		LEQ
 		PUSHCONT {
-			.loc BankStorage.tsol, 213
+			.loc BankStorage.tsol, 214
 			PUSH2 S0, S4
 			PUSHINT 64
 			DICTUDEL
@@ -1370,13 +1411,13 @@ PUSHCONT {
 	IFELSE
 	.loc BankStorage.tsol, 0
 	DROP
-	.loc BankStorage.tsol, 205
+	.loc BankStorage.tsol, 206
 	INC
 	.loc BankStorage.tsol, 0
 }
 WHILE
 DROP2
-.loc BankStorage.tsol, 217
+.loc BankStorage.tsol, 218
 ROLL 3
 GEQ
 BLKDROP2 2, 1
@@ -1387,12 +1428,12 @@ BLKDROP2 2, 1
 CALL $_lock_5a6e214e_internal_macro$
 
 .macro _lock_5a6e214e_internal_macro
-.loc BankStorage.tsol, 223
+.loc BankStorage.tsol, 224
 DUP
 NOW
 GREATER
 THROWIFNOT 100
-.loc BankStorage.tsol, 225
+.loc BankStorage.tsol, 226
 DUP
 GETGLOB 17
 PUSHINT 64
@@ -1402,11 +1443,11 @@ PUSHCONT {
 	PLDU 128
 }
 IF
-.loc BankStorage.tsol, 226
+.loc BankStorage.tsol, 227
 DUP
 ISNULL
 PUSHCONT {
-	.loc BankStorage.tsol, 231
+	.loc BankStorage.tsol, 232
 	PUSH S2
 	NEWC
 	STU 128
@@ -1416,7 +1457,7 @@ PUSHCONT {
 	DICTUADDB
 }
 PUSHCONT {
-	.loc BankStorage.tsol, 228
+	.loc BankStorage.tsol, 229
 	PUSH3 S2, S0, S0
 	ISNULL
 	THROWIF 63
@@ -1440,7 +1481,7 @@ BLKDROP 3
 CALL $_unlock_9111eb48_internal_macro$
 
 .macro _unlock_9111eb48_internal_macro
-.loc BankStorage.tsol, 238
+.loc BankStorage.tsol, 239
 DUP
 GETGLOB 17
 PUSHINT 64
@@ -1448,7 +1489,7 @@ DICTUGET
 NULLSWAPIFNOT
 NIP
 PUSHCONT {
-	.loc BankStorage.tsol, 240
+	.loc BankStorage.tsol, 241
 	DUP
 	GETGLOB 17
 	PUSHINT 64
@@ -1466,7 +1507,7 @@ DROP
 CALL $_getStorageAddress_cfd9db7f_internal_macro$
 
 .macro _getStorageAddress_cfd9db7f_internal_macro
-.loc BankStorage.tsol, 248
+.loc BankStorage.tsol, 249
 PUSHINT 0
 NEWC
 STU 256
@@ -1474,7 +1515,7 @@ PUSHINT 0
 NEWDICT
 PUSHINT 64
 DICTUSETB
-.loc BankStorage.tsol, 263
+.loc BankStorage.tsol, 264
 GETGLOB 10
 .loc BankStorage.tsol, 0
 PUSHINT 1
@@ -1496,7 +1537,7 @@ DICTUSETB
 NEWC
 STDICT
 ENDC
-.loc BankStorage.tsol, 267
+.loc BankStorage.tsol, 268
 MYCODE
 .loc BankStorage.tsol, 0
 NEWC
@@ -1505,7 +1546,7 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc BankStorage.tsol, 259
+.loc BankStorage.tsol, 260
 HASHCU
 NEWC
 STSLICECONST x801_

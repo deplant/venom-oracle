@@ -7,6 +7,7 @@ import "./BankStorage.tsol";
 import "./int/IBankRoot.tsol";
 import "./int/IBankStorage.tsol";
 import "./int/IStorageOwner.tsol";
+import "../task/int/IFactory.tsol";
 
 contract BankRoot is BankSecurity, IBankRoot, BankConfig, Types, GasManagement {
 
@@ -35,7 +36,11 @@ contract BankRoot is BankSecurity, IBankRoot, BankConfig, Types, GasManagement {
 
     ///@dev from bank Owner or from factory
     function deployStorageTo(address owner_, uint8 type_, uint128 deployWalletValue_) override external internalMsg reserveGas {
-        require(msg.sender.value != 0 && (msg.sender == $intOwner() || msg.sender == _factory), NOT_MY_OWNER);
+        require(msg.sender.value > 0 && (msg.sender == $intOwner() || msg.sender == _factory), NOT_MY_OWNER);
+        if (msg.sender == _factory) {
+            address taskStorage = _getStorageAddress(owner_, type_);
+            IFactory(msg.sender).acceptTaskStorageAddress{ value: 500 milli, flag: EXACT_VALUE_GAS }(owner_, taskStorage);
+        }
         _deployStorage(owner_, type_, deployWalletValue_);
     }
 
@@ -59,8 +64,8 @@ contract BankRoot is BankSecurity, IBankRoot, BankConfig, Types, GasManagement {
     // ****************************************************************
     // Internal (BankSecurity)
     // ****************************************************************
-    function _deployStorage(address owner_, uint8 type_, uint128 deployWalletValue_) internal view {
-        new BankStorage{
+    function _deployStorage(address owner_, uint8 type_, uint128 deployWalletValue_) internal view returns (address) {
+        return new BankStorage{
                 value: 0,
                 flag: ALL_UNRESERVED,
                 code: _storageCode,

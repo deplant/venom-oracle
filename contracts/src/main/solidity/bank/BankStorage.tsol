@@ -36,13 +36,14 @@ contract BankStorage is BankSecurity, Types, GasManagement, BankConfig, IBankSto
     constructor(address owner_, uint8 type_, uint128 initialDeposit_, address token_) public onlyBank returnAllUnreservedTo(owner_) {
         require(owner_ == _owner, 102);
         require(type_ == _type, 103);
+        require(msg.value > initialDeposit_ + 0.4 ever, NOT_ENOUGH_VALUE);
         _token = token_;
         if (initialDeposit_ > 0) {
             _valueBalance += initialDeposit_;
             //emit depositReceived{ value: 0, flag: Flags.FEE_EXTRA }(_owner, initialDeposit_, 0);
         }
         $reserve($gasFloor());
-        ITokenRoot(_token).deployWallet{value: 200 milli, flag: FEE_EXTRA, bounce: true, callback: BankStorage.onTokenRootCallback}(address(this), 100 milli);
+        ITokenRoot(_token).deployWallet{value: 300 milli, flag: FEE_EXTRA, bounce: true, callback: BankStorage.onTokenRootCallback}(address(this), 200 milli);
     }
 
     // ****************************************************************
@@ -114,7 +115,7 @@ contract BankStorage is BankSecurity, Types, GasManagement, BankConfig, IBankSto
     function withdrawToken(uint128 amount_) override external internalMsg onlyIntOwner {
         _decreaseBalance(0, amount_);
         TvmCell empty;
-        ITokenWallet(_tokenWallet).transfer{value: 0, flag: ALL_UNRESERVED}(amount_, $intOwner(), 0, $intOwner(), true, empty);
+        ITokenWallet(_tokenWallet).transfer{value: 0, bounce: true, flag: ALL_UNRESERVED}(amount_, $intOwner(), 0, $intOwner(), true, empty);
     }
 
     // ****************************************************************
@@ -122,7 +123,6 @@ contract BankStorage is BankSecurity, Types, GasManagement, BankConfig, IBankSto
     // ****************************************************************
     function acceptRequestTransfer(address task_, address consumer_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_) override external internalMsg onlyOtherStorage(task_, type_)  {
         if (_hasAllowance(consumer_, task_, valueAmount_, tokenAmount_)) {
-
             _transfer(task_, type_, valueAmount_, tokenAmount_, true, consumer_);
         }
     }
@@ -160,25 +160,25 @@ contract BankStorage is BankSecurity, Types, GasManagement, BankConfig, IBankSto
     function _increaseBalance(uint128 valueAmount_, uint128 tokenAmount_) internal {
         if (valueAmount_ > 0) {
             _valueBalance += valueAmount_;
-            $reserve($gasFloor());
         }
+        $reserve($gasFloor());
         if (tokenAmount_ > 0) {
             _tokenBalance += tokenAmount_;
         }
-        emit depositIncrease(_owner, valueAmount_, tokenAmount_, 0);
+        //emit depositIncrease(_owner, valueAmount_, tokenAmount_, 0);
     }
 
     function _decreaseBalance(uint128 valueAmount_, uint128 tokenAmount_) internal {
         if (valueAmount_ > 0) {
             require(valueAmount_ <= _valueBalance, NOT_ENOUGH_FUNDS);
             _valueBalance -= valueAmount_;
-            $reserve($gasFloor());
         }
+        $reserve($gasFloor());
         if (tokenAmount_ > 0) {
             require(tokenAmount_ <= _tokenBalance, NOT_ENOUGH_FUNDS);
             _tokenBalance -= tokenAmount_;
         }
-        emit depositDecrease(_owner, valueAmount_, tokenAmount_, 0);
+        //emit depositDecrease(_owner, valueAmount_, tokenAmount_, 0);
     }
 
     function _transfer(address recipient_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_, bool notifyOwner_, address consumer_) internal {

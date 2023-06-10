@@ -7,6 +7,7 @@ import tech.deplant.osiris.model.request.OracleRequest;
 import tech.deplant.osiris.model.task.TaskContext;
 import tech.deplant.osiris.node.ListenerControls;
 import tech.deplant.osiris.node.OracleNode;
+import tech.deplant.osiris.node.queues.CompletedTaskInfo;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -35,13 +36,13 @@ public class TaskProcessor extends ListenerControls {
 	@Override
 	protected void mainLoop() {
 		while (node().requestQueue().hasNext()) {
-			mainLoopIterationWrapper();
+			mainLoopIterationWrapper(null);
 		}
-		log.info("Requests queue is empty.");
+		log.trace("Requests queue is empty.");
 	}
 
 	@Override
-	protected void mainLoopIteration() throws ExecutionException, InterruptedException {
+	protected void mainLoopIteration(Object obj) throws ExecutionException, InterruptedException {
 		try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 			final OracleRequest req = node().requestQueue().poll();
 
@@ -64,15 +65,17 @@ public class TaskProcessor extends ListenerControls {
 				var futureTask = executor.submit(() -> {
 					// get task object for further use
 					var task = taskContext()
-					                 .spawnTask(subscription.template());
+							.spawnTask(subscription.template());
 					try {
 						task.run(req);
 						return task;
-					} catch (ActionProcessingException e) {
-						throw new RuntimeException(e);
+					} catch (ActionProcessingException ex) {
+						throw new RuntimeException(ex);
 					}
 				});
-				node().completedTasksQueue().addTask(futureTask.get());
+				var task = futureTask.get();
+				log.info("Task: %s, Response: %s".formatted(req.taskAddress(),task.response()));
+				node().completedTasksQueue().addTask(new CompletedTaskInfo(subscription, task));
 
 			} else {
 				log.info("Request already processed.");

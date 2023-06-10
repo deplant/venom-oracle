@@ -1,32 +1,30 @@
 package tech.deplant.osiris.node.queues;
 
-import tech.deplant.osiris.model.task.Task;
-
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class CompletedTasksQueue  {
 
-	private final Queue<Task> queue;
+	private final Queue<CompletedTaskInfo> queue;
 
 	// RequestsProcessor
 	public CompletedTasksQueue() {
 		this.queue = new ConcurrentLinkedDeque<>();
 	}
 
-	public void addTask(Task req) {
-		this.queue.add(req);
+	public void addTask(CompletedTaskInfo info) {
+		this.queue.add(info);
 	}
 
-	public Task[] tasks() {
-		return this.queue.toArray(Task[]::new);
+	public CompletedTaskInfo[] tasks() {
+		return this.queue.toArray(CompletedTaskInfo[]::new);
 	}
 
 	public boolean hasNext() {
 		return this.queue.size() > 0;
 	}
 
-	public Task poll() {
+	public CompletedTaskInfo poll() {
 		return this.queue.poll();
 	}
 

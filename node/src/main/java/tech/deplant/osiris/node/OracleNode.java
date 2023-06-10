@@ -14,6 +14,7 @@ import tech.deplant.osiris.node.client.JavaClient;
 import tech.deplant.osiris.node.client.WebClient;
 import tech.deplant.osiris.node.consensus.ConsensusParticipator;
 import tech.deplant.osiris.node.events.EventListener;
+import tech.deplant.osiris.node.fisherman.FeedFisherman;
 import tech.deplant.osiris.node.queues.CompletedTasksQueue;
 import tech.deplant.osiris.node.queues.RequestQueue;
 import tech.deplant.osiris.node.queues.ScheduledTasksMap;
@@ -34,6 +35,8 @@ public class OracleNode {
 	private final ScheduledTasksMap scheduledTasksMap;
 	private final SubscriptionManager subscriptionManager;
 	private final TaskProcessor taskProcessor;
+
+	private final FeedFisherman feedFisherman;
 
 	private final JsonMapper mapper;
 
@@ -62,7 +65,7 @@ public class OracleNode {
 		                                           nodeConfig.validatorConfig().address(),
 		                                           new Credentials(nodeConfig.validatorConfig().publicKey(),
 		                                                           nodeConfig.validatorConfig().privateKey()));
-		this.subscriptionManager = new SubscriptionManager(this);
+		this.subscriptionManager = new SubscriptionManager(this, nodeConfig.subscriptionConfig());
 		this.eventListener = new EventListener(this);
 		this.requestQueue = new RequestQueue();
 		this.completedTasksQueue = new CompletedTasksQueue();
@@ -74,11 +77,13 @@ public class OracleNode {
 		                                                             nodeConfig.taskConfig()
 		                                                                       .maxActionThreadsPerTask()));
 		this.consensusParticipator = new ConsensusParticipator(this, 120000L);
+		this.feedFisherman = new FeedFisherman(this);
 		this.webClient = JavaClient.of();
 	}
 
 	public void start() {
 		subscriptionManager().start();
+		feedFisherman().start();
 		eventListener().start();
 		taskProcessor().start();
 		consensusParticipator().start();
@@ -122,6 +127,10 @@ public class OracleNode {
 
 	public SubscriptionManager subscriptionManager() {
 		return subscriptionManager;
+	}
+
+	public FeedFisherman feedFisherman() {
+		return feedFisherman;
 	}
 
 	public TaskProcessor taskProcessor() {

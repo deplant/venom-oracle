@@ -21,21 +21,21 @@ server:
 oracle:
   validator:
     endpoint: http://185.20.226.96/graphql
-    timeout: 50000
-    address: 0:5cbe970968a1c2be1e5e2a74b8f5d209a1471de0e1b7eaf5cb45e37eb9aeee6b
+    timeout: 120000
+    address: 0:9af67afef71655e701d8ee4255af0b4d84843e4c4bf0aa02f50d489131264652
     token: 0:5cbe970968a1c2be1e5e2a74b8f5d209a1471de0e1b7eaf5cb45e37eb9aeee6b
-    public-key: 2494eaa1f454e78c187298d908f87e755343d35fe7921e3eb51a697ca2d5f46b
-    secret-key: d4f54f03f436cde25fd1883aee446766eb2eec8b29c65bfdf709d8a9ff9ab3de
+    public-key: b976f0990b607001220921de58ff1c7377f38410eb7369a1a312fb3062e6876a
+    secret-key: ffbbd42fe0ef0fcc1a35a99de6192549a46eb2190c89e9979d3c1dacfe399d53
   subscription:
     auto-sub-check-interval: 60000
-    feed-medianized-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
-    feed-precise-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
-    request-medianized-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
-    request-precise-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    feed-medianized-code-hash: 0858f9547a2cf3cb8d573c1060bcb27b460c21950bb0e621f1130ab6bd26f25a
+    feed-precise-code-hash: 408bffb257264f06082ea9ad6cea57c6dd5e5dbe0dfb5876cb7872cbfc6f2642
+    request-medianized-code-hash: db43d7c25a24018ddf492351b6373621c250d7ef484c71ed4726d0ed1d412ea5
+    request-precise-code-hash: 3cc2a982d23c15fa61b35856c613304113aead19b5629bd70f4f19cce66ab528
     scheduled-medianized-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
     scheduled-precise-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
   listener:
-    subscription-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    subscription-code-hash: 3d62a6de3aeaa7fba6cfb260534997c4f58777622bdabe2f2e15e091431166c5
     request-check-interval: 10000
   task-processor:
     max-task-threads: 1000

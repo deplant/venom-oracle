@@ -38,9 +38,9 @@ Oracle protocol constists of following entities:
 
 You check deployed contracts in the Venom DevNet here:
 
-- **Token Root**: 0:a3682fd1814f293cbf7ba69f5678533bc8576d226a369b6fa07a66073d1d54b1
-- **Test Faucet**: 0:9cae4d2963605798616a325f2d8a19603acc1d98990be664a8a39a19798f0f5e
-- **Bank Root**: 0:0e026e6eace4f079e974af51f6aa376e03bd7c7da8f9ccfcec0404c9ccab3401
+- **Token Root**: 0:6aba2723d0a0ec80a2443469953717a20ffe84ab0edcc3bffc7ac80496078f29
+- **Test Faucet**: 0:4498609f3585eac8669accfe7903ea48e866b0e52f97a7aac4229f0328e0a083
+- **Bank Root**: 0:235949b2994c930e5eedf162d8f55bdc50ee5e52b5a3f30a668aec2c6ddd87b5
 - **Task Factory**: 0:77e851d143521d08797586d100732344b59d427827967d81b7b290555b4165b1
 
 ## Tech Resources
@@ -123,4 +123,13 @@ contract ExampleConsumerTest is IMedianizedConsumer {
 - Run `gradlew test --tests "tech.deplant.osiris.contract.test.junit.sequence.TaskSequenceTest" -D--enable-preview -D--add-modules=jdk.incubator.concurrent -D--enable-native-access=ALL-UNNAMED`
 - Run `gradlew test --tests "tech.deplant.osiris.contract.test.junit.sequence.ValidatorSequenceTest" -D--enable-preview -D--add-modules=jdk.incubator.concurrent -D--enable-native-access=ALL-UNNAMED`
 - Run `gradlew test --tests "tech.deplant.osiris.contract.test.junit.sequence.ConsumerSequenceTest" -D--enable-preview -D--add-modules=jdk.incubator.concurrent -D--enable-native-access=ALL-UNNAMED`
+
+### How to run test node
+
+![node_gui.png](node_gui.png)
+
+- Clone this repo
+- Go to contracts `cd node`
+- Run `gradlew shadowJar -D--enable-preview -D--add-modules=jdk.incubator.concurrent -D--enable-native-access=ALL-UNNAMED`
+- Run it with Java
 

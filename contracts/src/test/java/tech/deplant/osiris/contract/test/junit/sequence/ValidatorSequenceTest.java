@@ -13,6 +13,7 @@ import tech.deplant.java4ever.framework.datatype.Address;
 import tech.deplant.java4ever.framework.datatype.TvmCell;
 import tech.deplant.java4ever.framework.template.SafeMultisigWalletTemplate;
 import tech.deplant.osiris.contract.OracleValidator;
+import tech.deplant.osiris.contract.TaskPreciseOnRequest;
 import tech.deplant.osiris.template.OracleValidatorTemplate;
 import tech.deplant.osiris.template.TaskSubscriptionTemplate;
 
@@ -21,6 +22,7 @@ import java.math.BigInteger;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static tech.deplant.osiris.contract.test.junit.TestContext.*;
 
 @DisplayName("full validator sequence")
@@ -44,33 +46,7 @@ public class ValidatorSequenceTest {
 	public void validator_sequence() throws IOException, InterruptedException {
 
 		// ****************************************************************
-		// Deploy Owners
-		// ****************************************************************
-
-		try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-			Future<SafeMultisigWallet>[] contracts = new Future[VALIDATORS_COUNT];
-			for (int i = 0; i < VALIDATORS_COUNT; i++) {
-				final int fi = i;
-				contracts[i] = scope.fork(() -> {
-					var msigKeys = CONFIG.addKeys("validator" + fi + "OwnerKeys", Credentials.RANDOM(SDK));
-					var msig = new SafeMultisigWalletTemplate()
-							.prepareDeploy(SDK,
-							               msigKeys,
-							               new BigInteger[]{msigKeys.publicBigInt()},
-							               1).deployWithGiver(GIVER, EVER_TEN);
-					return msig;
-				});
-			}
-			scope.join();
-			for (int i = 0; i < VALIDATORS_COUNT; i++) {
-				CONFIG.addContract("validator" + i + "Owner", contracts[i].resultNow());
-			}
-		}
-
-		REFRESH();
-
-		// ****************************************************************
-		// Bank Root Deploy
+		// Deploy Validators
 		// ****************************************************************
 
 		OracleValidator[] validators = new OracleValidator[4];
@@ -125,15 +101,20 @@ public class ValidatorSequenceTest {
 		// Subscribe
 		// ****************************************************************
 
+
+		var preciseTask = CONFIG.contract(TaskPreciseOnRequest.class, SDK, "preciseImmediateTask");
+
 		try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 			for (var validator : validators) {
-				executor.submit(() -> validator.subscribe(Address.fromJava(CONFIG.address(TEMPLATES[0].name())),
+				executor.submit(() -> validator.subscribe(new Address(preciseTask.address()),
 				                                          0L));
+				var remoteBoc = new TvmCell(validator._subscriptionCode().getAsMap().get("_subscriptionCode").toString());
+				assertNotEquals(remoteBoc.cellBoc(), TvmCell.EMPTY().cellBoc());
 			}
+		} catch (EverSdkException e) {
+			throw new RuntimeException(e);
 		}
-
 		REFRESH();
-		//assertEquals(valueDepositedSeparately, getValueBalance2);
 	}
 
 

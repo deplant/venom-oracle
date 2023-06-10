@@ -3,4 +3,5 @@ pragma ever-solidity >= 0.62.0;
 
 interface IFactory {
     function acceptFactorySettingsUpdate() external internalMsg;
+    function acceptTaskStorageAddress(address task_, address taskStorage_) external internalMsg;
 }

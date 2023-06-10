@@ -19,12 +19,12 @@ IF
 LDMSGADDR
 LDU 64
 ENDS
-.loc TaskSubscription.tsol, 53
+.loc TaskSubscription.tsol, 55
 GETGLOB 9
 GETGLOB 11
 SDEQ
 THROWIFNOT 201
-.loc TaskSubscription.tsol, 46
+.loc TaskSubscription.tsol, 48
 PUSHINT 25000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -36,7 +36,7 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc TaskSubscription.tsol, 23
+.loc TaskSubscription.tsol, 25
 GETGLOB 10
 CALLREF {
 	CALL $AddressExtension_with_obj_notNull_b229a8b8_macro$
@@ -59,7 +59,7 @@ PUSHCONT {
 }
 IF
 THROWIFNOT 200
-.loc TaskSubscription.tsol, 28
+.loc TaskSubscription.tsol, 30
 SETGLOB 12
 .loc TaskSubscription.tsol, 0
 DROP
@@ -89,7 +89,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc TaskSubscription.tsol, 34
+.loc TaskSubscription.tsol, 36
 ENDS
 .loc TaskSubscription.tsol, 0
 CALLREF {
@@ -101,17 +101,17 @@ IFREF {
 THROW 0
 
 .macro cancel_ea8a1af0_internal_macro
-.loc TaskSubscription.tsol, 34
+.loc TaskSubscription.tsol, 36
 DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc TaskSubscription.tsol, 53
+.loc TaskSubscription.tsol, 55
 GETGLOB 9
 GETGLOB 11
 SDEQ
 THROWIFNOT 201
-.loc TaskSubscription.tsol, 35
+.loc TaskSubscription.tsol, 37
 GETGLOB 11
 NEWC
 STSLICECONST x42_
@@ -134,7 +134,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc TaskSubscription.tsol, 38
+.loc TaskSubscription.tsol, 40
 LDU 64
 ENDS
 .loc TaskSubscription.tsol, 0
@@ -147,17 +147,17 @@ CALLREF {
 THROW 0
 
 .macro updateLastTx_8ec1185b_internal_macro
-.loc TaskSubscription.tsol, 38
+.loc TaskSubscription.tsol, 40
 DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc TaskSubscription.tsol, 53
+.loc TaskSubscription.tsol, 55
 GETGLOB 9
 GETGLOB 11
 SDEQ
 THROWIFNOT 201
-.loc TaskSubscription.tsol, 46
+.loc TaskSubscription.tsol, 48
 PUSHINT 25000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -169,7 +169,7 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc TaskSubscription.tsol, 39
+.loc TaskSubscription.tsol, 41
 SETGLOB 12
 .loc ../contracts-common/std/GasManagement.tsol, 63
 GETGLOB 9
@@ -197,7 +197,9 @@ ENDS
 CTOS
 LDMSGADDR
 LDU 64
+LDU 8
 ENDS
+SETGLOB 13
 SETGLOB 12
 SETGLOB 11
 SETGLOB 10
@@ -235,6 +237,8 @@ PUSHCONT {
 	}
 	IFNOT
 	PUSHINT 0
+	DUP
+	SETGLOB 13
 	SETGLOB 12
 	SETGLOB 11
 	SETGLOB 10
@@ -245,12 +249,15 @@ PUSHCONT {
 	SETGLOB 2
 	PUSHINT 0 ; timestamp
 	SETGLOB 3
+	PUSHINT 0
+	SETGLOB 13
 }
 IFREFELSE {
 	CALL $c4_to_c7$
 }
 
 .macro c7_to_c4
+GETGLOB 13
 GETGLOB 12
 GETGLOB 11
 GETGLOB 10
@@ -261,10 +268,11 @@ STU 256
 STU 64
 STONE
 STSLICE
-ROTREV
+ROLLREV 3
 NEWC
 STSLICE
 STU 64
+STU 8
 STBREFR
 ENDC
 POPROOT

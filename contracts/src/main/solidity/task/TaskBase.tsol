@@ -43,7 +43,7 @@ abstract contract TaskBase is ITask, Types, InternallyOwned, GasManagement {
     // ****************************************************************
     // External - from factory
     // ****************************************************************
-    function setStorage(address storage_) external internalMsg onlyFactory reserveGas returnAllUnreserved {
+    function setStorage(address storage_) override external internalMsg onlyFactory reserveGas returnAllUnreservedTo(_owner) {
         _storage = storage_;
     }
 
@@ -189,7 +189,7 @@ abstract contract TaskBase is ITask, Types, InternallyOwned, GasManagement {
 
     // @dev for feeds - fee is paid by requester to feed
     function _transferFeeFromRequesterToFeed(address requester_, address payer_, uint128 valueAmount_, uint128 tokenAmount_) internal view {
-        IBankStorage(_storage).requestTransfer(payer_, address(this), requester_, TASK_STORAGE, valueAmount_, tokenAmount_);
+        IBankStorage(_storage).requestTransfer{ value: 0, flag: ALL_UNRESERVED, bounce: true}(payer_, address(this), requester_, TASK_STORAGE, valueAmount_, tokenAmount_);
     }
 
     // @dev for feeds - fee is paid by feed owner to validators

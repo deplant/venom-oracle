@@ -17,6 +17,8 @@ contract TaskSubscription is GasManagement {
 	address public static _taskAddress;
 	address public static _oracleAddress;
 	uint64  public _lastTx;
+
+	uint8 nonce_ = 0;
 	
 	
     constructor(address taskAddress_, uint64 lastTx_) public onlyOracle reserveGas returnAllUnreserved {

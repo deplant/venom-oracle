@@ -10,7 +10,7 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ExampleConsumer.tsol, 18
+.loc ExampleConsumer.tsol, 17
 GETGLOB 5
 DUP
 ISNULL
@@ -22,7 +22,7 @@ IF
 GETGLOB 2
 EQUAL
 THROWIFNOT 199
-.loc ExampleConsumer.tsol, 19
+.loc ExampleConsumer.tsol, 18
 ACCEPT
 .loc ExampleConsumer.tsol, 0
 CALLREF {
@@ -39,7 +39,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 26
+.loc ExampleConsumer.tsol, 25
 OVER
 PUSHCONT {
 	LDREF
@@ -64,13 +64,13 @@ CALLREF {
 THROW 0
 
 .macro calculatePreciseOnRequest_728fc2e6_internal_macro
-.loc ExampleConsumer.tsol, 27
+.loc ExampleConsumer.tsol, 26
 PUSH S2
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 444
-.loc ExampleConsumer.tsol, 28
+.loc ExampleConsumer.tsol, 27
 GETGLOB 5
 DUP
 ISNULL
@@ -82,12 +82,12 @@ IF
 GETGLOB 2
 EQUAL
 THROWIFNOT 199
-.loc ExampleConsumer.tsol, 29
+.loc ExampleConsumer.tsol, 28
 ACCEPT
-.loc ExampleConsumer.tsol, 30
+.loc ExampleConsumer.tsol, 29
 PUSH S2
 SETGLOB 12
-.loc ExampleConsumer.tsol, 31
+.loc ExampleConsumer.tsol, 30
 XCHG S2
 TRUE
 NEWC
@@ -117,7 +117,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 34
+.loc ExampleConsumer.tsol, 33
 OVER
 PUSHCONT {
 	LDREF
@@ -142,13 +142,13 @@ CALLREF {
 THROW 0
 
 .macro calculateMedianizedOnRequest_025a4321_internal_macro
-.loc ExampleConsumer.tsol, 35
+.loc ExampleConsumer.tsol, 34
 PUSH S2
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 444
-.loc ExampleConsumer.tsol, 36
+.loc ExampleConsumer.tsol, 35
 GETGLOB 5
 DUP
 ISNULL
@@ -160,12 +160,12 @@ IF
 GETGLOB 2
 EQUAL
 THROWIFNOT 199
-.loc ExampleConsumer.tsol, 37
+.loc ExampleConsumer.tsol, 36
 ACCEPT
-.loc ExampleConsumer.tsol, 38
+.loc ExampleConsumer.tsol, 37
 PUSH S2
 SETGLOB 12
-.loc ExampleConsumer.tsol, 39
+.loc ExampleConsumer.tsol, 38
 XCHG S2
 TRUE
 NEWC
@@ -195,7 +195,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 42
+.loc ExampleConsumer.tsol, 41
 OVER
 PUSHCONT {
 	LDREF
@@ -219,13 +219,13 @@ CALLREF {
 THROW 0
 
 .macro calculatePreciseFeed_f018d939_internal_macro
-.loc ExampleConsumer.tsol, 43
+.loc ExampleConsumer.tsol, 42
 OVER
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 444
-.loc ExampleConsumer.tsol, 44
+.loc ExampleConsumer.tsol, 43
 GETGLOB 5
 DUP
 ISNULL
@@ -237,12 +237,12 @@ IF
 GETGLOB 2
 EQUAL
 THROWIFNOT 199
-.loc ExampleConsumer.tsol, 45
+.loc ExampleConsumer.tsol, 44
 ACCEPT
-.loc ExampleConsumer.tsol, 46
+.loc ExampleConsumer.tsol, 45
 OVER
 SETGLOB 12
-.loc ExampleConsumer.tsol, 47
+.loc ExampleConsumer.tsol, 46
 SWAP
 TRUE
 NEWC
@@ -271,7 +271,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 50
+.loc ExampleConsumer.tsol, 49
 OVER
 PUSHCONT {
 	LDREF
@@ -295,13 +295,13 @@ CALLREF {
 THROW 0
 
 .macro calculateMedianizedFeed_26724ad4_internal_macro
-.loc ExampleConsumer.tsol, 51
+.loc ExampleConsumer.tsol, 50
 OVER
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 444
-.loc ExampleConsumer.tsol, 52
+.loc ExampleConsumer.tsol, 51
 GETGLOB 5
 DUP
 ISNULL
@@ -313,12 +313,12 @@ IF
 GETGLOB 2
 EQUAL
 THROWIFNOT 199
-.loc ExampleConsumer.tsol, 53
+.loc ExampleConsumer.tsol, 52
 ACCEPT
-.loc ExampleConsumer.tsol, 54
+.loc ExampleConsumer.tsol, 53
 OVER
 SETGLOB 12
-.loc ExampleConsumer.tsol, 55
+.loc ExampleConsumer.tsol, 54
 SWAP
 TRUE
 NEWC
@@ -347,7 +347,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 61
+.loc ExampleConsumer.tsol, 60
 ENDS
 .loc ExampleConsumer.tsol, 0
 CALLREF {
@@ -381,7 +381,7 @@ IFREF {
 THROW 0
 
 .macro getPreciseResult_804c95ec_internal_macro
-.loc ExampleConsumer.tsol, 62
+.loc ExampleConsumer.tsol, 61
 GETGLOB 10
 .loc ExampleConsumer.tsol, 0
 
@@ -394,7 +394,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 65
+.loc ExampleConsumer.tsol, 64
 ENDS
 .loc ExampleConsumer.tsol, 0
 CALLREF {
@@ -428,7 +428,7 @@ IFREF {
 THROW 0
 
 .macro getMedianizedResult_848e0011_internal_macro
-.loc ExampleConsumer.tsol, 66
+.loc ExampleConsumer.tsol, 65
 GETGLOB 11
 .loc ExampleConsumer.tsol, 0
 
@@ -441,7 +441,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 72
+.loc ExampleConsumer.tsol, 71
 LDREF
 ENDS
 .loc ExampleConsumer.tsol, 0
@@ -454,12 +454,12 @@ CALLREF {
 THROW 0
 
 .macro preciseCallback_128b7a5e_internal_macro
-.loc ExampleConsumer.tsol, 72
+.loc ExampleConsumer.tsol, 71
 DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc ExampleConsumer.tsol, 73
+.loc ExampleConsumer.tsol, 72
 GETGLOB 9
 GETGLOB 12
 SDEQ
@@ -474,7 +474,7 @@ PUSHCONT {
 }
 IF
 THROWIFNOT 198
-.loc ExampleConsumer.tsol, 74
+.loc ExampleConsumer.tsol, 73
 SETGLOB 10
 .loc ExampleConsumer.tsol, 0
 
@@ -487,7 +487,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ExampleConsumer.tsol, 77
+.loc ExampleConsumer.tsol, 76
 LDU 128
 ENDS
 .loc ExampleConsumer.tsol, 0
@@ -500,12 +500,12 @@ CALLREF {
 THROW 0
 
 .macro medianizedCallback_d2aefba5_internal_macro
-.loc ExampleConsumer.tsol, 77
+.loc ExampleConsumer.tsol, 76
 DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc ExampleConsumer.tsol, 78
+.loc ExampleConsumer.tsol, 77
 GETGLOB 9
 GETGLOB 12
 SDEQ
@@ -520,7 +520,7 @@ PUSHCONT {
 }
 IF
 THROWIFNOT 198
-.loc ExampleConsumer.tsol, 79
+.loc ExampleConsumer.tsol, 78
 SETGLOB 11
 .loc ExampleConsumer.tsol, 0
 

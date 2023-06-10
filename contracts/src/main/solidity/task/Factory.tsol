@@ -28,7 +28,7 @@ contract Factory is IFactory, Types, Flags, GasManagement, ExternallyOwned {
     constructor() public checkExtOwnerAndAccept {
     }
 
-    uint128 constant TASK_DEPLOY_GAS = 500_000;    // 0.5 EVER currently
+    uint128 constant TASK_DEPLOY_GAS = 1_000_000;    // 1.0 EVER currently
 
     mapping(uint8 => TvmCell) public _taskCodes;
 
@@ -62,13 +62,17 @@ contract Factory is IFactory, Types, Flags, GasManagement, ExternallyOwned {
         _taskCodes[respType_] = taskCode_;
     }
 
+    function acceptTaskStorageAddress(address task_, address taskStorage_) override external internalMsg reserveGas {
+        ITask(task_).setStorage{ value: 0, flag: ALL_UNRESERVED }(taskStorage_);
+    }
+
     function acceptFactorySettingsUpdate() override external internalMsg reserveGas returnAllUnreserved {
         ITask(msg.sender).onUpdateFactorySettingsResponse(_defaultSettings);
     }
 
     function publishCustomTask(uint8 type_, string name_, string body_, uint32 minValidators_, uint128 executionFee_) external view internalMsg reserveGas {
         require(minValidators_ >= 3, WRONG_SETTINGS, "No less than 3 validators possible");
-        require(msg.value >= 2 ever, NOT_ENOUGH_VALUE, "Value too low");
+        require(msg.value >= 3 ever, NOT_ENOUGH_VALUE, "Value too low");
         address deployAddress;
         if (type_ == PRECISE_IMMEDIATE) {
             deployAddress = new TaskPreciseOnRequest{

@@ -9,6 +9,7 @@ import "../config/Types.tsol";
 import "../config/Configs.tsol";
 import "./Subscriptions.tsol";
 import "../task/int/ITask.tsol";
+import "../task/int/IFeed.tsol";
 
 contract OracleValidator is Subscriptions, Types, ValidatorConfig /* extends SubscriptionsConfig, GasManagement */ {
 
@@ -54,6 +55,11 @@ contract OracleValidator is Subscriptions, Types, ValidatorConfig /* extends Sub
 		require(taskAddress_.value != 0, ZERO_TASK_ADDRESS);
 		ITask(taskAddress_).onRequestFinalPhase{value: $toValue(ValidatorConfig.FINALIZE_REQ_GAS), bounce: true, flag: FEE_EXTRA}();
     }
+
+	function refreshFeed(address taskAddress_) external pure externalMsg checkExtOwnerAndAccept {
+		require(taskAddress_.value != 0, ZERO_TASK_ADDRESS);
+		IFeed(taskAddress_).updateResponse{value: $toValue(ValidatorConfig.COMMIT_MSG_GAS), bounce: true, flag: FEE_EXTRA}();
+	}
 	
 	// ****************************************************************
 	// Getter

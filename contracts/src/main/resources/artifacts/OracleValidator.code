@@ -14,10 +14,10 @@ LDREF
 ENDS
 .loc ../contracts-common/std/ExternallyOwned.tsol, 24
 ACCEPT
-.loc OracleValidator.tsol, 30
+.loc OracleValidator.tsol, 31
 SWAP
 SETGLOB 11
-.loc OracleValidator.tsol, 31
+.loc OracleValidator.tsol, 32
 SETGLOB 12
 .loc ../contracts-common/std/ExternallyOwned.tsol, 0
 CALLREF {
@@ -29,7 +29,7 @@ THROW 0
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc OracleValidator.tsol, 37
+.loc OracleValidator.tsol, 38
 OVER
 PUSHCONT {
 	LDREF
@@ -50,7 +50,7 @@ IFREF {
 THROW 0
 
 .macro commit_84bf1535_internal_macro
-.loc OracleValidator.tsol, 37
+.loc OracleValidator.tsol, 38
 DEPTH
 ADDCONST -5
 PICK
@@ -58,16 +58,16 @@ EQINT -1
 THROWIFNOT 71
 .loc ../contracts-common/std/ExternallyOwned.tsol, 24
 ACCEPT
-.loc OracleValidator.tsol, 38
+.loc OracleValidator.tsol, 39
 OVER
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 301
-.loc OracleValidator.tsol, 39
+.loc OracleValidator.tsol, 40
 DUP
 THROWIFNOT 300
-.loc OracleValidator.tsol, 40
+.loc OracleValidator.tsol, 41
 PUSHINT 50000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -102,7 +102,7 @@ SENDRAWMSG
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc OracleValidator.tsol, 43
+.loc OracleValidator.tsol, 44
 OVER
 PUSHCONT {
 	LDREF
@@ -124,7 +124,7 @@ IFREF {
 THROW 0
 
 .macro reveal_a061c07c_internal_macro
-.loc OracleValidator.tsol, 43
+.loc OracleValidator.tsol, 44
 DEPTH
 ADDCONST -5
 PICK
@@ -132,13 +132,13 @@ EQINT -1
 THROWIFNOT 71
 .loc ../contracts-common/std/ExternallyOwned.tsol, 24
 ACCEPT
-.loc OracleValidator.tsol, 44
+.loc OracleValidator.tsol, 45
 PUSH S2
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 301
-.loc OracleValidator.tsol, 45
+.loc OracleValidator.tsol, 46
 SWAP
 PUSHINT 50000
 .loc ../contracts-common/std/GasManagement.tsol, 24
@@ -175,7 +175,7 @@ SENDRAWMSG
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc OracleValidator.tsol, 48
+.loc OracleValidator.tsol, 49
 OVER
 PUSHCONT {
 	LDREF
@@ -195,7 +195,7 @@ IFREF {
 THROW 0
 
 .macro requestRevealPhase_ad83131e_internal_macro
-.loc OracleValidator.tsol, 48
+.loc OracleValidator.tsol, 49
 DEPTH
 ADDCONST -5
 PICK
@@ -203,13 +203,13 @@ EQINT -1
 THROWIFNOT 71
 .loc ../contracts-common/std/ExternallyOwned.tsol, 24
 ACCEPT
-.loc OracleValidator.tsol, 49
+.loc OracleValidator.tsol, 50
 DUP
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 301
-.loc OracleValidator.tsol, 50
+.loc OracleValidator.tsol, 51
 PUSHINT 50000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -239,7 +239,7 @@ SENDRAWMSG
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc OracleValidator.tsol, 53
+.loc OracleValidator.tsol, 54
 OVER
 PUSHCONT {
 	LDREF
@@ -259,7 +259,7 @@ IFREF {
 THROW 0
 
 .macro requestFinalPhase_9ce9dbb5_internal_macro
-.loc OracleValidator.tsol, 53
+.loc OracleValidator.tsol, 54
 DEPTH
 ADDCONST -5
 PICK
@@ -267,13 +267,13 @@ EQINT -1
 THROWIFNOT 71
 .loc ../contracts-common/std/ExternallyOwned.tsol, 24
 ACCEPT
-.loc OracleValidator.tsol, 54
+.loc OracleValidator.tsol, 55
 DUP
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 301
-.loc OracleValidator.tsol, 55
+.loc OracleValidator.tsol, 56
 PUSHINT 200000
 .loc ../contracts-common/std/GasManagement.tsol, 24
 MYADDR
@@ -299,11 +299,75 @@ PUSHINT 1
 SENDRAWMSG
 .loc OracleValidator.tsol, 0
 
+.macro refreshFeed
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc OracleValidator.tsol, 59
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc OracleValidator.tsol, 0
+CALLREF {
+	CALL $refreshFeed_091abac6_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro refreshFeed_091abac6_internal_macro
+.loc OracleValidator.tsol, 59
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc OracleValidator.tsol, 60
+DUP
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 301
+.loc OracleValidator.tsol, 61
+PUSHINT 50000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+SWAP
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 304455091
+STUR 139
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc OracleValidator.tsol, 0
+
 .macro getCommitHash
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc OracleValidator.tsol, 61
+.loc OracleValidator.tsol, 67
 LDREF
 LDU 256
 ENDS
@@ -339,15 +403,15 @@ IFREF {
 THROW 0
 
 .macro getCommitHash_b6fa0788_internal_macro
-.loc OracleValidator.tsol, 75
+.loc OracleValidator.tsol, 81
 SWAP
 NEWC
 STREF
-.loc OracleValidator.tsol, 76
+.loc OracleValidator.tsol, 82
 STU 256
-.loc OracleValidator.tsol, 77
+.loc OracleValidator.tsol, 83
 ENDC
-.loc OracleValidator.tsol, 78
+.loc OracleValidator.tsol, 84
 HASHCU
 .loc OracleValidator.tsol, 0
 
@@ -1180,7 +1244,7 @@ IFJMPREF {
 	}
 }
 DUP
-PUSHINT 1361891541
+PUSHINT 1361003416
 LEQ
 IFJMPREF {
 	DUP
@@ -1202,16 +1266,22 @@ IFJMPREF {
 		CALL $_name$
 	}
 	DUP
+	PUSHINT 1361003416
+	EQUAL
+	IFJMPREF {
+		CALL $refreshFeed$
+	}
+}
+DUP
+PUSHINT 1954758558
+LEQ
+IFJMPREF {
+	DUP
 	PUSHINT 1361891541
 	EQUAL
 	IFJMPREF {
 		CALL $getCommitHash$
 	}
-}
-DUP
-PUSHINT 2036900798
-LEQ
-IFJMPREF {
 	DUP
 	PUSHINT 1409108257
 	EQUAL
@@ -1230,17 +1300,17 @@ IFJMPREF {
 	IFJMPREF {
 		CALL $saveRequestTx$
 	}
+}
+DUP
+PUSHINT 2118814704
+LEQ
+IFJMPREF {
 	DUP
 	PUSHINT 2036900798
 	EQUAL
 	IFJMPREF {
 		CALL $requestFinalPhase$
 	}
-}
-DUP
-PUSHINT 2118814704
-LEQ
-IFJMPREF {
 	DUP
 	PUSHINT 2093044778
 	EQUAL

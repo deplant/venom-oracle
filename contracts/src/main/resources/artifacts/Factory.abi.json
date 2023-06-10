@@ -55,6 +55,15 @@
 			]
 		},
 		{
+			"name": "acceptTaskStorageAddress",
+			"inputs": [
+				{"name":"task_","type":"address"},
+				{"name":"taskStorage_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "acceptFactorySettingsUpdate",
 			"inputs": [
 			],

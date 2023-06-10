@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tech.deplant.java4ever.binding.EverSdkException;
-import tech.deplant.osiris.model.task.Task;
+import tech.deplant.osiris.Election;
+import tech.deplant.osiris.Elector;
 import tech.deplant.osiris.node.ListenerControls;
 import tech.deplant.osiris.node.OracleNode;
+import tech.deplant.osiris.node.queues.CompletedTaskInfo;
 
+import java.time.Instant;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ConsensusParticipator extends ListenerControls {
@@ -30,19 +34,37 @@ public class ConsensusParticipator extends ListenerControls {
 	@Override
 	protected void mainLoop() {
 		while (node().completedTasksQueue().hasNext()) {
-			mainLoopIterationWrapper();
+			try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+				mainLoopIterationWrapper(executor);
+			}
 		}
-		log.info("Completed tasks queue is empty.");
+		log.trace("Completed tasks queue is empty.");
 	}
 
 	@Override
-	protected void mainLoopIteration() throws ExecutionException, InterruptedException, JsonProcessingException {
-		try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-			final Task task = node().completedTasksQueue().poll();
-			task.sendResponse(node().oracleValidator());
-		} catch (EverSdkException e) {
+	protected void mainLoopIteration(Object obj) throws ExecutionException, InterruptedException, JsonProcessingException {
+
+		if (obj instanceof ExecutorService e) {
+			final CompletedTaskInfo taskInfo = node().completedTasksQueue().poll();
+			var future = e.submit(() -> vote(taskInfo));
+		}
+	}
+
+	public void vote(CompletedTaskInfo taskInfo) {
+		try {
+			Election election;
+			election = new Election(node().oracleValidator(),
+			                        Elector.ofType(taskInfo.details().taskType(), node().oracleValidator().sdk(),
+			                                       taskInfo.details().taskId()),
+			                        taskInfo.task().response());
+			if (election.vote()) {
+				node().subscriptionManager().requestDone(taskInfo.details().subscriptionId(), Instant.now().getEpochSecond());
+			} else {
+				log.error("Failed consensus! Address: %s, Response: %s".formatted(taskInfo.details().taskId(),
+				                                                                  taskInfo.task().response()));
+			}
+		} catch (EverSdkException | JsonProcessingException e) {
 			log.error(e);
-			throw new RuntimeException(e);
 		}
 	}
 }

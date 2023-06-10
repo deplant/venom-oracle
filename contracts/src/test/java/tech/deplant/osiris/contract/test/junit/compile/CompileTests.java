@@ -28,6 +28,10 @@ public class CompileTests {
 		                             "C:/idea_git/iris-contracts-core/src/main/resources/artifacts",
 		                             "ExampleConsumer.tsol",
 		                             "ExampleConsumer");
+		LOCAL_CONFIG.compileTemplate("C:/idea_git/iris-contracts-core/src/main/solidity/consumer",
+		                             "C:/idea_git/iris-contracts-core/src/main/resources/artifacts",
+		                             "ExampleConsumerTest.tsol",
+		                             "ExampleConsumerTest");
 	}
 
 

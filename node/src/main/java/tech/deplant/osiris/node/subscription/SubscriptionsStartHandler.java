@@ -15,6 +15,7 @@ public record SubscriptionsStartHandler(OracleNode node) implements Handler {
 	public void accept(final ServerRequest req, final ServerResponse res) {
 		try {
 			node().subscriptionManager().start();
+			node().feedFisherman().start();
 			res.send("Subscription updates started.");
 		} catch (final Exception ex) {
 			logger.error(ex);

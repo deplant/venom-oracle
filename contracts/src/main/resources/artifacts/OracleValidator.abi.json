@@ -48,6 +48,14 @@
 			]
 		},
 		{
+			"name": "refreshFeed",
+			"inputs": [
+				{"name":"taskAddress_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getCommitHash",
 			"inputs": [
 				{"name":"response_","type":"cell"},

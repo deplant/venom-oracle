@@ -10,5 +10,5 @@ interface ITask {
     function onRequestRevealPhase() external internalMsg;
     function onRequestFinalPhase() external internalMsg;
     function onUpdateFactorySettingsResponse(Types.FactorySettings factorySettings_) external internalMsg;
-
+    function setStorage(address storage_) external internalMsg;
 }

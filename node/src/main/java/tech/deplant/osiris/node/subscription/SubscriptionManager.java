@@ -8,20 +8,26 @@ import tech.deplant.java4ever.framework.Account;
 import tech.deplant.java4ever.framework.Sdk;
 import tech.deplant.java4ever.framework.Tvc;
 import tech.deplant.java4ever.framework.datatype.Address;
+import tech.deplant.java4ever.utils.Objs;
+import tech.deplant.osiris.ConsensusType;
+import tech.deplant.osiris.Elector;
 import tech.deplant.osiris.GraphQLUtils;
-import tech.deplant.osiris.contract.CustomTaskElector;
+import tech.deplant.osiris.TaskType;
+import tech.deplant.osiris.contract.TaskMedianizedOnRequest;
+import tech.deplant.osiris.contract.TaskPreciseOnRequest;
 import tech.deplant.osiris.contract.TaskSubscription;
 import tech.deplant.osiris.model.exception.TemplateProcessingException;
 import tech.deplant.osiris.model.template.TaskTemplate;
+import tech.deplant.osiris.model.trigger.TriggerType;
 import tech.deplant.osiris.node.ListenerControls;
 import tech.deplant.osiris.node.OracleNode;
+import tech.deplant.osiris.node.fisherman.FishInfo;
 import tech.deplant.osiris.template.TaskSubscriptionTemplate;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -29,31 +35,53 @@ public class SubscriptionManager extends ListenerControls {
 
 	private final Logger log = LogManager.getLogger(SubscriptionManager.class);
 	private final Map<String, SubscriptionDetails> subscriptionsMap = new ConcurrentHashMap<>();
-
 	private final Set<String> badSubscriptions = new HashSet<>();
-
+	private final Set<String> badTasks = new HashSet<>();
 	private final OracleNode node;
 	private String codeHash = "";
 
+	private String preciseRequestCodeHash;
+	private String medianRequestCodeHash;
+	private String preciseFeedCodeHash;
+	private String medianFeedCodeHash;
+
 	// RequestsProcessor
-	public SubscriptionManager(OracleNode node) {
+	public SubscriptionManager(OracleNode node, SubscriptionConfig config) {
+		super(config.autoSubscriptionCheckInterval(), 10000L);
+		this.preciseRequestCodeHash = config.requestPreciseCodeHash();
+		this.medianRequestCodeHash = config.requestMedianizedCodeHash();
+		this.preciseFeedCodeHash = config.feedPreciseCodeHash();
+		this.medianFeedCodeHash = config.feedMedianizedCodeHash();
 		this.node = node;
+		this.badSubscriptions.add("0:0ec8be8a704598ac90ad09cacb5f34e5eac261bccaf3d1b3d783fab4208fcd77");
+	}
+
+	public static TaskType taskTypeOf(TriggerType trigger, ConsensusType consensus) {
+		if (trigger.equals(TriggerType.IMMEDIATE) && consensus.equals(ConsensusType.MEDIAN)) {
+			return TaskType.MEDIAN_IMMEDIATE;
+		} else if (trigger.equals(TriggerType.IMMEDIATE) && consensus.equals(ConsensusType.PRECISE)) {
+			return TaskType.PRECISE_IMMEDIATE;
+		} else if (trigger.equals(TriggerType.VALUE_FEED) && consensus.equals(ConsensusType.MEDIAN)) {
+			return TaskType.MEDIAN_FEED;
+		} else if (trigger.equals(TriggerType.VALUE_FEED) && consensus.equals(ConsensusType.PRECISE)) {
+			return TaskType.PRECISE_FEED;
+		} else {
+			return TaskType.MEDIAN_FEED;
+		}
 	}
 
 	public SubscriptionDetails parseSubscribedTask(final Sdk sdk,
 	                                               final Account accountOfSubscription) throws JsonProcessingException, TemplateProcessingException, EverSdkException {
 		var subscription = new TaskSubscription(sdk, accountOfSubscription.id());
-
-		final String taskAddress = subscription.getLocalTaskAddress(accountOfSubscription.boc());
-		final Long lastRequestTx = subscription.getLocalLastRequestTx(accountOfSubscription.boc());
-
-		var elector = new CustomTaskElector(sdk, taskAddress);
-
+		final String taskId = subscription.getLocalTaskAddress(accountOfSubscription.boc());
+		var task = new TaskPreciseOnRequest(sdk, taskId);
+		var elector = new Elector(task);
+		long lastResponseTx = Long.parseLong(elector.previousStateProperty("responseTimestamp").toString());
 		final TaskTemplate template = TaskTemplate.deserialize(node().mapper(), elector.jsonBody());
-
-		return new SubscriptionDetails(taskAddress,
+		return new SubscriptionDetails(taskId,
 		                               accountOfSubscription.id(),
-		                               lastRequestTx,
+		                               taskTypeOf(template.trigger().triggerType(), template.consensus().type()),
+		                               lastResponseTx,
 		                               template);
 	}
 
@@ -72,23 +100,38 @@ public class SubscriptionManager extends ListenerControls {
 		                         .collect(Collectors.toSet());
 	}
 
-	public Set<String> badSubscriptions() {
-		return this.badSubscriptions;
+	public SubscriptionDetails subscribe(String taskId, TaskType type) {
+		if (subscriptionsMap().containsKey(taskId) || this.badTasks.contains(taskId)) {
+			return null;
+		}
+		log.debug("Found new unsubscribed task! Type: %s. Id: %s".formatted(type.toString(),
+		                                                                    taskId));
+		try {
+			var addr = new Address(taskId);
+			var elector = new Elector(new TaskMedianizedOnRequest(node().oracleValidator().sdk(), taskId));
+			var lastResponseTx = Long.valueOf(elector.previousStateProperty("responseTimestamp").toString());
+			var subAddress = node().oracleValidator()
+			                       .subscribe(addr, lastResponseTx)
+			                       .call()
+			                       .subscriptionAddress();
+			final TaskTemplate template = TaskTemplate.deserialize(node().mapper(), elector.jsonBody());
+			var subscriptionDetails = new SubscriptionDetails(taskId,
+			                                                  subAddress.makeAddrStd(),
+			                                                  type,
+			                                                  lastResponseTx,
+			                                                  template);
+			node().subscriptionManager().addSubscribedTask(subscriptionDetails);
+			return subscriptionDetails;
+		} catch (EverSdkException | TemplateProcessingException | JsonProcessingException e) {
+			log.warn("Failed to process task subscription! " + e);
+			this.badTasks.add(taskId);
+			return null;
+		}
 	}
 
-	public String subscribe(String taskAddress) throws EverSdkException, TemplateProcessingException, JsonProcessingException {
-		var subAddress = node().oracleValidator()
-		                       //TODO Last processed tx!!!
-		                       .subscribe(new Address(taskAddress), Long.valueOf("0"))
-		                       .call()
-		                       .subscriptionAddress();
-		var subscriptionDetails = parseSubscribedTask(node().oracleValidator().sdk(),
-		                                              Account.ofAddress(node().oracleValidator()
-		                                                                      .sdk(),
-		                                                                subAddress.makeAddrStd()));
-		node().subscriptionManager().addSubscribedTask(subscriptionDetails);
-		return subAddress.makeAddrStd();
-	}
+//	public void subscribe(String taskId) throws EverSdkException, TemplateProcessingException, JsonProcessingException {
+//		new T
+//	}
 
 	public void unsubscribe(String taskAddress) throws EverSdkException {
 		removeSubscribedTask(taskAddress);
@@ -127,27 +170,86 @@ public class SubscriptionManager extends ListenerControls {
 			this.codeHash = node().oracleValidator().getSubscriptionCodeHash().get().codeHash().toString(16);
 			log.info("Started checking contracts with code_hash: " + this.codeHash);
 			// Check for existing subscriptions
-			checkDeployedSubscriptions();
+			loadDeployedSubscriptions();
 			super.start();
-		} catch (EverSdkException e) {
-			throw new RuntimeException(e);
-		} catch (JsonProcessingException e) {
+		} catch (EverSdkException | JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
 	protected void mainLoop() {
-		mainLoopIterationWrapper();
-		log.debug("Checking for deployed task subscriptions!");
+		mainLoopIterationWrapper(null);
+		//log.debug("Checking for deployed task subscriptions!");
 	}
 
 	@Override
-	protected void mainLoopIteration() throws ExecutionException, InterruptedException, JsonProcessingException {
+	protected void mainLoopIteration(Object obj) throws JsonProcessingException, EverSdkException {
+
+		// find all tasks, categorize them and subscribe to all new ones
+
+		// MEDIAN_IMMEDIATE Tasks
+		var medianizedOnRequestTaskArray = node.mapper()
+		                                       .readValue(gqlRequest(new String[]{this.medianRequestCodeHash}),
+		                                                  GraphQLAnswer.class)
+		                                       .data()
+		                                       .accounts();
+		Arrays.stream(medianizedOnRequestTaskArray)
+		      .forEach(task -> subscribe(task.get("id").toString(), TaskType.MEDIAN_IMMEDIATE));
+
+		// PRECISE_IMMEDIATE Tasks
+		var preciseOnRequestTaskArray = node.mapper()
+		                                    .readValue(gqlRequest(new String[]{this.preciseRequestCodeHash}),
+		                                               GraphQLAnswer.class)
+		                                    .data()
+		                                    .accounts();
+		Arrays.stream(preciseOnRequestTaskArray)
+		      .forEach(task -> subscribe(task.get("id").toString(), TaskType.PRECISE_IMMEDIATE));
+
+		// MEDIAN_FEED Tasks
+		var medianizedFeedTaskArray = node.mapper()
+		                                  .readValue(gqlRequest(new String[]{this.medianFeedCodeHash}),
+		                                             GraphQLAnswer.class)
+		                                  .data()
+		                                  .accounts();
+		Arrays.stream(medianizedFeedTaskArray)
+		      .forEach(task -> {
+			      var taskId = task.get("id").toString();
+			      var subscriptionDetails = subscribe(taskId, TaskType.MEDIAN_FEED);
+			      if (Objs.isNotNull(subscriptionDetails)) {
+				      node().feedFisherman().pond.put(taskId, new FishInfo(subscriptionDetails, 0L, 3600L));
+			      }
+		      });
+
+		// PRECISE_FEED Tasks
+		var preciseFeedTaskArray = node.mapper()
+		                               .readValue(gqlRequest(new String[]{this.preciseFeedCodeHash}),
+		                                          GraphQLAnswer.class)
+		                               .data()
+		                               .accounts();
+		Arrays.stream(preciseFeedTaskArray)
+		      .forEach(task -> {
+			      var taskId = task.get("id").toString();
+			      var subscriptionDetails = subscribe(taskId, TaskType.PRECISE_FEED);
+			      node().feedFisherman().pond.put(taskId, new FishInfo(subscriptionDetails, 0L, 3600L));
+		      });
 
 	}
 
-	private void checkDeployedSubscriptions() throws JsonProcessingException {
+	public String gqlRequest(String[] codeHashes) throws JsonProcessingException {
+		var url = node().endpoint();
+		final String accountQuery = GraphQLUtils.accountsByCodeHash(codeHashes,
+		                                                            "id balance last_trans_lt boc",
+		                                                            "last_trans_lt",
+		                                                            false,
+		                                                            50);
+
+		final String jsonRequest;
+		jsonRequest = node().mapper().writeValueAsString(new GraphQLQuery(accountQuery));
+		return node().webClient().postJSON(url, jsonRequest);
+	}
+
+	private void loadDeployedSubscriptions() throws JsonProcessingException {
 		// Let's find all current active subscriptions by code_hash
 		final String accountQuery =
 				GraphQLUtils.accountsByCodeHash(new String[]{codeHash()},
@@ -171,7 +273,7 @@ public class SubscriptionManager extends ListenerControls {
 		StreamSupport
 				.stream(Spliterators.spliteratorUnknownSize(jsonNodeIterator, Spliterator.IMMUTABLE), true)
 				.filter(gqlResponse -> !subscriptions().contains(gqlResponse.get("id").asText()))
-				.filter(gqlResponse -> !badSubscriptions().contains(gqlResponse.get("id").asText()))
+				.filter(gqlResponse -> !this.badSubscriptions.contains(gqlResponse.get("id").asText()))
 				.map(gqlResponse -> new Account(
 						gqlResponse.get("id").asText(),
 						1,
@@ -196,7 +298,26 @@ public class SubscriptionManager extends ListenerControls {
 					}
 				})
 				.filter(Objects::nonNull)
-				.forEach(this::addSubscribedTask);
+				.forEach(subscription -> {
+					addSubscribedTask(subscription);
+					if (subscription.taskType().equals(TaskType.MEDIAN_FEED) ||
+					    subscription.taskType().equals(TaskType.PRECISE_FEED)
+					) {
+						if (Objs.isNotNull(subscription)) {
+							node().feedFisherman().pond.put(subscription.taskId(),
+							                                new FishInfo(subscription, 0L, 3600L));
+						}
+					}
+				});
 	}
 
+	public Set<String> badSubscriptions() {
+		return badSubscriptions;
+	}
+
+
+	public void requestDone(String taskId, long lastProcessedTx) {
+		var details = subscriptionsMap.get(taskId);
+		subscriptionsMap.put(taskId, details.withLastProcessedRequestTx(lastProcessedTx));
+	}
 }

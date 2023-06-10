@@ -1,6 +1,5 @@
 pragma ever-solidity ^0.64;
 
-import "../contracts-common/std/GasManagement.tsol";
 import "./int/IPreciseConsumer.tsol";
 import "./int/IMedianizedConsumer.tsol";
 import "../task/int/IMedianizedFeed.tsol";
@@ -8,7 +7,7 @@ import "../task/int/IPreciseFeed.tsol";
 import "../task/int/IMedianizedOnRequest.tsol";
 import "../task/int/IPreciseOnRequest.tsol";
 
-contract ExampleConsumer is GasManagement, IPreciseConsumer, IMedianizedConsumer {
+contract ExampleConsumer is IPreciseConsumer, IMedianizedConsumer {
 
 	TvmCell _preciseResult;
 	uint128 _medianizedResult;
@@ -78,13 +77,5 @@ contract ExampleConsumer is GasManagement, IPreciseConsumer, IMedianizedConsumer
 		require(msg.sender == _currentTask && msg.sender.value != 0, 198); // NOT_AWAITED_TASK
 		_medianizedResult = response_;
 	}
-
-	// ****************************************************************	
-	// Internal (std)
-	// ****************************************************************		
-    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
-		return DEFAULT_GAS_FLOOR;
-	}
-	
 
 }

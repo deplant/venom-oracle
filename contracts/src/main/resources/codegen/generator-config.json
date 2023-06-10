@@ -6,22 +6,34 @@
     {
       "name": "TaskMedianizedOnRequest",
       "abi": "artifacts/TaskMedianizedOnRequest.abi.json",
-      "tvc": "artifacts/TaskMedianizedOnRequest.tvc"
+      "tvc": "artifacts/TaskMedianizedOnRequest.tvc",
+      "interfaces": [
+        "TaskElector"
+      ]
     },
     {
       "name": "TaskMedianizedValueFeed",
       "abi": "artifacts/TaskMedianizedValueFeed.abi.json",
-      "tvc": "artifacts/TaskMedianizedValueFeed.tvc"
+      "tvc": "artifacts/TaskMedianizedValueFeed.tvc",
+      "interfaces": [
+        "TaskElector"
+      ]
     },
     {
       "name": "TaskPreciseOnRequest",
       "abi": "artifacts/TaskPreciseOnRequest.abi.json",
-      "tvc": "artifacts/TaskPreciseOnRequest.tvc"
+      "tvc": "artifacts/TaskPreciseOnRequest.tvc",
+      "interfaces": [
+        "TaskElector"
+      ]
     },
     {
       "name": "TaskPreciseValueFeed",
       "abi": "artifacts/TaskPreciseValueFeed.abi.json",
-      "tvc": "artifacts/TaskPreciseValueFeed.tvc"
+      "tvc": "artifacts/TaskPreciseValueFeed.tvc",
+      "interfaces": [
+        "TaskElector"
+      ]
     },
     {
       "name": "OracleValidator",

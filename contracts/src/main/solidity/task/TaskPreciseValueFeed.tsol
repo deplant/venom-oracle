@@ -7,18 +7,26 @@ import "./ConsensusPrecise.tsol";
 
 contract TaskPreciseValueFeed is ConsensusPrecise, IPreciseFeed, IStorageOwner {
 
+    uint8 nonce_ = 0;
+
+    // ****************************************************************
+    // Events
+    // ****************************************************************
+    event refreshConsensus(address requester); // main event that is monitored by subscribed Oracles
+
     // ****************************************************************
     // Constructor
     // ****************************************************************
     constructor(TaskSettings taskSettings_, Types.FactorySettings factorySettings_) public onlyFactory returnAllUnreservedTo(_owner) {
         _taskSettings = taskSettings_;
         _factorySettings = factorySettings_;
+        _currElectionState.status = READY;
     }
 
     // ****************************************************************
     // External - from Consumer
     // ****************************************************************
-    function preciseFeedRequest(address payerAddress_) override external internalMsg reserveGas returnAllUnreserved {
+    function preciseFeedRequest(address payerAddress_) override external internalMsg reserveGas {
         _transferFeeFromRequesterToFeed(msg.sender, payerAddress_, _taskSettings.executionFee, _taskSettings.executionFee);
     }
 
@@ -40,18 +48,18 @@ contract TaskPreciseValueFeed is ConsensusPrecise, IPreciseFeed, IStorageOwner {
             // LET'S START CONSENSUS!!!
             _currElectionState.status = COMMIT;
             _currElectionState.commitStartTimestamp = now;
+            emit refreshConsensus(msg.sender);
         }
     }
 
     function _sendResponse() override internal {
         require(_prevElectionState.status == SUCCESS && _currElectionState.status == READY, PHASE_NOT_ENDED);
-        //uint16 validators = _prevElectionState.acceptedCount;
-        for (ParticipantData participant : _prevElectionState.participants.values()) {
-            if (participant.slashValue == 0) {
-                _transferFeeFromFeedToValidator(participant.validator, participant.bountyValue, participant.bountyValue);
-            }
-        }
-
+        //TODO
+        //        for (ParticipantData participant : _prevElectionState.participants.values()) {
+        //            if (participant.slashValue == 0) {
+        //                _transferFeeFromFeedToValidator(participant.validator, participant.bountyValue, participant.bountyValue);
+        //            }
+        //        }
     }
 
 }

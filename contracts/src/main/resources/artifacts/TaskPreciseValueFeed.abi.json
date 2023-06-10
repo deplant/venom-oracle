@@ -181,6 +181,14 @@
 		{"key":3,"name":"_name","type":"string"}
 	],
 	"events": [
+		{
+			"name": "refreshConsensus",
+			"inputs": [
+				{"name":"requester","type":"address"}
+			],
+			"outputs": [
+			]
+		}
 	],
 	"fields": [
 		{"name":"_pubkey","type":"uint256"},
@@ -193,6 +201,7 @@
 		{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_factorySettings","type":"tuple"},
 		{"components":[{"name":"status","type":"uint8"},{"name":"failureReason","type":"uint16"},{"name":"response","type":"cell"},{"name":"commitStartTimestamp","type":"uint64"},{"name":"revealStartTimestamp","type":"uint64"},{"name":"responseTimestamp","type":"uint64"},{"components":[{"name":"validator","type":"address"},{"name":"enterStake","type":"uint128"},{"name":"commitHash","type":"uint256"},{"name":"revealResponse","type":"cell"},{"name":"bountyValue","type":"uint128"},{"name":"slashValue","type":"uint128"},{"name":"committed","type":"bool"},{"name":"revealed","type":"bool"}],"name":"participants","type":"map(address,tuple)"},{"name":"commitedCount","type":"uint16"},{"name":"revealedCount","type":"uint16"},{"name":"acceptedCount","type":"uint16"}],"name":"_currElectionState","type":"tuple"},
 		{"components":[{"name":"status","type":"uint8"},{"name":"failureReason","type":"uint16"},{"name":"response","type":"cell"},{"name":"commitStartTimestamp","type":"uint64"},{"name":"revealStartTimestamp","type":"uint64"},{"name":"responseTimestamp","type":"uint64"},{"components":[{"name":"validator","type":"address"},{"name":"enterStake","type":"uint128"},{"name":"commitHash","type":"uint256"},{"name":"revealResponse","type":"cell"},{"name":"bountyValue","type":"uint128"},{"name":"slashValue","type":"uint128"},{"name":"committed","type":"bool"},{"name":"revealed","type":"bool"}],"name":"participants","type":"map(address,tuple)"},{"name":"commitedCount","type":"uint16"},{"name":"revealedCount","type":"uint16"},{"name":"acceptedCount","type":"uint16"}],"name":"_prevElectionState","type":"tuple"},
-		{"name":"_storage","type":"address"}
+		{"name":"_storage","type":"address"},
+		{"name":"nonce_","type":"uint8"}
 	]
 }

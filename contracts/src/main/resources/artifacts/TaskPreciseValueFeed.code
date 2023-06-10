@@ -61,10 +61,15 @@ THROWIFNOT 303
 GETGLOB 11
 .loc ../contracts-common/std/GasManagement.tsol, 68
 XCHG S2
-.loc TaskPreciseValueFeed.tsol, 14
+.loc TaskPreciseValueFeed.tsol, 21
 SETGLOB 13
-.loc TaskPreciseValueFeed.tsol, 15
+.loc TaskPreciseValueFeed.tsol, 22
 SETGLOB 14
+.loc TaskPreciseValueFeed.tsol, 23
+GETGLOB 15
+PUSHINT 1
+SETINDEX 0
+SETGLOB 15
 .loc ../contracts-common/std/GasManagement.tsol, 35
 NEWC
 STSLICECONST x62_
@@ -89,7 +94,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc TaskPreciseValueFeed.tsol, 21
+.loc TaskPreciseValueFeed.tsol, 29
 OVER
 PUSHCONT {
 	LDREF
@@ -109,7 +114,7 @@ CALLREF {
 THROW 0
 
 .macro preciseFeedRequest_eef58e69_internal_macro
-.loc TaskPreciseValueFeed.tsol, 21
+.loc TaskPreciseValueFeed.tsol, 29
 DEPTH
 ADDCONST -5
 PICK
@@ -126,7 +131,7 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc TaskPreciseValueFeed.tsol, 22
+.loc TaskPreciseValueFeed.tsol, 30
 GETGLOB 9
 SWAP
 GETGLOB 13
@@ -136,17 +141,6 @@ INDEX 3
 CALLREF {
 	CALL $_transferFeeFromRequesterToFeed_ee344941_internal_macro$
 }
-.loc ../contracts-common/std/GasManagement.tsol, 63
-GETGLOB 9
-.loc ../contracts-common/std/GasManagement.tsol, 35
-NEWC
-STSLICECONST x62_
-STSLICE
-PUSHINT 111
-STZEROES
-ENDC
-PUSHPOW2 7
-SENDRAWMSG
 .loc TaskPreciseValueFeed.tsol, 0
 
 .macro onReceivedTransfer
@@ -158,7 +152,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc TaskPreciseValueFeed.tsol, 25
+.loc TaskPreciseValueFeed.tsol, 33
 OVER
 PUSHCONT {
 	LDREF
@@ -184,7 +178,7 @@ CALLREF {
 THROW 0
 
 .macro onReceivedTransfer_0c35d9fe_internal_macro
-.loc TaskPreciseValueFeed.tsol, 25
+.loc TaskPreciseValueFeed.tsol, 33
 DEPTH
 ADDCONST -5
 PICK
@@ -220,7 +214,7 @@ RAWRESERVE
 PUSH S3
 .loc ../contracts-common/std/GasManagement.tsol, 68
 ROLLREV 4
-.loc TaskPreciseValueFeed.tsol, 26
+.loc TaskPreciseValueFeed.tsol, 34
 SWAP
 GETGLOB 13
 INDEX 3
@@ -231,7 +225,7 @@ INDEX 3
 GEQ
 AND
 PUSHCONT {
-	.loc TaskPreciseValueFeed.tsol, 27
+	.loc TaskPreciseValueFeed.tsol, 35
 	GETGLOB 16
 	THIRD
 	OVER
@@ -269,7 +263,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc TaskPreciseValueFeed.tsol, 31
+.loc TaskPreciseValueFeed.tsol, 39
 OVER
 PUSHCONT {
 	LDREF
@@ -291,7 +285,7 @@ CALLREF {
 THROW 0
 
 .macro acceptLockResult_9dd782a8_internal_macro
-.loc TaskPreciseValueFeed.tsol, 31
+.loc TaskPreciseValueFeed.tsol, 39
 BLKDROP 3
 DEPTH
 ADDCONST -5
@@ -308,7 +302,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc TaskPreciseValueFeed.tsol, 38
+.loc TaskPreciseValueFeed.tsol, 46
 ENDS
 .loc TaskPreciseValueFeed.tsol, 0
 CALLREF {
@@ -320,7 +314,7 @@ CALLREF {
 THROW 0
 
 .macro updateResponse_e5d15ad5_internal_macro
-.loc TaskPreciseValueFeed.tsol, 38
+.loc TaskPreciseValueFeed.tsol, 46
 DEPTH
 ADDCONST -5
 PICK
@@ -337,21 +331,30 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
-.loc TaskPreciseValueFeed.tsol, 39
+.loc TaskPreciseValueFeed.tsol, 47
 GETGLOB 15
 FIRST
 EQINT 1
 PUSHCONT {
-	.loc TaskPreciseValueFeed.tsol, 41
+	.loc TaskPreciseValueFeed.tsol, 49
 	GETGLOB 15
 	PUSHINT 2
 	SETINDEX 0
 	DUP
 	SETGLOB 15
-	.loc TaskPreciseValueFeed.tsol, 42
+	.loc TaskPreciseValueFeed.tsol, 50
 	NOW
 	SETINDEX 3
 	SETGLOB 15
+	.loc TaskPreciseValueFeed.tsol, 51
+	GETGLOB 9
+	PUSHSLICE xc00000000000000000000000001f0197bf
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
 	.loc TaskPreciseValueFeed.tsol, 0
 }
 IF
@@ -373,7 +376,7 @@ SENDRAWMSG
 CALL $_sendResponse_5f267ebd_internal_macro$
 
 .macro _sendResponse_5f267ebd_internal_macro
-.loc TaskPreciseValueFeed.tsol, 47
+.loc TaskPreciseValueFeed.tsol, 56
 GETGLOB 16
 FIRST
 EQINT 4
@@ -382,155 +385,6 @@ FIRST
 EQINT 1
 AND
 THROWIFNOT 308
-.loc TaskPreciseValueFeed.tsol, 49
-PUSHINT 0
-NEWDICT
-PAIR
-GETGLOB 16
-INDEX 6
-DUP
-PUSHINT 267
-DICTMINREF
-NULLSWAPIFNOT
-IFREF {
-	SWAP
-	CTOS
-	CALLREF {
-		LDMSGADDR
-		LDU 128
-		LDU 256
-		LDREF
-		LDREF
-		ENDS
-		CTOS
-		LDU 128
-		LDU 128
-		LDI 1
-		LDI 1
-		ENDS
-		TUPLE 8
-	}
-	PAIR
-}
-PUSHCONT {
-	DUP
-	ISNULL
-	NOT
-}
-PUSHCONT {
-	PUSH2 S2, S0
-	SECOND
-	CALLREF {
-		UNTUPLE 8
-		REVERSE 8, 0
-		NEWC
-		STSLICE
-		STU 128
-		STU 256
-		STREF
-		ROLLREV 4
-		NEWC
-		STU 128
-		STU 128
-		STI 1
-		STI 1
-		STBREFR
-	}
-	ENDC
-	SWAP
-	UNPAIR
-	OVER
-	INC
-	ROLLREV 3
-	PUSHINT 32
-	DICTUSETREF
-	PAIR
-	POP S3
-	FIRST
-	OVER
-	PUSHINT 267
-	DICTGETNEXT
-	NULLSWAPIFNOT
-	IFREF {
-		SWAP
-		PLDREF
-		CTOS
-		CALLREF {
-			LDMSGADDR
-			LDU 128
-			LDU 256
-			LDREF
-			LDREF
-			ENDS
-			CTOS
-			LDU 128
-			LDU 128
-			LDI 1
-			LDI 1
-			ENDS
-			TUPLE 8
-		}
-		PAIR
-	}
-}
-WHILE
-DROP2
-SECOND
-PUSHINT 0
-NULL
-PUSHCONT {
-	PUSH2 S1, S2
-	PUSHINT 32
-	DICTUGETREF
-	NULLSWAPIFNOT
-	IFREF {
-		CTOS
-		CALLREF {
-			LDMSGADDR
-			LDU 128
-			LDU 256
-			LDREF
-			LDREF
-			ENDS
-			CTOS
-			LDU 128
-			LDU 128
-			LDI 1
-			LDI 1
-			ENDS
-			TUPLE 8
-		}
-	}
-	DUP
-	POP S2
-	ISNULL
-	NOT
-}
-PUSHCONT {
-	.loc TaskPreciseValueFeed.tsol, 50
-	DUP
-	INDEX 5
-	PUSHCONT {
-		.loc TaskPreciseValueFeed.tsol, 51
-		DUP
-		FIRST
-		OVER
-		INDEX 4
-		PUSH S2
-		INDEX 4
-		CALLREF {
-			CALL $_transferFeeFromFeedToValidator_8e0173de_internal_macro$
-		}
-		.loc TaskPreciseValueFeed.tsol, 0
-	}
-	IFNOT
-	.loc TaskPreciseValueFeed.tsol, 0
-	OVER
-	INC
-	POP S2
-}
-WHILE
-BLKDROP 3
 .loc TaskPreciseValueFeed.tsol, 0
 
 .globl	_makeConsensus_fc701e5e_internal
@@ -976,10 +830,12 @@ CALLREF {
 .loc ../contracts-common/std/GasManagement.tsol, 0
 PUSHINT 0
 RAWRESERVE
+.loc ../contracts-common/std/GasManagement.tsol, 45
+GETGLOB 11
+.loc ../contracts-common/std/GasManagement.tsol, 68
+SWAP
 .loc TaskBase.tsol, 47
 SETGLOB 17
-.loc ../contracts-common/std/GasManagement.tsol, 63
-GETGLOB 9
 .loc ../contracts-common/std/GasManagement.tsol, 35
 NEWC
 STSLICECONST x62_
@@ -2074,11 +1930,14 @@ ROLL 4
 MYADDR
 ROLL 5
 GETGLOB 17
+TRUE
 NEWC
-STSLICECONST x62_
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
 STSLICE
-PUSHINT 9789369574394656757036770681243717074945
-STUR 135
+PUSHINT 1
+STUR 111
 ROLLREV 6
 NEWC
 STSLICECONST x5f32d85d
@@ -2096,7 +1955,7 @@ STBREFR
 STBREFR
 STBREFR
 ENDC
-PUSHINT 0
+PUSHPOW2 7
 SENDRAWMSG
 .loc TaskBase.tsol, 0
 
@@ -2191,7 +2050,9 @@ ROLLREV 10
 TUPLE 10
 SWAP
 LDMSGADDR
+LDU 8
 ENDS
+SETGLOB 18
 SETGLOB 17
 SETGLOB 16
 SETGLOB 15
@@ -2264,6 +2125,8 @@ PUSHCONT {
 	PUSHREFSLICE {
 		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 	}
+	PUSHINT 0
+	SETGLOB 18
 	SETGLOB 17
 	SETGLOB 16
 	SETGLOB 15
@@ -2279,12 +2142,15 @@ PUSHCONT {
 	SETGLOB 2
 	PUSHINT 0 ; timestamp
 	SETGLOB 3
+	PUSHINT 0
+	SETGLOB 18
 }
 IFREFELSE {
 	CALL $c4_to_c7$
 }
 
 .macro c7_to_c4
+GETGLOB 18
 GETGLOB 17
 GETGLOB 16
 GETGLOB 15
@@ -2300,7 +2166,7 @@ STU 256
 STU 64
 STONE
 STSLICE
-ROLLREV 7
+ROLLREV 8
 NEWC
 STSLICE
 STREF
@@ -2316,7 +2182,7 @@ UNTUPLE 5
 REVERSE 6, 0
 STU 128
 STU 64
-ROLLREV 6
+ROLLREV 7
 NEWC
 STU 128
 STU 128
@@ -2343,13 +2209,14 @@ STREF
 STU 64
 STU 64
 STU 64
-ROLLREV 5
+ROLLREV 6
 NEWC
 STDICT
 STU 16
 STU 16
 STU 16
 STSLICE
+STU 8
 STBREFR
 STBREFR
 STBREFR

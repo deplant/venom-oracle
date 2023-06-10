@@ -7,7 +7,7 @@ abstract contract ConsensusMedianized is TaskBase {
 
     ///@dev CustomTask implementation doesn't check anything
     function _responseCheck(TvmCell response) override internal inline pure {
-        //uint128 /*responseValue*/ = abi.decode(response, uint128);
+        uint128 responseValue = abi.decode(response, uint128);
     }
 
     function _makeConsensus() override internal returns (TvmCell, uint8) {
@@ -18,8 +18,9 @@ abstract contract ConsensusMedianized is TaskBase {
         //uint size = _currElectionState.revealedCount;
         ResponseData[] revealedResponses;
         for (ParticipantData participant : _currElectionState.participants.values()) {// iteration over the array
-            if (participant.revealed) {
-                TvmCell responseCell = participant.revealResponse;
+            TvmCell empty;
+            TvmCell responseCell = participant.revealResponse;
+            if (participant.revealed && responseCell != empty) {
                 revealedResponses.push(ResponseData(participant.validator, abi.decode(responseCell, uint128)));
             }
         }
@@ -28,9 +29,9 @@ abstract contract ConsensusMedianized is TaskBase {
         uint respCount = sortedResponses.length;
 
         if (respCount * 2 >= _currElectionState.revealedCount) {
-            return (abi.encode(sortedResponses[respCount / 2]), SUCCESS);
+            return (abi.encode(sortedResponses[respCount / 2].value), SUCCESS);
         } else {
-            return (abi.encode(sortedResponses[respCount / 2]), FAILURE);
+            return (abi.encode(sortedResponses[respCount / 2].value), FAILURE);
         }
 
     }
