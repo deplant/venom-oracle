@@ -1,0 +1,44 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "../ITokenRoot.tsol";
+import "../ITokenWallet.tsol";
+import "../../contracts-common/std/GasManagement.tsol";
+
+contract TestFaucet is GasManagement {
+
+    address public static _token;
+    address public _tokenWallet;
+    uint128 _amount;
+
+    constructor(address token_, uint128 amount_) public {
+        require(msg.pubkey() == tvm.pubkey(), 100);
+        require(token_ == _token,101);
+        tvm.accept();
+        _amount = amount_;
+        ITokenRoot(_token).deployWallet{ value: 200 milli, flag: FEE_EXTRA, bounce: true, callback: TestFaucet.onTokenRootCallback }(address(this), 100 milli);
+    }
+
+    // ****************************************************************
+    // External
+    // ****************************************************************
+
+    function onTokenRootCallback(address tokenWallet_) external reserveGas {
+        require(msg.sender == _token, 102);
+        _tokenWallet = tokenWallet_;
+    }
+
+    function faucet(bool doDeploy_) external view internalMsg reserveGas {
+        TvmCell empty;
+        uint128 valueToDeployWallet = doDeploy_ ? 100 milli : 0;
+        ITokenWallet(_tokenWallet).transfer{ value: 0, flag: ALL_UNRESERVED, bounce: true }(_amount,msg.sender,valueToDeployWallet, msg.sender,false,empty);
+    }
+
+    // ****************************************************************
+    // Internal (std/GasManagement)
+    // ****************************************************************
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+        return DEFAULT_GAS_FLOOR;
+    }
+
+}

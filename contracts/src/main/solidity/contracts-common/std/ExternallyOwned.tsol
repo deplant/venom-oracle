@@ -1,0 +1,28 @@
+pragma ever-solidity ^0.64;
+
+import "./Errors.tsol";
+
+abstract contract ExternallyOwned is Errors {
+
+	// ****************************************************************
+	// Inline
+	// ****************************************************************
+	function $requireExtOwnerSign() internal inline view {
+		require(msg.pubkey() == tvm.pubkey(), NOT_MY_OWNER);
+	}
+
+	// ****************************************************************	
+	// Modifiers
+	// ****************************************************************	
+	modifier onlyExtOwner {
+		$requireExtOwnerSign;
+		_;
+	}
+
+	modifier checkExtOwnerAndAccept {
+		$requireExtOwnerSign;
+		tvm.accept();
+		_;
+	}
+	
+}

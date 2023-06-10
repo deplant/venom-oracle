@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+interface IPreciseFeed {
+    function preciseFeedRequest(address payerAddress_) external internalMsg;
+    function updateResponse() external internalMsg;
+}

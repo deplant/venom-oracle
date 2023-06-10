@@ -1,0 +1,111 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity ^0.64;
+
+import "../config/Types.tsol";
+import "../contracts-common/std/GasManagement.tsol";
+import "./BankStorage.tsol";
+import "./int/IBankRoot.tsol";
+import "./int/IBankStorage.tsol";
+import "./int/IStorageOwner.tsol";
+
+contract BankRoot is BankSecurity, IBankRoot, BankConfig, Types, GasManagement {
+
+    address public static _owner;
+    address public static _token;
+    address public static _factory;
+    TvmCell public _storageCode;
+
+    constructor() public {
+        tvm.accept();
+    }
+
+    // ****************************************************************
+    // Getter
+    // ****************************************************************
+    function storageOf(address owner_, uint8 type_) external view returns (address) {
+        return _getStorageAddress(owner_, type_);
+    }
+
+    // ****************************************************************
+    // External (IBank)
+    // ****************************************************************
+    function deployStorage(uint128 deployWalletValue_) override external internalMsg reserveGas {
+        _deployStorage(msg.sender, CONSUMER_STORAGE, deployWalletValue_);
+    }
+
+    ///@dev from bank Owner or from factory
+    function deployStorageTo(address owner_, uint8 type_, uint128 deployWalletValue_) override external internalMsg reserveGas {
+        require(msg.sender.value != 0 && (msg.sender == $intOwner() || msg.sender == _factory), NOT_MY_OWNER);
+        _deployStorage(owner_, type_, deployWalletValue_);
+    }
+
+    //    function onLockCheckRequest(address owner_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_, uint64 until_, address requester_, uint8 requesterType_) override external internalMsg reserveGas {
+    //        address targetStorage = _getStorageAddress(owner_, type_);
+    //        IBankStorage(targetStorage).acceptLockCheck{ value: 0, flag: ALL_UNRESERVED, bounce: true }(requester_, requesterType_, valueAmount_, tokenAmount_, until_);
+    //    }
+    //
+    //    function onLockCheckResult(address owner_, uint8 type_, address requester_, uint8 /*requesterType_*/, bool hasLocked_) override external internalMsg onlyOtherStorage(owner_, type_) reserveGas {
+    //        IStorageOwner(requester_).acceptLockResult{ value: 0, flag: ALL_UNRESERVED, bounce: true }(owner_, type_, hasLocked_);
+    //    }
+
+    function setStorageCode(TvmCell storageCode_) override external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+        _storageCode = storageCode_;
+    }
+
+    function setFactory(address factory_) override external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+        _factory = factory_;
+    }
+
+    // ****************************************************************
+    // Internal (BankSecurity)
+    // ****************************************************************
+    function _deployStorage(address owner_, uint8 type_, uint128 deployWalletValue_) internal view {
+        new BankStorage{
+                value: 0,
+                flag: ALL_UNRESERVED,
+                code: _storageCode,
+                varInit: {
+                _bank: address(this),
+                _owner: owner_,
+                _type: type_
+            }}(owner_, type_, deployWalletValue_, _token);
+    }
+
+    function _getStorageAddress(address owner_, uint8 type_) override internal view returns (address) {
+        TvmCell stateInit = tvm.buildStateInit({
+            contr: BankStorage,
+            varInit: {
+            _bank: $bank(),
+            _owner: owner_,
+            _type: type_
+        },
+            pubkey: 0,
+            code: $code()
+        });
+
+        return address(tvm.hash(stateInit));
+    }
+
+    // ****************************************************************
+    // Internal (std/InternallyOwned)
+    // ****************************************************************
+    function $intOwner() override internal inline view returns (address owner) {
+        return _owner;
+    }
+
+    // ****************************************************************
+    // Internal (std/GasManagement)
+    // ****************************************************************
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+        return DEFAULT_GAS_FLOOR;
+    }
+
+    function $bank() override internal inline view returns (address bank) {
+        return address(this);
+    }
+
+    function $code() override internal inline view returns (TvmCell code) {
+        return _storageCode;
+    }
+
+}

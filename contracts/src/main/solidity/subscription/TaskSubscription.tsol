@@ -1,0 +1,56 @@
+pragma ever-solidity ^0.64;
+
+pragma AbiHeader expire;
+pragma AbiHeader time;
+
+import "../contracts-common/std/GasManagement.tsol";
+import "../contracts-common/extensions/AddressExtension.tsol";
+
+
+/*
+	This contract tracks current subscriptions of oracle (so, oracle will know which event to monitor)
+*/
+contract TaskSubscription is GasManagement {
+
+	using AddressExtension for address;
+	
+	address public static _taskAddress;
+	address public static _oracleAddress;
+	uint64  public _lastTx;
+	
+	
+    constructor(address taskAddress_, uint64 lastTx_) public onlyOracle reserveGas returnAllUnreserved {
+		require(
+				_taskAddress.notNull() && 
+				_oracleAddress.notNull() && 
+				taskAddress_ == _taskAddress
+		, WRONG_CONSTRUCTOR_VALUES);
+		_lastTx = lastTx_;
+    }
+
+	// ****************************************************************	
+	// External
+	// ****************************************************************			
+	function cancel() external view internalMsg onlyOracle {
+		_oracleAddress.transfer({bounce: false, value: 0, flag: DRAIN_AND_DESTROY});
+	}
+	
+	function updateLastTx(uint64 lastTx_) external internalMsg onlyOracle reserveGas returnAllUnreserved {
+		_lastTx = lastTx_;
+	}
+
+	// ****************************************************************	
+	// Internal (std)
+	// ****************************************************************		
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+		return DEFAULT_GAS_FLOOR;
+	}	
+	
+	// ****************************************************************	
+	// Modifiers
+	// ****************************************************************	
+	modifier onlyOracle {
+		require(msg.sender == _oracleAddress, NOT_MY_OWNER);
+		_;
+	}		
+}

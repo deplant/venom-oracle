@@ -1,0 +1,90 @@
+pragma ever-solidity ^0.64;
+
+import "../contracts-common/std/GasManagement.tsol";
+import "./int/IPreciseConsumer.tsol";
+import "./int/IMedianizedConsumer.tsol";
+import "../task/int/IMedianizedFeed.tsol";
+import "../task/int/IPreciseFeed.tsol";
+import "../task/int/IMedianizedOnRequest.tsol";
+import "../task/int/IPreciseOnRequest.tsol";
+
+contract ExampleConsumer is GasManagement, IPreciseConsumer, IMedianizedConsumer {
+
+	TvmCell _preciseResult;
+	uint128 _medianizedResult;
+	address _currentTask;
+
+    constructor() public {
+		require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+		tvm.accept();
+    }
+
+	// ****************************************************************
+	// External
+	// ****************************************************************
+	
+	function calculatePreciseOnRequest(address taskAddress_, address payerAddress_, TvmCell params_) external {
+		require(taskAddress_.value != 0, 444);
+		require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+		tvm.accept();
+		_currentTask = taskAddress_;
+		IPreciseOnRequest(taskAddress_).preciseTaskRequest{value: 500_000_000, flag: 1, bounce: true}(payerAddress_, params_);
+	}
+
+	function calculateMedianizedOnRequest(address taskAddress_, address payerAddress_, TvmCell params_) external {
+		require(taskAddress_.value != 0, 444);
+		require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+		tvm.accept();
+		_currentTask = taskAddress_;
+		IMedianizedOnRequest(taskAddress_).medianizedTaskRequest{value: 500_000_000, flag: 1, bounce: true}(payerAddress_, params_);
+	}
+
+	function calculatePreciseFeed(address taskAddress_, address payerAddress_) external {
+		require(taskAddress_.value != 0, 444);
+		require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+		tvm.accept();
+		_currentTask = taskAddress_;
+		IPreciseFeed(taskAddress_).preciseFeedRequest{value: 500_000_000, flag: 1, bounce: true}(payerAddress_);
+	}
+
+	function calculateMedianizedFeed(address taskAddress_, address payerAddress_) external {
+		require(taskAddress_.value != 0, 444);
+		require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+		tvm.accept();
+		_currentTask = taskAddress_;
+		IMedianizedFeed(taskAddress_).medianizedFeedRequest{value: 500_000_000, flag: 1, bounce: true}(payerAddress_);
+	}
+
+	// ****************************************************************
+	// Getter 
+	// ****************************************************************	
+	function getPreciseResult() external view returns (TvmCell) {
+		return _preciseResult;
+	}
+
+	function getMedianizedResult() external view returns (uint128) {
+		return _medianizedResult;
+	}
+
+	// ****************************************************************
+	// External
+	// ****************************************************************
+	function preciseCallback(TvmCell response_) override external internalMsg {
+		require(msg.sender == _currentTask && msg.sender.value != 0, 198); // NOT_AWAITED_TASK
+		_preciseResult = response_;
+	}
+
+	function medianizedCallback(uint128 response_) override external internalMsg {
+		require(msg.sender == _currentTask && msg.sender.value != 0, 198); // NOT_AWAITED_TASK
+		_medianizedResult = response_;
+	}
+
+	// ****************************************************************	
+	// Internal (std)
+	// ****************************************************************		
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+		return DEFAULT_GAS_FLOOR;
+	}
+	
+
+}

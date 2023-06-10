@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "../contracts-common/std/InternallyOwned.tsol";
+
+abstract contract BankSecurity is InternallyOwned {
+
+    // ****************************************************************
+    // Internal
+    // ****************************************************************
+    function _getStorageAddress(address owner_, uint8 type_) virtual internal view returns (address);
+
+    // ****************************************************************
+    // Abstract
+    // ****************************************************************
+    // @dev virtual functions that are differently overriden in bank and in storage
+    function $bank() virtual internal inline view returns (address bank);
+
+    // @dev virtual functions that are differently overriden in bank and in storage
+    function $code() virtual internal inline view returns (TvmCell code);
+
+    // ****************************************************************
+    // Modifiers
+    // ****************************************************************
+    modifier onlyOtherStorage(address storageOwner_, uint8 type_) {
+        require(msg.sender.value != 0 && msg.sender == _getStorageAddress(storageOwner_, type_));
+        _;
+    }
+
+}

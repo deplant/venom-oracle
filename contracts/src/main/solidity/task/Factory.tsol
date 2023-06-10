@@ -1,0 +1,171 @@
+pragma ever-solidity ^0.64;
+
+import "../bank/int/IBankRoot.tsol";
+import "../config/Types.tsol";
+import "../contracts-common/extensions/TvmCellExtension.tsol";
+import "../contracts-common/std/ExternallyOwned.tsol";
+import "../contracts-common/std/GasManagement.tsol";
+import "./TaskMedianizedOnRequest.tsol";
+import "./TaskMedianizedValueFeed.tsol";
+import "./TaskPreciseOnRequest.tsol";
+import "./TaskPreciseValueFeed.tsol";
+import "./int/IFactory.tsol";
+import "./int/ITask.tsol";
+
+
+contract Factory is IFactory, Types, Flags, GasManagement, ExternallyOwned {
+
+    using TvmCellExtension for TvmCell;
+
+    Types.FactorySettings public _defaultSettings = Types.FactorySettings({
+        minStake: 10_000_000_000_000,
+        electionTimeout: 15,
+        bountyStageSwitch: 10_000_000_000,
+        slashMissedStage: 10_000_000_000,
+        slashBadResponse: 10_000_000_000
+    });
+
+    constructor() public checkExtOwnerAndAccept {
+    }
+
+    uint128 constant TASK_DEPLOY_GAS = 500_000;    // 0.5 EVER currently
+
+    mapping(uint8 => TvmCell) public _taskCodes;
+
+    address public _bank;
+    address public _token;
+    TvmCell public _bankStorageCode;
+
+    function getTaskAddress(uint8 type_, address owner_, string name_) external view returns (address) {
+        return _getTaskAddress(type_, owner_, name_);
+    }
+
+    function setMinStake(uint128 minStake_) external externalMsg checkExtOwnerAndAccept {
+        _defaultSettings.minStake = minStake_;
+    }
+
+    function setBank(address bank_) external externalMsg checkExtOwnerAndAccept {
+        _bank = bank_;
+    }
+
+    function setTokenRoot(address tokenRoot_) external externalMsg checkExtOwnerAndAccept {
+        _token = tokenRoot_;
+    }
+
+    //    function setValidatorCodeSignature(TvmCell validatorCode_) external externalMsg checkExtOwnerAndAccept {
+    //        (uint256 hash, uint16 depth) = validatorCode_.hashAndDepth();
+    //        _defaultSettings.validatorCodeHash = hash;
+    //        _defaultSettings.validatorCodeDepth = depth;
+    //    }
+
+    function setTaskCode(uint8 respType_, TvmCell taskCode_) external externalMsg checkExtOwnerAndAccept {
+        _taskCodes[respType_] = taskCode_;
+    }
+
+    function acceptFactorySettingsUpdate() override external internalMsg reserveGas returnAllUnreserved {
+        ITask(msg.sender).onUpdateFactorySettingsResponse(_defaultSettings);
+    }
+
+    function publishCustomTask(uint8 type_, string name_, string body_, uint32 minValidators_, uint128 executionFee_) external view internalMsg reserveGas {
+        require(minValidators_ >= 3, WRONG_SETTINGS, "No less than 3 validators possible");
+        require(msg.value >= 2 ever, NOT_ENOUGH_VALUE, "Value too low");
+        address deployAddress;
+        if (type_ == PRECISE_IMMEDIATE) {
+            deployAddress = new TaskPreciseOnRequest{
+                    value: $toValue(TASK_DEPLOY_GAS),
+                    flag: FEE_EXTRA,
+                    code: _taskCodes[PRECISE_IMMEDIATE],
+                    varInit: {
+                    _factory: address(this),
+                    _owner: msg.sender,
+                    _name: name_
+                }
+                }(TaskSettings({body: body_, consensusType: PRECISE, minValidators: minValidators_, executionFee: executionFee_}),
+                _defaultSettings);
+        } else if (type_ == MEDIAN_IMMEDIATE) {
+            deployAddress = new TaskMedianizedOnRequest{
+                    value: $toValue(TASK_DEPLOY_GAS),
+                    flag: FEE_EXTRA,
+                    code: _taskCodes[MEDIAN_IMMEDIATE],
+                    varInit: {
+                    _factory: address(this),
+                    _owner: msg.sender,
+                    _name: name_
+                }
+                }(TaskSettings({body: body_, consensusType: MEDIAN, minValidators: minValidators_, executionFee: executionFee_}),
+                _defaultSettings);
+        } else if (type_ == PRECISE_FEED) {
+            deployAddress = new TaskPreciseValueFeed{
+                    value: $toValue(TASK_DEPLOY_GAS),
+                    flag: FEE_EXTRA,
+                    code: _taskCodes[PRECISE_FEED],
+                    varInit: {
+                    _factory: address(this),
+                    _owner: msg.sender,
+                    _name: name_
+                }
+                }(TaskSettings({body: body_, consensusType: PRECISE, minValidators: minValidators_, executionFee: executionFee_}),
+                _defaultSettings);
+        } else if (type_ == MEDIAN_FEED) {
+            deployAddress = new TaskMedianizedValueFeed{
+                    value: $toValue(TASK_DEPLOY_GAS),
+                    flag: FEE_EXTRA,
+                    code: _taskCodes[MEDIAN_FEED],
+                    varInit: {
+                    _factory: address(this),
+                    _owner: msg.sender,
+                    _name: name_
+                }
+                }(TaskSettings({body: body_, consensusType: MEDIAN, minValidators: minValidators_, executionFee: executionFee_}),
+                _defaultSettings);
+        } else {
+            revert(UNKNOWN_ARGUMENT);
+        }
+
+
+        IBankRoot(_bank).deployStorageTo{value: 0, flag: ALL_UNRESERVED}(deployAddress, TASK_STORAGE, 500 milliever);
+    }
+
+    // function publishPriceFeed(string name_, string body_, uint32 minValidators_, ElectionSettings settings_) external view internalMsg returns (address taskAddress) {
+    // return new PriceFeedElector{
+    // value: $toValue(TASK_DEPLOY_GAS),
+    // flag: FEE_EXTRA,
+    // code: _taskCodes[ResponseType.MEDIAN],
+    // pubkey: tvm.pubkey(),
+    // varInit: {
+    // _factory: address(this),
+    // _owner: msg.sender,
+    // _name: name_
+    // }
+    // }(new Task({body: body_, responseType: ResponseType.MEDIAN, minValidators: minValidators_, executionFee: 10_000_000}),
+    // settings_);
+    // }
+
+    // ****************************************************************
+    // Internal (std)
+    // ****************************************************************
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+        return DEFAULT_GAS_FLOOR;
+    }
+
+    // ****************************************************************
+    // Internal
+    // ****************************************************************
+
+    function _getTaskAddress(uint8 type_, address owner_, string name_) private view returns (address) {
+        TvmCell stateInit = tvm.buildStateInit({
+            contr: TaskMedianizedValueFeed,
+            varInit: {
+            _factory: address(this),
+            _owner: owner_,
+            _name: name_
+        },
+            pubkey: 0,
+            code: _taskCodes[type_]
+        });
+
+        return address(tvm.hash(stateInit));
+    }
+
+
+}

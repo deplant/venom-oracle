@@ -1,0 +1,85 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setMinStake",
+			"inputs": [
+				{"name":"minStake_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTokenRoot",
+			"inputs": [
+				{"name":"tokenRoot_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setValidatorCodeSignature",
+			"inputs": [
+				{"name":"validatorCode_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTaskCode",
+			"inputs": [
+				{"name":"respType_","type":"uint8"},
+				{"name":"taskCode_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "publishCustomTask",
+			"inputs": [
+				{"name":"name_","type":"string"},
+				{"name":"body_","type":"string"},
+				{"name":"minValidators_","type":"uint32"},
+				{"name":"executionFee_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "_defaultSettings",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"validatorCodeHash","type":"uint256"},{"name":"validatorCodeDepth","type":"uint16"},{"name":"tokenRoot","type":"address"},{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_defaultSettings","type":"tuple"}
+			]
+		},
+		{
+			"name": "_taskCodes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_taskCodes","type":"map(uint8,cell)"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"components":[{"name":"validatorCodeHash","type":"uint256"},{"name":"validatorCodeDepth","type":"uint16"},{"name":"tokenRoot","type":"address"},{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_defaultSettings","type":"tuple"},
+		{"name":"_taskCodes","type":"map(uint8,cell)"}
+	]
+}

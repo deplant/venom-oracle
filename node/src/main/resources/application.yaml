@@ -1,0 +1,45 @@
+#
+# Copyright (c) 2022 Oracle and/or its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+server:
+  host: 127.0.0.1
+  port: 9080
+
+oracle:
+  validator:
+    endpoint: http://185.20.226.96/graphql
+    timeout: 50000
+    address: 0:5cbe970968a1c2be1e5e2a74b8f5d209a1471de0e1b7eaf5cb45e37eb9aeee6b
+    token: 0:5cbe970968a1c2be1e5e2a74b8f5d209a1471de0e1b7eaf5cb45e37eb9aeee6b
+    public-key: 2494eaa1f454e78c187298d908f87e755343d35fe7921e3eb51a697ca2d5f46b
+    secret-key: d4f54f03f436cde25fd1883aee446766eb2eec8b29c65bfdf709d8a9ff9ab3de
+  subscription:
+    auto-sub-check-interval: 60000
+    feed-medianized-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    feed-precise-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    request-medianized-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    request-precise-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    scheduled-medianized-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    scheduled-precise-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+  listener:
+    subscription-code-hash: 7bb4f2878d2167862692a8c4099037ba3f6dea2a1d8fe87e3a17c142a1f1b02e
+    request-check-interval: 10000
+  task-processor:
+    max-task-threads: 1000
+    max-gql-queries: 100
+    max-http-requests: 1000
+    max-action-threads: 512
+    task-timeout: 60000

@@ -1,0 +1,40 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "./TaskBase.tsol";
+
+abstract contract ConsensusPrecise is TaskBase {
+
+
+    ///@dev CustomTask implementation doesn't check anything
+    function _responseCheck(TvmCell response) override internal inline pure {
+        //abi.decode(response, uint128);
+    }
+
+    function _makeConsensus() override internal returns (TvmCell, uint8) {
+        TvmBuilder builder;
+        TvmCell maxCountResponse = builder.toCell();
+        mapping(TvmCell => uint16) groupByResponse;
+
+        for (ParticipantData participant : _currElectionState.participants.values()) {// iteration over the array
+            TvmCell response = participant.revealResponse;
+            if (!response.isEmpty()) {
+                if (++groupByResponse[response] > groupByResponse[maxCountResponse]) {
+                    maxCountResponse = response;
+                }
+            }
+        }
+
+        uint16 maxCount = groupByResponse[maxCountResponse];
+
+        if (maxCount * 2 >= _currElectionState.revealedCount) {
+            // > 51% good answers
+            _currElectionState.acceptedCount = maxCount;
+            return (maxCountResponse, SUCCESS);
+        } else {
+            _currElectionState.acceptedCount = maxCount;
+            return (maxCountResponse, FAILURE);
+        }
+    }
+
+}

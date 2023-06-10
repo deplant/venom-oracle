@@ -1,0 +1,68 @@
+{
+  "target_dir": "src/gen/java",
+  "contract_pkg": "tech.deplant.osiris.contract",
+  "template_pkg": "tech.deplant.osiris.template",
+  "contract_list": [
+    {
+      "name": "TaskMedianizedOnRequest",
+      "abi": "artifacts/TaskMedianizedOnRequest.abi.json",
+      "tvc": "artifacts/TaskMedianizedOnRequest.tvc"
+    },
+    {
+      "name": "TaskMedianizedValueFeed",
+      "abi": "artifacts/TaskMedianizedValueFeed.abi.json",
+      "tvc": "artifacts/TaskMedianizedValueFeed.tvc"
+    },
+    {
+      "name": "TaskPreciseOnRequest",
+      "abi": "artifacts/TaskPreciseOnRequest.abi.json",
+      "tvc": "artifacts/TaskPreciseOnRequest.tvc"
+    },
+    {
+      "name": "TaskPreciseValueFeed",
+      "abi": "artifacts/TaskPreciseValueFeed.abi.json",
+      "tvc": "artifacts/TaskPreciseValueFeed.tvc"
+    },
+    {
+      "name": "OracleValidator",
+      "abi": "artifacts/OracleValidator.abi.json",
+      "tvc": "artifacts/OracleValidator.tvc",
+      "interfaces": [
+        "Validator"
+      ]
+    },
+    {
+      "name": "ExampleConsumer",
+      "abi": "artifacts/ExampleConsumer.abi.json",
+      "tvc": "artifacts/ExampleConsumer.tvc"
+    },
+    {
+      "name": "Factory",
+      "abi": "artifacts/Factory.abi.json",
+      "tvc": "artifacts/Factory.tvc"
+    },
+    {
+      "name": "TaskSubscription",
+      "abi": "artifacts/TaskSubscription.abi.json",
+      "tvc": "artifacts/TaskSubscription.tvc",
+      "interfaces": [
+        "Subscription"
+      ]
+    },
+    {
+      "name": "TestFaucet",
+      "abi": "artifacts/TestFaucet.abi.json",
+      "tvc": "artifacts/TestFaucet.tvc"
+    },
+    {
+      "name": "BankRoot",
+      "abi": "artifacts/BankRoot.abi.json",
+      "tvc": "artifacts/BankRoot.tvc"
+    },
+    {
+      "name": "BankStorage",
+      "abi": "artifacts/BankStorage.abi.json",
+      "tvc": "artifacts/BankStorage.tvc"
+    }
+  ]
+}

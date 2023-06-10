@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "trigger": {
+    "type": "SCHEDULE",
+    "schedule": "* */20 * * * *",
+    "timezone": "UTC"
+  },
+  "externalId": "",
+  "actions": [
+    {
+      "type": "HTTP",
+      "answer": "JSON",
+      "method": "GET",
+      "uri": "https://cex.io/api/ticker/EVER/USD"
+    },
+    {
+      "type": "JSON_PARSE",
+      "answer": "UINT32",
+      "path": "/last"
+    },
+    {
+      "type": "RANDOM",
+      "answer": "UINT32",
+      "values": [
+        "Sun",
+        "Earth"
+      ],
+      "seed": 12034040
+    }
+  ]
+}

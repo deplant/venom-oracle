@@ -1,0 +1,198 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"components":[{"name":"body","type":"string"},{"name":"consensusType","type":"uint8"},{"name":"minValidators","type":"uint32"},{"name":"executionFee","type":"uint128"}],"name":"taskSettings_","type":"tuple"},
+				{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"factorySettings_","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "medianizedFeedRequest",
+			"inputs": [
+				{"name":"payerAddress_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onReceivedTransfer",
+			"inputs": [
+				{"name":"sender_","type":"address"},
+				{"name":"consumer_","type":"address"},
+				{"name":"valueAmount_","type":"uint128"},
+				{"name":"tokenAmount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptLockResult",
+			"inputs": [
+				{"name":"owner_","type":"address"},
+				{"name":"type_","type":"uint8"},
+				{"name":"hasLocked_","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "updateResponse",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTaskDetails",
+			"inputs": [
+				{"components":[{"name":"body","type":"string"},{"name":"consensusType","type":"uint8"},{"name":"minValidators","type":"uint32"},{"name":"executionFee","type":"uint128"}],"name":"taskSettings_","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "requestFactorySettingsUpdate",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setStorage",
+			"inputs": [
+				{"name":"storage_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onUpdateFactorySettingsResponse",
+			"inputs": [
+				{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"factorySettings_","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onCommit",
+			"inputs": [
+				{"name":"commitHash_","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onRequestRevealPhase",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onReveal",
+			"inputs": [
+				{"name":"revealValue_","type":"cell"},
+				{"name":"revealSalt_","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onRequestFinalPhase",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "_factory",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_factory","type":"address"}
+			]
+		},
+		{
+			"name": "_owner",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_owner","type":"address"}
+			]
+		},
+		{
+			"name": "_name",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_name","type":"string"}
+			]
+		},
+		{
+			"name": "_taskSettings",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"body","type":"string"},{"name":"consensusType","type":"uint8"},{"name":"minValidators","type":"uint32"},{"name":"executionFee","type":"uint128"}],"name":"_taskSettings","type":"tuple"}
+			]
+		},
+		{
+			"name": "_factorySettings",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_factorySettings","type":"tuple"}
+			]
+		},
+		{
+			"name": "_currElectionState",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"status","type":"uint8"},{"name":"failureReason","type":"uint16"},{"name":"response","type":"cell"},{"name":"commitStartTimestamp","type":"uint64"},{"name":"revealStartTimestamp","type":"uint64"},{"name":"responseTimestamp","type":"uint64"},{"components":[{"name":"validator","type":"address"},{"name":"enterStake","type":"uint128"},{"name":"commitHash","type":"uint256"},{"name":"revealResponse","type":"cell"},{"name":"bountyValue","type":"uint128"},{"name":"slashValue","type":"uint128"},{"name":"committed","type":"bool"},{"name":"revealed","type":"bool"}],"name":"participants","type":"map(address,tuple)"},{"name":"commitedCount","type":"uint16"},{"name":"revealedCount","type":"uint16"},{"name":"acceptedCount","type":"uint16"}],"name":"_currElectionState","type":"tuple"}
+			]
+		},
+		{
+			"name": "_prevElectionState",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"status","type":"uint8"},{"name":"failureReason","type":"uint16"},{"name":"response","type":"cell"},{"name":"commitStartTimestamp","type":"uint64"},{"name":"revealStartTimestamp","type":"uint64"},{"name":"responseTimestamp","type":"uint64"},{"components":[{"name":"validator","type":"address"},{"name":"enterStake","type":"uint128"},{"name":"commitHash","type":"uint256"},{"name":"revealResponse","type":"cell"},{"name":"bountyValue","type":"uint128"},{"name":"slashValue","type":"uint128"},{"name":"committed","type":"bool"},{"name":"revealed","type":"bool"}],"name":"participants","type":"map(address,tuple)"},{"name":"commitedCount","type":"uint16"},{"name":"revealedCount","type":"uint16"},{"name":"acceptedCount","type":"uint16"}],"name":"_prevElectionState","type":"tuple"}
+			]
+		},
+		{
+			"name": "_storage",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_storage","type":"address"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_factory","type":"address"},
+		{"key":2,"name":"_owner","type":"address"},
+		{"key":3,"name":"_name","type":"string"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_factory","type":"address"},
+		{"name":"_owner","type":"address"},
+		{"name":"_name","type":"string"},
+		{"components":[{"name":"body","type":"string"},{"name":"consensusType","type":"uint8"},{"name":"minValidators","type":"uint32"},{"name":"executionFee","type":"uint128"}],"name":"_taskSettings","type":"tuple"},
+		{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_factorySettings","type":"tuple"},
+		{"components":[{"name":"status","type":"uint8"},{"name":"failureReason","type":"uint16"},{"name":"response","type":"cell"},{"name":"commitStartTimestamp","type":"uint64"},{"name":"revealStartTimestamp","type":"uint64"},{"name":"responseTimestamp","type":"uint64"},{"components":[{"name":"validator","type":"address"},{"name":"enterStake","type":"uint128"},{"name":"commitHash","type":"uint256"},{"name":"revealResponse","type":"cell"},{"name":"bountyValue","type":"uint128"},{"name":"slashValue","type":"uint128"},{"name":"committed","type":"bool"},{"name":"revealed","type":"bool"}],"name":"participants","type":"map(address,tuple)"},{"name":"commitedCount","type":"uint16"},{"name":"revealedCount","type":"uint16"},{"name":"acceptedCount","type":"uint16"}],"name":"_currElectionState","type":"tuple"},
+		{"components":[{"name":"status","type":"uint8"},{"name":"failureReason","type":"uint16"},{"name":"response","type":"cell"},{"name":"commitStartTimestamp","type":"uint64"},{"name":"revealStartTimestamp","type":"uint64"},{"name":"responseTimestamp","type":"uint64"},{"components":[{"name":"validator","type":"address"},{"name":"enterStake","type":"uint128"},{"name":"commitHash","type":"uint256"},{"name":"revealResponse","type":"cell"},{"name":"bountyValue","type":"uint128"},{"name":"slashValue","type":"uint128"},{"name":"committed","type":"bool"},{"name":"revealed","type":"bool"}],"name":"participants","type":"map(address,tuple)"},{"name":"commitedCount","type":"uint16"},{"name":"revealedCount","type":"uint16"},{"name":"acceptedCount","type":"uint16"}],"name":"_prevElectionState","type":"tuple"},
+		{"name":"_storage","type":"address"}
+	]
+}

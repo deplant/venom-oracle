@@ -1,0 +1,87 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "./TaskBase.tsol";
+
+abstract contract ConsensusMedianized is TaskBase {
+
+    ///@dev CustomTask implementation doesn't check anything
+    function _responseCheck(TvmCell response) override internal inline pure {
+        //uint128 /*responseValue*/ = abi.decode(response, uint128);
+    }
+
+    function _makeConsensus() override internal returns (TvmCell, uint8) {
+        //TvmBuilder builder;
+        //TvmCell maxCountResponse = builder.toCell();
+        //mapping(TvmCell => uint16) groupByResponse;
+
+        //uint size = _currElectionState.revealedCount;
+        ResponseData[] revealedResponses;
+        for (ParticipantData participant : _currElectionState.participants.values()) {// iteration over the array
+            if (participant.revealed) {
+                TvmCell responseCell = participant.revealResponse;
+                revealedResponses.push(ResponseData(participant.validator, abi.decode(responseCell, uint128)));
+            }
+        }
+        ResponseData[] sortedResponses = qSortedResponses(revealedResponses);
+
+        uint respCount = sortedResponses.length;
+
+        if (respCount * 2 >= _currElectionState.revealedCount) {
+            return (abi.encode(sortedResponses[respCount / 2]), SUCCESS);
+        } else {
+            return (abi.encode(sortedResponses[respCount / 2]), FAILURE);
+        }
+
+    }
+
+    struct ResponseData {address validator; uint128 value;}
+    struct Limits {uint l; uint r;}
+
+    function qSortedResponses(ResponseData[] unsorted_) private pure returns (ResponseData[] res) {
+        for (ResponseData respData : unsorted_) {
+            if (respData.value != 0) {
+                res.push(respData);
+            }
+        }
+
+        vector(Limits) s;
+        s.push(Limits(0, res.length - 1));
+
+        uint l;
+        uint r;
+        uint i;
+        uint j;
+        ResponseData none;
+        uint128 v;
+        while (!s.empty()) {
+            (l, r) = s.pop().unpack();
+            if (r > l) {
+                v = res[(l + r) / 2].value;
+                i = l;
+                j = r;
+                while (i <= j) {
+                    while (res[i].value < v){
+                        i++;
+                    }
+                    while (res[j].value > v){
+                        j--;
+                    }
+                    if (i >= j)
+                        break;
+                    none = res[i];
+                    res[i] = res[j];
+                    res[j] = none;
+                    i++;
+                    j--;
+                }
+                i = j;
+
+                s.push(Limits(i + 1, r));
+                s.push(Limits(l, i));
+            }
+        }
+    }
+
+}
+

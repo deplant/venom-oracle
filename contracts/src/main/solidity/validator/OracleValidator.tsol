@@ -1,0 +1,89 @@
+pragma ever-solidity ^0.64;
+
+pragma AbiHeader expire;
+pragma AbiHeader time;
+
+import "../contracts-common/std/GasManagement.tsol";
+import "../contracts-common/extensions/TvmCellExtension.tsol";
+import "../config/Types.tsol";
+import "../config/Configs.tsol";
+import "./Subscriptions.tsol";
+import "../task/int/ITask.tsol";
+
+contract OracleValidator is Subscriptions, Types, ValidatorConfig /* extends SubscriptionsConfig, GasManagement */ {
+
+	using TvmCellExtension for TvmCell;
+
+	// ****************************************************************
+	// Exceptions
+	// ****************************************************************
+	uint16 constant ZERO_HASH = 300;
+	uint16 constant ZERO_TASK_ADDRESS = 301;	
+
+	//ValidatorSignature _sign;
+	
+	string public _name;
+	string public _logo;
+
+    constructor(string name_, string logo_) public checkExtOwnerAndAccept {
+		//(_sign.dataHash,_sign.dataDepth) = _calcDataInit(); //write hash of initData for signing messages to elector
+		_name = name_;
+		_logo = logo_;
+    }
+
+	// ****************************************************************
+	// External
+	// ****************************************************************
+    function commit(address taskAddress_, uint256 commitHash_) external pure externalMsg checkExtOwnerAndAccept {
+		require(taskAddress_.value != 0, ZERO_TASK_ADDRESS);
+		require(commitHash_ != 0, ZERO_HASH);
+		ITask(taskAddress_).onCommit{value: $toValue(ValidatorConfig.COMMIT_MSG_GAS), bounce: true, flag: FEE_EXTRA}(commitHash_);
+    }
+	
+    function reveal(address taskAddress_, TvmCell revealValue_, uint256 revealSalt_) external pure externalMsg checkExtOwnerAndAccept {
+		require(taskAddress_.value != 0, ZERO_TASK_ADDRESS);
+		ITask(taskAddress_).onReveal{value: $toValue(ValidatorConfig.REVEAL_MSG_GAS), bounce: true, flag: FEE_EXTRA}(revealValue_, revealSalt_);
+    }
+	
+    function requestRevealPhase(address taskAddress_) external pure externalMsg checkExtOwnerAndAccept {
+		require(taskAddress_.value != 0, ZERO_TASK_ADDRESS);
+		ITask(taskAddress_).onRequestRevealPhase{value: $toValue(ValidatorConfig.REVEAL_REQ_GAS), bounce: true, flag: FEE_EXTRA}();
+    }
+	
+    function requestFinalPhase(address taskAddress_) external pure externalMsg checkExtOwnerAndAccept {
+		require(taskAddress_.value != 0, ZERO_TASK_ADDRESS);
+		ITask(taskAddress_).onRequestFinalPhase{value: $toValue(ValidatorConfig.FINALIZE_REQ_GAS), bounce: true, flag: FEE_EXTRA}();
+    }
+	
+	// ****************************************************************
+	// Getter
+	// ****************************************************************	
+    function getCommitHash(TvmCell response_, uint256 salt_) external pure returns (uint256 valueHash) {
+		return _revealHashCell(response_, salt_);
+    }
+	
+//	// ****************************************************************
+//	// Internal
+//	// ****************************************************************
+//	function _calcDataInit() internal inline view returns (uint256,uint16) {
+//	TvmCell cell = tvm.buildDataInit({pubkey: tvm.pubkey(), contr: OracleValidator});
+//		return cell.hashAndDepth();
+//	}
+	
+	function _revealHashCell(TvmCell revealValue_, uint256 salt_) internal pure inline returns (uint256) {
+		TvmBuilder builder;
+		builder.store(revealValue_);
+		builder.store(salt_);
+		TvmCell cell = builder.toCell();		
+		return tvm.hash(cell);
+	}
+
+	// ****************************************************************	
+	// Internal (std)
+	// ****************************************************************		
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+		return DEFAULT_GAS_FLOOR;
+	}
+	
+
+}
