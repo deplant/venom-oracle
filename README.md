@@ -36,8 +36,8 @@ run-on-request, as schedules or data feeds with deviation thresholds.
 
 ## Connect your contract
 
-- Get [interface for your consumer](https://github.com/deplant/venom-oracle/contracts/src/main/solidity/consumer/int)
-- Get [interface for your task](https://github.com/deplant/venom-oracle/contracts/src/main/solidity/task/int)
+- Get [interface for your consumer](https://github.com/deplant/venom-oracle/tree/master/contracts/src/main/solidity/consumer/int)
+- Get [interface for your task](https://github.com/deplant/venom-oracle/tree/master/contracts/src/main/solidity/task/int)
 - Here is the example of contract for getting answer out of Medianized Feed:
 
 ```
