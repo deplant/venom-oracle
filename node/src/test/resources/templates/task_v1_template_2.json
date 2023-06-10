@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "trigger": {
+    "type": "SCHEDULE",
+    "schedule": "* */20 * * * *",
+    "timezone": "UTC"
+  },
+  "externalId": "",
+  "actions": "digraph\n{\n// This task consumes the output of the 'fetch' task in its 'data' parameter\nhttp_action_1 [type=\"HTTP\" answer=\"JSON\" method=\"GET\" uri=\"https://cex.io/api/ticker/EVER/USD\"]\njson_parse_action_2 [type=\"JSON_PARSE\" answer=\"UINT32\" path=\"/last\" data=\"$(http_action_1)\"]\nmultiply_action_3 [type=\"MULTIPLY\" answer=\"UINT32\" second=12 first=\"$(json_parse_action_2)\"]\n\n// This is the specification of the dependency\nhttp_action_1 -> json_parse_action_2 -> multiply_action_3\n}"
+}

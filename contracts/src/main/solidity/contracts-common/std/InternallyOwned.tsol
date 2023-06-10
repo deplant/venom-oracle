@@ -1,0 +1,17 @@
+pragma ever-solidity ^0.64;
+
+import "./Errors.tsol";
+
+abstract contract InternallyOwned is Errors {
+
+    function $intOwner() virtual internal inline view returns (address owner);
+
+	// ****************************************************************	
+	// Modifiers
+	// ****************************************************************	
+	modifier onlyIntOwner {
+		require(msg.sender.value != 0 && msg.sender == $intOwner(), NOT_MY_OWNER);
+		_;
+	}
+	
+}

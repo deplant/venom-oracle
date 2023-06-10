@@ -1,0 +1,298 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "../config/Types.tsol";
+import "../contracts-common/std/GasManagement.tsol";
+import "../config/Configs.tsol";
+import "./int/IBankStorage.tsol";
+import "./int/IBankRoot.tsol";
+import "../tip3/IAcceptTokensTransferCallback.tsol";
+import "../tip3/ITokenRoot.tsol";
+import "../tip3/ITokenWallet.tsol";
+import "./BankSecurity.tsol";
+import "./int/IStorageOwner.tsol";
+
+contract BankStorage is BankSecurity, Types, GasManagement, BankConfig, IBankStorage, IAcceptTokensTransferCallback {
+
+    // varInit
+    address public static _bank;
+    address public static _owner;
+    uint8 public static _type;
+
+    // state
+    uint128 public _valueBalance; // gas balance deposited by owner
+    uint128 public _tokenBalance; // token balance deposited by owner
+    address public _tokenWallet;
+    address public _token;
+
+    mapping(uint64 => uint128) public _lockedBalances; // value balance, deposited by owner
+    mapping(uint64 => uint128) public _lockedTokens;
+
+    mapping(address => AllowanceData) public _allowanceMap; // value balance, deposited by owner
+
+    event depositIncrease(address owner, uint128 valueAmount, uint128 tokenAmount, uint8 assetType); // main event that is monitored by subscribed Oracles
+    event depositDecrease(address owner, uint128 valueAmount, uint128 tokenAmount, uint8 assetType); // event of successful consensus
+
+    constructor(address owner_, uint8 type_, uint128 initialDeposit_, address token_) public onlyBank returnAllUnreservedTo(owner_) {
+        require(owner_ == _owner, 102);
+        require(type_ == _type, 103);
+        _token = token_;
+        if (initialDeposit_ > 0) {
+            _valueBalance += initialDeposit_;
+            //emit depositReceived{ value: 0, flag: Flags.FEE_EXTRA }(_owner, initialDeposit_, 0);
+        }
+        $reserve($gasFloor());
+        ITokenRoot(_token).deployWallet{value: 200 milli, flag: FEE_EXTRA, bounce: true, callback: BankStorage.onTokenRootCallback}(address(this), 100 milli);
+    }
+
+    // ****************************************************************
+    // External - Bank/Token/Factory methods
+    // ****************************************************************
+
+//    // method for checking lock, works only from other PersonalStorage contracts. You can send to yourself, if needed.
+//    function acceptLockCheck(address requester_, uint8 requesterType_, uint128 valueAmount_, uint128 tokenAmount_, uint64 until_)
+//    override external internalMsg onlyBank reserveGas {
+//
+//        bool hasValueLocked = false;
+//        bool hasTokenLocked = false;
+//
+//        if (_valueBalance > valueAmount_) {
+//            hasValueLocked = _hasLocked(valueAmount_, until_, _lockedBalances);
+//        } else {
+//            hasValueLocked = false;
+//        }
+//
+//        if (_tokenBalance > tokenAmount_) {
+//            hasTokenLocked = _hasLocked(tokenAmount_, until_, _lockedTokens);
+//        } else {
+//            hasTokenLocked = false;
+//        }
+//
+//        IBankRoot(_bank).onLockCheckResult{ value: 0, flag: ALL_UNRESERVED, bounce: true }(_owner, _type, requester_, requesterType_, hasValueLocked && hasTokenLocked);
+//    }
+
+    function onTokenRootCallback(address tokenWallet_) external reserveGas returnAllUnreservedTo(_owner) {
+        require(msg.sender == _token, 102);
+        // only from Token root
+        _tokenWallet = tokenWallet_;
+    }
+
+    // ****************************************************************
+    // External - Owner methods
+    // ****************************************************************
+    function addAllowance(address consumer_, address task_, uint128 valueAmount_, uint128 tokenAmount_) override external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+        _allowanceMap[consumer_] = AllowanceData(task_, valueAmount_, tokenAmount_);
+    }
+
+    function removeAllowance(address consumer_) override external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+        delete _allowanceMap[consumer_];
+    }
+
+    function transfer(address recipient_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_, bool notifyOwner_) override external internalMsg onlyIntOwner {
+        _transfer(recipient_, type_, valueAmount_, tokenAmount_, notifyOwner_, address(0));
+    }
+
+    function requestTransfer(address payer_, address task_, address consumer_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_) override external internalMsg onlyIntOwner reserveGas  {
+        address payerStorage = _getStorageAddress(payer_,CONSUMER_STORAGE);
+        IBankStorage(payerStorage).acceptRequestTransfer{value: 0, flag: ALL_UNRESERVED}(task_, consumer_, type_, valueAmount_, tokenAmount_);
+    }
+
+    function redeployTokenWallet() override external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+        ITokenRoot(_token).deployWallet{value: 200 milli, flag: FEE_EXTRA, bounce: true, callback: BankStorage.onTokenRootCallback}(address(this), 100 milli);
+    }
+
+    /// @notice we can't use reserveGas modifier here, as reserve should be made after balance update
+    function depositValue(uint128 amount_) override external internalMsg onlyIntOwner returnAllUnreserved {
+        _increaseBalance(amount_, 0);
+    }
+
+    function withdrawValue(uint128 amount_) override external internalMsg onlyIntOwner {
+        _decreaseBalance(amount_, 0);
+        _owner.transfer(0, true, ALL_UNRESERVED);
+    }
+
+    function withdrawToken(uint128 amount_) override external internalMsg onlyIntOwner {
+        _decreaseBalance(0, amount_);
+        TvmCell empty;
+        ITokenWallet(_tokenWallet).transfer{value: 0, flag: ALL_UNRESERVED}(amount_, $intOwner(), 0, $intOwner(), true, empty);
+    }
+
+    // ****************************************************************
+    // External - From other storages
+    // ****************************************************************
+    function acceptRequestTransfer(address task_, address consumer_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_) override external internalMsg onlyOtherStorage(task_, type_)  {
+        if (_hasAllowance(consumer_, task_, valueAmount_, tokenAmount_)) {
+
+            _transfer(task_, type_, valueAmount_, tokenAmount_, true, consumer_);
+        }
+    }
+
+    // ****************************************************************
+    // External - From wallet
+    // ****************************************************************
+
+    function onAcceptTokensTransfer(
+        address /*tokenRoot*/,
+        uint128 amount,
+        address sender,
+        address /*senderWallet*/,
+        address /*remainingGasTo*/,
+        TvmCell payload
+    ) external override onlyTokenWallet {
+        TvmCell empty;
+        uint128 valueAmount;
+        bool notify;
+        address consumer;
+        if (payload != empty) {
+            (notify,valueAmount, consumer) = abi.decode(payload, (bool, uint128, address));
+        }
+        _increaseBalance(valueAmount,amount);
+        if (notify) {
+            IStorageOwner(_owner).onReceivedTransfer{ value: 0, flag: ALL_UNRESERVED }(sender, consumer, valueAmount, amount);
+        } else {
+            $sendChange(sender);
+        }
+    }
+
+    // ****************************************************************
+    // Internal - locking
+    // ****************************************************************
+    function _increaseBalance(uint128 valueAmount_, uint128 tokenAmount_) internal {
+        if (valueAmount_ > 0) {
+            _valueBalance += valueAmount_;
+            $reserve($gasFloor());
+        }
+        if (tokenAmount_ > 0) {
+            _tokenBalance += tokenAmount_;
+        }
+        emit depositIncrease(_owner, valueAmount_, tokenAmount_, 0);
+    }
+
+    function _decreaseBalance(uint128 valueAmount_, uint128 tokenAmount_) internal {
+        if (valueAmount_ > 0) {
+            require(valueAmount_ <= _valueBalance, NOT_ENOUGH_FUNDS);
+            _valueBalance -= valueAmount_;
+            $reserve($gasFloor());
+        }
+        if (tokenAmount_ > 0) {
+            require(tokenAmount_ <= _tokenBalance, NOT_ENOUGH_FUNDS);
+            _tokenBalance -= tokenAmount_;
+        }
+        emit depositDecrease(_owner, valueAmount_, tokenAmount_, 0);
+    }
+
+    function _transfer(address recipient_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_, bool notifyOwner_, address consumer_) internal {
+        require(_tokenWallet.value != 0, NO_DEPLOYED_WALLET);
+        _decreaseBalance(valueAmount_, tokenAmount_);
+        TvmCell valueAmountInfo = abi.encode(notifyOwner_, valueAmount_, consumer_);
+        address targetStorage = _getStorageAddress(recipient_,type_);
+        ITokenWallet(_tokenWallet).transfer{value: 0, flag: ALL_UNRESERVED}(tokenAmount_, targetStorage, 0, targetStorage, true, valueAmountInfo);
+    }
+
+    function _hasAllowance(address consumer_, address task_, uint128 valueAmount_, uint128 tokenAmount_) internal view returns (bool) {
+        optional(AllowanceData) optionalAllowance = _allowanceMap.fetch(consumer_);
+        if (optionalAllowance.hasValue()) {
+            AllowanceData allowance = optionalAllowance.get();
+            return task_ == allowance.task && valueAmount_ <= allowance.maxValue && tokenAmount_ <= allowance.maxToken;
+        } else {
+            return false;
+        }
+    }
+
+    function _hasLocked(uint128 amount_, uint64 until_, mapping(uint64 => uint128) assetMap_) internal pure returns (bool) {
+        uint128 lockedTotal = 0;
+        uint64[] lockTimeouts = assetMap_.keys();
+        // place in var to not re-query map
+        for (uint j = 0; j < lockTimeouts.length; j++) {
+            uint64 lockTimeout = lockTimeouts[j];
+            // place in var to not re-query map
+            if (lockTimeout >= until_) {// if lock duration exceeds requested time...
+                lockedTotal += assetMap_[lockTimeout];
+                // add to calculation
+            } else if (lockTimeout <= now) {// if lock duration expired...
+                // we do not use _unlock() method as it re-queries mapping
+                delete assetMap_[lockTimeout];
+                // unlock
+            }
+        }
+        return lockedTotal >= amount_;
+    }
+
+    /// @notice Method to lock part of deposit until a given expire time
+    /// @dev When we add sum, it adds sum to map key with the same expire time or produces a new mapping key
+    function _lock(uint128 amount_, uint64 expireTime_) internal {
+        require(expireTime_ > now);
+        ///TODO if less than now, do nothing? Error?
+        optional(uint128) optionalLock = _lockedBalances.fetch(expireTime_);
+        if (optionalLock.hasValue()) {
+            // if map has lock until the same time, increase existing amount
+            _lockedBalances.replace(expireTime_, amount_ + optionalLock.get());
+        } else {
+            // if map doesn't have lock - put new amount
+            _lockedBalances.add(expireTime_, amount_);
+        }
+    }
+
+    /// @notice Let's unlock deposit
+    /// @dev we choose right sum just by it's expireTime, because you can't unlock precise sum, only choose deposit and unlock
+    function _unlock(uint64 expireTime_) internal {
+        if (_lockedBalances.exists(expireTime_)) {
+            // delete only if lock exists
+            delete _lockedBalances[expireTime_];
+        }
+    }
+
+    // ****************************************************************
+    // Internal (BankSecurity)
+    // ****************************************************************
+    function _getStorageAddress(address owner_, uint8 type_) override internal view returns (address) {
+        TvmCell stateInit = tvm.buildStateInit({
+            contr: BankStorage,
+            varInit: {
+            _bank: $bank(),
+            _owner: owner_,
+            _type: type_
+        },
+            pubkey: 0,
+            code: $code()
+        });
+
+        return address(tvm.hash(stateInit));
+    }
+
+    function $bank() override internal inline view returns (address bank) {
+        return _bank;
+    }
+
+    function $code() override internal inline view returns (TvmCell code) {
+        return tvm.code();
+    }
+
+    // ****************************************************************
+    // Internal (std/InternallyOwned)
+    // ****************************************************************
+    function $intOwner() override internal inline view returns (address owner) {
+        return _owner;
+    }
+
+    // ****************************************************************
+    // Internal (std/GasManagement)
+    // ****************************************************************
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+        return DEFAULT_GAS_FLOOR + valueToGas(_valueBalance);
+    }
+
+    // ****************************************************************
+    // Modifiers
+    // ****************************************************************
+    modifier onlyBank {
+        require(msg.sender.value != 0 && msg.sender == $bank(), NOT_MY_BANK);
+        _;
+    }
+
+    modifier onlyTokenWallet {
+        require(msg.sender.value != 0 && msg.sender == _tokenWallet, NOT_MY_WALLET);
+        _;
+    }
+
+}

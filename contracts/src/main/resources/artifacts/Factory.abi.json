@@ -1,0 +1,131 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getTaskAddress",
+			"inputs": [
+				{"name":"type_","type":"uint8"},
+				{"name":"owner_","type":"address"},
+				{"name":"name_","type":"string"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "setMinStake",
+			"inputs": [
+				{"name":"minStake_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setBank",
+			"inputs": [
+				{"name":"bank_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTokenRoot",
+			"inputs": [
+				{"name":"tokenRoot_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTaskCode",
+			"inputs": [
+				{"name":"respType_","type":"uint8"},
+				{"name":"taskCode_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptFactorySettingsUpdate",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "publishCustomTask",
+			"inputs": [
+				{"name":"type_","type":"uint8"},
+				{"name":"name_","type":"string"},
+				{"name":"body_","type":"string"},
+				{"name":"minValidators_","type":"uint32"},
+				{"name":"executionFee_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "_defaultSettings",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_defaultSettings","type":"tuple"}
+			]
+		},
+		{
+			"name": "_taskCodes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_taskCodes","type":"map(uint8,cell)"}
+			]
+		},
+		{
+			"name": "_bank",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_bank","type":"address"}
+			]
+		},
+		{
+			"name": "_token",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_token","type":"address"}
+			]
+		},
+		{
+			"name": "_bankStorageCode",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_bankStorageCode","type":"cell"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"components":[{"name":"minStake","type":"uint128"},{"name":"electionTimeout","type":"uint64"},{"name":"bountyStageSwitch","type":"uint128"},{"name":"slashMissedStage","type":"uint128"},{"name":"slashBadResponse","type":"uint128"}],"name":"_defaultSettings","type":"tuple"},
+		{"name":"_taskCodes","type":"map(uint8,cell)"},
+		{"name":"_bank","type":"address"},
+		{"name":"_token","type":"address"},
+		{"name":"_bankStorageCode","type":"cell"}
+	]
+}

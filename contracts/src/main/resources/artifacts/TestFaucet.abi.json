@@ -1,0 +1,61 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"token_","type":"address"},
+				{"name":"amount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onTokenRootCallback",
+			"inputs": [
+				{"name":"tokenWallet_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "faucet",
+			"inputs": [
+				{"name":"doDeploy_","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "_token",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_token","type":"address"}
+			]
+		},
+		{
+			"name": "_tokenWallet",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_tokenWallet","type":"address"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_token","type":"address"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_token","type":"address"},
+		{"name":"_tokenWallet","type":"address"},
+		{"name":"_amount","type":"uint128"}
+	]
+}

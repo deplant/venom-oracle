@@ -1,0 +1,72 @@
+pragma ever-solidity ^0.64;
+
+import "../config/Configs.tsol";
+import "../contracts-common/std/GasManagement.tsol";
+import "../contracts-common/std/ExternallyOwned.tsol";
+import "../contracts-common/extensions/TvmCellExtension.tsol";
+import "../subscription/TaskSubscription.tsol";
+
+abstract contract Subscriptions is SubscriptionsConfig, ExternallyOwned, GasManagement {
+
+	using TvmCellExtension for TvmCell;
+
+	TvmCell public static _subscriptionCode;
+
+	// ****************************************************************	
+	// External
+	// ****************************************************************	
+    function subscribe(address taskAddress_, uint64 lastProcessedTx_) external view externalMsg checkExtOwnerAndAccept returns (address subscriptionAddress) {
+		return new TaskSubscription{
+			value: $toValue(SUBSCR_DEPLOY_GAS),		
+			flag: FEE_EXTRA,
+			code: _subscriptionCode,
+			pubkey: tvm.pubkey(),
+			varInit: {
+				_taskAddress: taskAddress_, 
+				_oracleAddress: address(this)
+			}
+		}(taskAddress_, lastProcessedTx_);
+    }
+	
+    function unsubscribe(address taskAddress_) external view externalMsg checkExtOwnerAndAccept {
+		(address subscrAddr, ) = _calcSubscriptAddress(taskAddress_);
+		TaskSubscription(subscrAddr).cancel{value: $toValue(SUBSCR_CANCEL_GAS), bounce: true, flag: FEE_EXTRA}();
+    }		
+	
+    function saveRequestTx(address taskAddress_, uint64 lastProcessedTx_) external view externalMsg checkExtOwnerAndAccept {
+		(address subscrAddr, ) = _calcSubscriptAddress(taskAddress_);
+		TaskSubscription(subscrAddr).updateLastTx{value: $toValue(SUBSCR_CANCEL_GAS), bounce: true, flag: FEE_EXTRA}(lastProcessedTx_);
+    }		
+	
+    function setSubscriptionCode(TvmCell subscriptionCode_) external externalMsg checkExtOwnerAndAccept {
+		TvmBuilder builder;
+		builder.store(address(this).value);
+		TvmCell saltedCode = tvm.setCodeSalt(subscriptionCode_, builder.toCell());
+		_subscriptionCode = saltedCode;
+    }			
+	
+	// ****************************************************************	
+	// Getters
+	// ****************************************************************		
+    function getSubscriptionCodeHash() external view externalMsg checkExtOwnerAndAccept returns (uint256 codeHash) {
+		return tvm.hash(_subscriptionCode);
+    }		
+
+	// ****************************************************************	
+	// Internal
+	// ****************************************************************		
+    function _calcSubscriptAddress(address taskAddress_) internal view returns (address, TvmCell) {
+        TvmCell stateInit = tvm.buildStateInit({
+            contr: TaskSubscription,
+			pubkey: tvm.pubkey(),
+			varInit: {
+				_taskAddress: taskAddress_, 
+				_oracleAddress: address(this)
+			},
+            code: _subscriptionCode
+        });
+
+        return (stateInit.toAddress(), stateInit);
+    }	
+
+}

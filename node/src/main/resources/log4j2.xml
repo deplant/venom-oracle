@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+        <RandomAccessFile name="RandomAccessFile" fileName="tasks.log" immediateFlush="false" append="false">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m %ex%n</Pattern>
+            </PatternLayout>
+        </RandomAccessFile>
+    </appenders>
+    <loggers>
+        <logger name="tech.deplant.java4ever" level="DEBUG" additivity="false">
+            <appenderRef ref="RandomAccessFile"/>
+        </logger>
+        <logger name="tech.deplant.osiris" level="DEBUG" additivity="false">
+            <appenderRef ref="RandomAccessFile"/>
+        </logger>
+        <root level="WARN">
+            <appenderRef ref="RandomAccessFile"/>
+        </root>
+    </loggers>
+</configuration>

@@ -1,0 +1,2843 @@
+.version sol 0.64.0
+
+.macro constructor
+DROP
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+GETGLOB 6
+THROWIF 51
+OVER
+PUSHCONT {
+	LDREF
+	LDU 8
+	LDU 32
+	LDU 128
+	ROLLREV 4
+	TUPLE 4
+	SWAP
+	LDU 128
+	LDREF
+	ENDS
+	CTOS
+}
+PUSHCONT {
+	LDREF
+	LDU 8
+	LDU 32
+	LDU 128
+	ROLLREV 4
+	TUPLE 4
+	SWAP
+	LDU 128
+}
+IFELSE
+LDU 64
+LDU 128
+LDU 128
+LDU 128
+ROLLREV 5
+TUPLE 5
+SWAP
+ENDS
+.loc TaskBase.tsol, 227
+GETGLOB 10
+GETGLOB 9
+SDEQ
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PARSEMSGADDR
+	INDEX 3
+	PLDU 256
+	NEQINT 0
+}
+IF
+THROWIFNOT 303
+.loc TaskBase.tsol, 228
+GETGLOB 11
+.loc ../contracts-common/std/GasManagement.tsol, 68
+XCHG S2
+.loc TaskPreciseValueFeed.tsol, 14
+SETGLOB 13
+.loc TaskPreciseValueFeed.tsol, 15
+SETGLOB 14
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro preciseFeedRequest
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskPreciseValueFeed.tsol, 21
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc TaskPreciseValueFeed.tsol, 0
+CALLREF {
+	CALL $preciseFeedRequest_eef58e69_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro preciseFeedRequest_eef58e69_internal_macro
+.loc TaskPreciseValueFeed.tsol, 21
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc TaskPreciseValueFeed.tsol, 22
+GETGLOB 9
+SWAP
+GETGLOB 13
+INDEX 3
+GETGLOB 13
+INDEX 3
+CALLREF {
+	CALL $_transferFeeFromRequesterToFeed_ee344941_internal_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskPreciseValueFeed.tsol, 0
+
+.macro onReceivedTransfer
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskPreciseValueFeed.tsol, 25
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDU 128
+LDU 128
+ENDS
+.loc TaskPreciseValueFeed.tsol, 0
+CALLREF {
+	CALL $onReceivedTransfer_0c35d9fe_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro onReceivedTransfer_0c35d9fe_internal_macro
+.loc TaskPreciseValueFeed.tsol, 25
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 222
+GETGLOB 17
+GETGLOB 9
+SDEQ
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PARSEMSGADDR
+	INDEX 3
+	PLDU 256
+	NEQINT 0
+}
+IF
+THROWIFNOT 313
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc ../contracts-common/std/GasManagement.tsol, 45
+PUSH S3
+.loc ../contracts-common/std/GasManagement.tsol, 68
+ROLLREV 4
+.loc TaskPreciseValueFeed.tsol, 26
+SWAP
+GETGLOB 13
+INDEX 3
+GEQ
+SWAP
+GETGLOB 13
+INDEX 3
+GEQ
+AND
+PUSHCONT {
+	.loc TaskPreciseValueFeed.tsol, 27
+	GETGLOB 16
+	THIRD
+	OVER
+	NEWC
+	STSLICECONST x62_
+	STSLICE
+	PUSHINT 42045022170482489768618347945393405442362195975203
+	STUR 167
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc TaskPreciseValueFeed.tsol, 0
+}
+IF
+.loc TaskPreciseValueFeed.tsol, 0
+DROP2
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskPreciseValueFeed.tsol, 0
+
+.macro acceptLockResult
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskPreciseValueFeed.tsol, 31
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDU 8
+LDI 1
+ENDS
+.loc TaskPreciseValueFeed.tsol, 0
+CALLREF {
+	CALL $acceptLockResult_9dd782a8_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro acceptLockResult_9dd782a8_internal_macro
+.loc TaskPreciseValueFeed.tsol, 31
+BLKDROP 3
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskPreciseValueFeed.tsol, 0
+
+.macro updateResponse
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskPreciseValueFeed.tsol, 38
+ENDS
+.loc TaskPreciseValueFeed.tsol, 0
+CALLREF {
+	CALL $updateResponse_e5d15ad5_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro updateResponse_e5d15ad5_internal_macro
+.loc TaskPreciseValueFeed.tsol, 38
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc TaskPreciseValueFeed.tsol, 39
+GETGLOB 15
+FIRST
+EQINT 1
+PUSHCONT {
+	.loc TaskPreciseValueFeed.tsol, 41
+	GETGLOB 15
+	PUSHINT 2
+	SETINDEX 0
+	DUP
+	SETGLOB 15
+	.loc TaskPreciseValueFeed.tsol, 42
+	NOW
+	SETINDEX 3
+	SETGLOB 15
+	.loc TaskPreciseValueFeed.tsol, 0
+}
+IF
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskPreciseValueFeed.tsol, 0
+
+.globl	_sendResponse_5f267ebd_internal
+.type	_sendResponse_5f267ebd_internal, @function
+CALL $_sendResponse_5f267ebd_internal_macro$
+
+.macro _sendResponse_5f267ebd_internal_macro
+.loc TaskPreciseValueFeed.tsol, 47
+GETGLOB 16
+FIRST
+EQINT 4
+GETGLOB 15
+FIRST
+EQINT 1
+AND
+THROWIFNOT 308
+.loc TaskPreciseValueFeed.tsol, 49
+PUSHINT 0
+NEWDICT
+PAIR
+GETGLOB 16
+INDEX 6
+DUP
+PUSHINT 267
+DICTMINREF
+NULLSWAPIFNOT
+IFREF {
+	SWAP
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+	PAIR
+}
+PUSHCONT {
+	DUP
+	ISNULL
+	NOT
+}
+PUSHCONT {
+	PUSH2 S2, S0
+	SECOND
+	CALLREF {
+		UNTUPLE 8
+		REVERSE 8, 0
+		NEWC
+		STSLICE
+		STU 128
+		STU 256
+		STREF
+		ROLLREV 4
+		NEWC
+		STU 128
+		STU 128
+		STI 1
+		STI 1
+		STBREFR
+	}
+	ENDC
+	SWAP
+	UNPAIR
+	OVER
+	INC
+	ROLLREV 3
+	PUSHINT 32
+	DICTUSETREF
+	PAIR
+	POP S3
+	FIRST
+	OVER
+	PUSHINT 267
+	DICTGETNEXT
+	NULLSWAPIFNOT
+	IFREF {
+		SWAP
+		PLDREF
+		CTOS
+		CALLREF {
+			LDMSGADDR
+			LDU 128
+			LDU 256
+			LDREF
+			LDREF
+			ENDS
+			CTOS
+			LDU 128
+			LDU 128
+			LDI 1
+			LDI 1
+			ENDS
+			TUPLE 8
+		}
+		PAIR
+	}
+}
+WHILE
+DROP2
+SECOND
+PUSHINT 0
+NULL
+PUSHCONT {
+	PUSH2 S1, S2
+	PUSHINT 32
+	DICTUGETREF
+	NULLSWAPIFNOT
+	IFREF {
+		CTOS
+		CALLREF {
+			LDMSGADDR
+			LDU 128
+			LDU 256
+			LDREF
+			LDREF
+			ENDS
+			CTOS
+			LDU 128
+			LDU 128
+			LDI 1
+			LDI 1
+			ENDS
+			TUPLE 8
+		}
+	}
+	DUP
+	POP S2
+	ISNULL
+	NOT
+}
+PUSHCONT {
+	.loc TaskPreciseValueFeed.tsol, 50
+	DUP
+	INDEX 5
+	PUSHCONT {
+		.loc TaskPreciseValueFeed.tsol, 51
+		DUP
+		FIRST
+		OVER
+		INDEX 4
+		PUSH S2
+		INDEX 4
+		CALLREF {
+			CALL $_transferFeeFromFeedToValidator_8e0173de_internal_macro$
+		}
+		.loc TaskPreciseValueFeed.tsol, 0
+	}
+	IFNOT
+	.loc TaskPreciseValueFeed.tsol, 0
+	OVER
+	INC
+	POP S2
+}
+WHILE
+BLKDROP 3
+.loc TaskPreciseValueFeed.tsol, 0
+
+.globl	_makeConsensus_fc701e5e_internal
+.type	_makeConsensus_fc701e5e_internal, @function
+CALL $_makeConsensus_fc701e5e_internal_macro$
+
+.macro _makeConsensus_fc701e5e_internal_macro
+.loc ConsensusPrecise.tsol, 15
+PUSHREF {
+}
+.loc ConsensusPrecise.tsol, 17
+NEWDICT
+.loc ConsensusPrecise.tsol, 19
+PUSHINT 0
+NEWDICT
+PAIR
+GETGLOB 15
+INDEX 6
+DUP
+PUSHINT 267
+DICTMINREF
+NULLSWAPIFNOT
+IFREF {
+	SWAP
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+	PAIR
+}
+PUSHCONT {
+	DUP
+	ISNULL
+	NOT
+}
+PUSHCONT {
+	PUSH2 S2, S0
+	SECOND
+	CALLREF {
+		UNTUPLE 8
+		REVERSE 8, 0
+		NEWC
+		STSLICE
+		STU 128
+		STU 256
+		STREF
+		ROLLREV 4
+		NEWC
+		STU 128
+		STU 128
+		STI 1
+		STI 1
+		STBREFR
+	}
+	ENDC
+	SWAP
+	UNPAIR
+	OVER
+	INC
+	ROLLREV 3
+	PUSHINT 32
+	DICTUSETREF
+	PAIR
+	POP S3
+	FIRST
+	OVER
+	PUSHINT 267
+	DICTGETNEXT
+	NULLSWAPIFNOT
+	IFREF {
+		SWAP
+		PLDREF
+		CTOS
+		CALLREF {
+			LDMSGADDR
+			LDU 128
+			LDU 256
+			LDREF
+			LDREF
+			ENDS
+			CTOS
+			LDU 128
+			LDU 128
+			LDI 1
+			LDI 1
+			ENDS
+			TUPLE 8
+		}
+		PAIR
+	}
+}
+WHILE
+DROP2
+SECOND
+PUSHINT 0
+NULL
+PUSHCONT {
+	PUSH2 S1, S2
+	PUSHINT 32
+	DICTUGETREF
+	NULLSWAPIFNOT
+	IFREF {
+		CTOS
+		CALLREF {
+			LDMSGADDR
+			LDU 128
+			LDU 256
+			LDREF
+			LDREF
+			ENDS
+			CTOS
+			LDU 128
+			LDU 128
+			LDI 1
+			LDI 1
+			ENDS
+			TUPLE 8
+		}
+	}
+	DUP
+	POP S2
+	ISNULL
+	NOT
+}
+PUSHCONT {
+	.loc ConsensusPrecise.tsol, 20
+	DUP
+	INDEX 3
+	.loc ConsensusPrecise.tsol, 21
+	CALLREF {
+		CALL $TvmCellExtension_with_obj_isEmpty_cd8fe089_macro$
+	}
+	PUSHCONT {
+		.loc ConsensusPrecise.tsol, 22
+		PUSH2 S4, S0
+		HASHCU
+		TUCK
+		OVER
+		PUSHPOW2 8
+		DICTUGET
+		ZEROSWAPIFNOT
+		PUSHCONT {
+			PLDU 16
+		}
+		IF
+		INC
+		DUP
+		ROLLREV 3
+		UFITS 16
+		NEWC
+		STU 16
+		ROTREV
+		PUSHPOW2 8
+		DICTUSETB
+		POP S6
+		PUSH S6
+		HASHCU
+		PUSH S6
+		PUSHPOW2 8
+		DICTUGET
+		ZEROSWAPIFNOT
+		PUSHCONT {
+			PLDU 16
+		}
+		IF
+		GREATER
+		PUSHCONT {
+			.loc ConsensusPrecise.tsol, 23
+			DUP
+			POP S6
+			.loc ConsensusPrecise.tsol, 0
+		}
+		IF
+		.loc ConsensusPrecise.tsol, 0
+	}
+	IFNOT
+	.loc ConsensusPrecise.tsol, 0
+	DROP
+	OVER
+	INC
+	POP S2
+}
+WHILE
+BLKDROP 3
+.loc ConsensusPrecise.tsol, 28
+OVER
+HASHCU
+SWAP
+PUSHPOW2 8
+DICTUGET
+ZEROSWAPIFNOT
+PUSHCONT {
+	PLDU 16
+}
+IF
+.loc ConsensusPrecise.tsol, 30
+DUP
+MULCONST 2
+UFITS 16
+GETGLOB 15
+INDEX 8
+GEQ
+PUSHCONT {
+	.loc ConsensusPrecise.tsol, 32
+	GETGLOB 15
+	SWAP
+	SETINDEX 9
+	SETGLOB 15
+	.loc ConsensusPrecise.tsol, 33
+	PUSHINT 4
+	.loc ConsensusPrecise.tsol, 0
+}
+PUSHCONT {
+	.loc ConsensusPrecise.tsol, 35
+	GETGLOB 15
+	SWAP
+	SETINDEX 9
+	SETGLOB 15
+	.loc ConsensusPrecise.tsol, 36
+	PUSHINT 0
+	.loc ConsensusPrecise.tsol, 0
+}
+IFELSE
+.loc ConsensusPrecise.tsol, 0
+
+.macro setTaskDetails
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 35
+LDREF
+LDU 8
+LDU 32
+LDU 128
+ROLLREV 4
+TUPLE 4
+SWAP
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $setTaskDetails_0e9a83ba_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro setTaskDetails_0e9a83ba_internal_macro
+.loc TaskBase.tsol, 35
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc ../contracts-common/std/InternallyOwned.tsol, 13
+GETGLOB 9
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	.loc TaskBase.tsol, 205
+	GETGLOB 11
+	.loc TaskBase.tsol, 0
+	SDEQ
+}
+IF
+THROWIFNOT 201
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc TaskBase.tsol, 36
+SETGLOB 13
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro requestFactorySettingsUpdate
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 39
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $requestFactorySettingsUpdate_734defa5_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro requestFactorySettingsUpdate_734defa5_internal_macro
+.loc TaskBase.tsol, 39
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc ../contracts-common/std/InternallyOwned.tsol, 13
+GETGLOB 9
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	.loc TaskBase.tsol, 205
+	GETGLOB 11
+	.loc TaskBase.tsol, 0
+	SDEQ
+}
+IF
+THROWIFNOT 201
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc TaskBase.tsol, 40
+GETGLOB 10
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+PUSHINT 928281448
+STUR 143
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro setStorage
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 46
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $setStorage_9137c1a7_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro setStorage_9137c1a7_internal_macro
+.loc TaskBase.tsol, 46
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 227
+GETGLOB 10
+GETGLOB 9
+SDEQ
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PARSEMSGADDR
+	INDEX 3
+	PLDU 256
+	NEQINT 0
+}
+IF
+THROWIFNOT 303
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc TaskBase.tsol, 47
+SETGLOB 17
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro onUpdateFactorySettingsResponse
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 50
+OVER
+PUSHCONT {
+	LDU 128
+	LDU 64
+	LDU 128
+	LDREF
+	ENDS
+	CTOS
+}
+PUSHCONT {
+	LDU 128
+	LDU 64
+	LDU 128
+}
+IFELSE
+LDU 128
+LDU 128
+ROLLREV 5
+TUPLE 5
+SWAP
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $onUpdateFactorySettingsResponse_12f52bb0_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro onUpdateFactorySettingsResponse_12f52bb0_internal_macro
+.loc TaskBase.tsol, 50
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 227
+GETGLOB 10
+GETGLOB 9
+SDEQ
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PARSEMSGADDR
+	INDEX 3
+	PLDU 256
+	NEQINT 0
+}
+IF
+THROWIFNOT 303
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc ../contracts-common/std/GasManagement.tsol, 45
+GETGLOB 11
+.loc ../contracts-common/std/GasManagement.tsol, 68
+SWAP
+.loc TaskBase.tsol, 51
+SETGLOB 14
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro onCommit
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 59
+LDU 256
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $onCommit_c2c05dcf_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro onCommit_c2c05dcf_internal_macro
+.loc TaskBase.tsol, 59
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc ../contracts-common/std/GasManagement.tsol, 45
+PUSHINT 2
+.loc TaskBase.tsol, 182
+GETGLOB 15
+FIRST
+EQUAL
+.loc TaskBase.tsol, 0
+THROWIFNOT 304
+.loc TaskBase.tsol, 60
+GETGLOB 15
+DUP
+INDEX 6
+GETGLOB 9
+TUCK
+OVER
+PUSHINT 267
+DICTGETREF
+PUSHCONT {
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+}
+PUSHCONT {
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 3, 0
+	TUPLE 8
+}
+IFELSE
+ROLL 4
+SETINDEX 2
+CALLREF {
+	UNTUPLE 8
+	REVERSE 8, 0
+	NEWC
+	STSLICE
+	STU 128
+	STU 256
+	STREF
+	ROLLREV 4
+	NEWC
+	STU 128
+	STU 128
+	STI 1
+	STI 1
+	STBREFR
+}
+ENDC
+ROTREV
+PUSHINT 267
+DICTSETREF
+SETINDEX 6
+DUP
+SETGLOB 15
+.loc TaskBase.tsol, 61
+DUP
+INDEX 6
+GETGLOB 9
+TUCK
+OVER
+PUSHINT 267
+DICTGETREF
+PUSHCONT {
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+}
+PUSHCONT {
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 3, 0
+	TUPLE 8
+}
+IFELSE
+GETGLOB 9
+SETINDEX 0
+CALLREF {
+	UNTUPLE 8
+	REVERSE 8, 0
+	NEWC
+	STSLICE
+	STU 128
+	STU 256
+	STREF
+	ROLLREV 4
+	NEWC
+	STU 128
+	STU 128
+	STI 1
+	STI 1
+	STBREFR
+}
+ENDC
+ROTREV
+PUSHINT 267
+DICTSETREF
+SETINDEX 6
+SETGLOB 15
+.loc TaskBase.tsol, 62
+GETGLOB 9
+GETGLOB 14
+FIRST
+.loc TaskBase.tsol, 162
+GETGLOB 15
+INDEX 3
+GETGLOB 14
+SECOND
+ADD
+UFITS 64
+GETGLOB 14
+SECOND
+ADD
+UFITS 64
+GETGLOB 14
+SECOND
+ADD
+UFITS 64
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $_checkValidatorStake_5f7e4e07_internal_macro$
+}
+.loc TaskBase.tsol, 63
+GETGLOB 15
+DUP
+INDEX 6
+GETGLOB 9
+TUCK
+OVER
+PUSHINT 267
+DICTGETREF
+PUSHCONT {
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+}
+PUSHCONT {
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 3, 0
+	TUPLE 8
+}
+IFELSE
+TRUE
+SETINDEX 6
+CALLREF {
+	UNTUPLE 8
+	REVERSE 8, 0
+	NEWC
+	STSLICE
+	STU 128
+	STU 256
+	STREF
+	ROLLREV 4
+	NEWC
+	STU 128
+	STU 128
+	STI 1
+	STI 1
+	STBREFR
+}
+ENDC
+ROTREV
+PUSHINT 267
+DICTSETREF
+SETINDEX 6
+DUP
+SETGLOB 15
+.loc TaskBase.tsol, 64
+DUP
+INDEX 7
+INC
+UFITS 16
+SETINDEX 7
+SETGLOB 15
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro onRequestRevealPhase
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 72
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $onRequestRevealPhase_33f0e777_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro onRequestRevealPhase_33f0e777_internal_macro
+.loc TaskBase.tsol, 72
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc TaskBase.tsol, 232
+GETGLOB 9
+GETGLOB 15
+INDEX 6
+PUSHINT 267
+DICTGET
+NULLSWAPIFNOT
+NIP
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PARSEMSGADDR
+	INDEX 3
+	PLDU 256
+	NEQINT 0
+}
+IF
+THROWIFNOT 302
+.loc TaskBase.tsol, 233
+PUSHINT 2
+.loc TaskBase.tsol, 182
+GETGLOB 15
+FIRST
+EQUAL
+.loc TaskBase.tsol, 0
+THROWIFNOT 304
+.loc TaskBase.tsol, 73
+PUSHREF {
+	.blob x436f6d6d6974207068617365206163746976652c206e6f2074696d656f7574207369676e616c6564
+}
+NOW
+GETGLOB 15
+INDEX 3
+SUB
+UFITS 64
+GETGLOB 14
+SECOND
+GREATER
+THROWARGIFNOT 308
+.loc TaskBase.tsol, 75
+GETGLOB 15
+INDEX 7
+GETGLOB 13
+THIRD
+GEQ
+PUSHCONT {
+	.loc TaskBase.tsol, 166
+	GETGLOB 14
+	THIRD
+	GETGLOB 15
+	DUP
+	INDEX 6
+	GETGLOB 9
+	TUCK
+	OVER
+	PUSHINT 267
+	DICTGETREF
+	PUSHCONT {
+		CTOS
+		CALLREF {
+			LDMSGADDR
+			LDU 128
+			LDU 256
+			LDREF
+			LDREF
+			ENDS
+			CTOS
+			LDU 128
+			LDU 128
+			LDI 1
+			LDI 1
+			ENDS
+			TUPLE 8
+		}
+	}
+	PUSHCONT {
+		PUSHREFSLICE {
+			.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+		}
+		PUSHINT 0
+		DUP
+		PUSHREF {
+		}
+		PUSHINT 0
+		BLKPUSH 3, 0
+		TUPLE 8
+	}
+	IFELSE
+	DUP
+	INDEX 4
+	ROLL 5
+	ADD
+	UFITS 128
+	SETINDEX 4
+	CALLREF {
+		UNTUPLE 8
+		REVERSE 8, 0
+		NEWC
+		STSLICE
+		STU 128
+		STU 256
+		STREF
+		ROLLREV 4
+		NEWC
+		STU 128
+		STU 128
+		STI 1
+		STI 1
+		STBREFR
+	}
+	ENDC
+	ROTREV
+	PUSHINT 267
+	DICTSETREF
+	SETINDEX 6
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 78
+	PUSHINT 3
+	SETINDEX 0
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 80
+	NOW
+	SETINDEX 4
+}
+PUSHCONT {
+	.loc TaskBase.tsol, 82
+	GETGLOB 15
+	PUSHINT 0
+	SETINDEX 0
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 83
+	SETGLOB 16
+	.loc TaskBase.tsol, 85
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 2, 0
+	NEWDICT
+	PUSHINT 0
+	BLKPUSH 2, 0
+	TUPLE 10
+	.loc TaskBase.tsol, 86
+}
+IFELSE
+SETGLOB 15
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro onReveal
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 91
+LDREF
+LDU 256
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $onReveal_4efdfcf9_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro onReveal_4efdfcf9_internal_macro
+.loc TaskBase.tsol, 91
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc ../contracts-common/std/GasManagement.tsol, 45
+PUSHINT 3
+.loc TaskBase.tsol, 182
+GETGLOB 15
+FIRST
+EQUAL
+.loc TaskBase.tsol, 0
+THROWIFNOT 304
+.loc TaskBase.tsol, 94
+GETGLOB 9
+GETGLOB 15
+INDEX 6
+PUSHINT 267
+DICTGETREF
+NULLSWAPIFNOT
+IFREF {
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+}
+.loc TaskBase.tsol, 95
+DUP
+ISNULL
+THROWIF 302
+.loc TaskBase.tsol, 96
+DUP
+ISNULL
+THROWIF 63
+.loc TaskBase.tsol, 97
+PUSH S2
+XCHG S1, S2
+.loc TaskBase.tsol, 175
+NEWC
+STREF
+.loc TaskBase.tsol, 176
+STU 256
+.loc TaskBase.tsol, 177
+ENDC
+.loc TaskBase.tsol, 178
+HASHCU
+.loc TaskBase.tsol, 0
+SWAP
+THIRD
+EQUAL
+THROWIFNOT 305
+.loc TaskBase.tsol, 100
+GETGLOB 15
+DUP
+INDEX 6
+GETGLOB 9
+TUCK
+OVER
+PUSHINT 267
+DICTGETREF
+PUSHCONT {
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+}
+PUSHCONT {
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 3, 0
+	TUPLE 8
+}
+IFELSE
+ROLL 4
+SETINDEX 3
+CALLREF {
+	UNTUPLE 8
+	REVERSE 8, 0
+	NEWC
+	STSLICE
+	STU 128
+	STU 256
+	STREF
+	ROLLREV 4
+	NEWC
+	STU 128
+	STU 128
+	STI 1
+	STI 1
+	STBREFR
+}
+ENDC
+ROTREV
+PUSHINT 267
+DICTSETREF
+SETINDEX 6
+DUP
+SETGLOB 15
+.loc TaskBase.tsol, 101
+DUP
+INDEX 6
+GETGLOB 9
+TUCK
+OVER
+PUSHINT 267
+DICTGETREF
+PUSHCONT {
+	CTOS
+	CALLREF {
+		LDMSGADDR
+		LDU 128
+		LDU 256
+		LDREF
+		LDREF
+		ENDS
+		CTOS
+		LDU 128
+		LDU 128
+		LDI 1
+		LDI 1
+		ENDS
+		TUPLE 8
+	}
+}
+PUSHCONT {
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 3, 0
+	TUPLE 8
+}
+IFELSE
+TRUE
+SETINDEX 7
+CALLREF {
+	UNTUPLE 8
+	REVERSE 8, 0
+	NEWC
+	STSLICE
+	STU 128
+	STU 256
+	STREF
+	ROLLREV 4
+	NEWC
+	STU 128
+	STU 128
+	STI 1
+	STI 1
+	STBREFR
+}
+ENDC
+ROTREV
+PUSHINT 267
+DICTSETREF
+SETINDEX 6
+DUP
+SETGLOB 15
+.loc TaskBase.tsol, 102
+DUP
+INDEX 8
+INC
+UFITS 16
+SETINDEX 8
+SETGLOB 15
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro onRequestFinalPhase
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc TaskBase.tsol, 107
+ENDS
+.loc TaskBase.tsol, 0
+CALLREF {
+	CALL $onRequestFinalPhase_df5ef188_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro onRequestFinalPhase_df5ef188_internal_macro
+.loc TaskBase.tsol, 107
+DEPTH
+ADDCONST -5
+PICK
+THROWIF 72
+.loc TaskBase.tsol, 210
+PUSHINT 25000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSHINT 0
+RAWRESERVE
+.loc ../contracts-common/std/GasManagement.tsol, 45
+PUSHINT 3
+.loc TaskBase.tsol, 182
+GETGLOB 15
+FIRST
+EQUAL
+.loc TaskBase.tsol, 0
+THROWIFNOT 304
+.loc TaskBase.tsol, 232
+GETGLOB 9
+GETGLOB 15
+INDEX 6
+PUSHINT 267
+DICTGET
+NULLSWAPIFNOT
+NIP
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PARSEMSGADDR
+	INDEX 3
+	PLDU 256
+	NEQINT 0
+}
+IF
+THROWIFNOT 302
+.loc TaskBase.tsol, 108
+PUSHREF {
+	.blob x52657665616c207068617365206163746976652c206e6f2074696d656f7574207369676e616c6564
+}
+NOW
+GETGLOB 15
+INDEX 4
+SUB
+UFITS 64
+GETGLOB 14
+SECOND
+GREATER
+THROWARGIFNOT 308
+.loc TaskBase.tsol, 110
+GETGLOB 15
+INDEX 8
+GETGLOB 13
+THIRD
+GEQ
+PUSHCONT {
+	.loc TaskBase.tsol, 166
+	GETGLOB 14
+	THIRD
+	GETGLOB 15
+	DUP
+	INDEX 6
+	GETGLOB 9
+	TUCK
+	OVER
+	PUSHINT 267
+	DICTGETREF
+	PUSHCONT {
+		CTOS
+		CALLREF {
+			LDMSGADDR
+			LDU 128
+			LDU 256
+			LDREF
+			LDREF
+			ENDS
+			CTOS
+			LDU 128
+			LDU 128
+			LDI 1
+			LDI 1
+			ENDS
+			TUPLE 8
+		}
+	}
+	PUSHCONT {
+		PUSHREFSLICE {
+			.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+		}
+		PUSHINT 0
+		DUP
+		PUSHREF {
+		}
+		PUSHINT 0
+		BLKPUSH 3, 0
+		TUPLE 8
+	}
+	IFELSE
+	DUP
+	INDEX 4
+	ROLL 5
+	ADD
+	UFITS 128
+	SETINDEX 4
+	CALLREF {
+		UNTUPLE 8
+		REVERSE 8, 0
+		NEWC
+		STSLICE
+		STU 128
+		STU 256
+		STREF
+		ROLLREV 4
+		NEWC
+		STU 128
+		STU 128
+		STI 1
+		STI 1
+		STBREFR
+	}
+	ENDC
+	ROTREV
+	PUSHINT 267
+	DICTSETREF
+	SETINDEX 6
+	SETGLOB 15
+	.loc TaskBase.tsol, 116
+	CALLREF {
+		CALL $_makeConsensus_fc701e5e_internal_macro$
+	}
+	GETGLOB 15
+	ROT
+	SETINDEX 2
+	DUP
+	SETGLOB 15
+	SWAP
+	SETINDEX 0
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 117
+	NOW
+	SETINDEX 5
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 119
+	SETGLOB 16
+	.loc TaskBase.tsol, 121
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 2, 0
+	NEWDICT
+	PUSHINT 0
+	BLKPUSH 2, 0
+	TUPLE 10
+	.loc TaskBase.tsol, 122
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 123
+	PUSHINT 1
+	SETINDEX 0
+	SETGLOB 15
+	.loc TaskBase.tsol, 125
+	CALLREF {
+		CALL $_sendResponse_5f267ebd_internal_macro$
+	}
+}
+PUSHCONT {
+	.loc TaskBase.tsol, 127
+	GETGLOB 15
+	PUSHINT 0
+	SETINDEX 0
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 128
+	SETGLOB 16
+	.loc TaskBase.tsol, 130
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 2, 0
+	NEWDICT
+	PUSHINT 0
+	BLKPUSH 2, 0
+	TUPLE 10
+	.loc TaskBase.tsol, 131
+	DUP
+	SETGLOB 15
+	.loc TaskBase.tsol, 132
+	PUSHINT 1
+	SETINDEX 0
+	SETGLOB 15
+}
+IFELSE
+.loc ../contracts-common/std/GasManagement.tsol, 63
+GETGLOB 9
+.loc ../contracts-common/std/GasManagement.tsol, 35
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHPOW2 7
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.globl	_checkValidatorStake_5f7e4e07_internal
+.type	_checkValidatorStake_5f7e4e07_internal, @function
+CALL $_checkValidatorStake_5f7e4e07_internal_macro$
+
+.macro _checkValidatorStake_5f7e4e07_internal_macro
+.loc TaskBase.tsol, 186
+BLKDROP 3
+.loc TaskBase.tsol, 0
+
+.globl	_transferFeeFromRequesterToFeed_ee344941_internal
+.type	_transferFeeFromRequesterToFeed_ee344941_internal, @function
+CALL $_transferFeeFromRequesterToFeed_ee344941_internal_macro$
+
+.macro _transferFeeFromRequesterToFeed_ee344941_internal_macro
+.loc TaskBase.tsol, 192
+SWAP
+PUSHINT 2
+ROLL 4
+MYADDR
+ROLL 5
+GETGLOB 17
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 9789369574394656757036770681243717074945
+STUR 135
+ROLLREV 6
+NEWC
+STSLICECONST x5f32d85d
+STSLICE
+ROLLREV 5
+NEWC
+STSLICE
+ROLLREV 4
+NEWC
+STSLICE
+STU 8
+STU 128
+STU 128
+STBREFR
+STBREFR
+STBREFR
+ENDC
+PUSHINT 0
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.globl	_transferFeeFromFeedToValidator_8e0173de_internal
+.type	_transferFeeFromFeedToValidator_8e0173de_internal, @function
+CALL $_transferFeeFromFeedToValidator_8e0173de_internal_macro$
+
+.macro _transferFeeFromFeedToValidator_8e0173de_internal_macro
+.loc TaskBase.tsol, 197
+FALSE
+XCHG S2
+PUSHINT 1
+ROLL 4
+GETGLOB 17
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 9789369574394656757036770681243717074945
+STUR 135
+ROLLREV 5
+NEWC
+STSLICECONST x7fa67456
+STSLICE
+STU 8
+STU 128
+STU 128
+STI 1
+STBREFR
+ENDC
+PUSHINT 0
+SENDRAWMSG
+.loc TaskBase.tsol, 0
+
+.macro c4_to_c7
+PUSHROOT
+CTOS
+LDU 256 ; pubkey c4
+LDU 64 ; pubkey timestamp c4
+LDU 1 ; ctor flag
+NIP
+LDMSGADDR
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDREF
+LDREF
+LDU 8
+LDU 32
+LDU 128
+ROLLREV 4
+TUPLE 4
+SWAP
+LDU 128
+LDU 64
+LDREF
+ENDS
+CTOS
+LDU 128
+LDU 128
+LDU 128
+ROLLREV 5
+TUPLE 5
+SWAP
+LDU 8
+LDU 16
+LDREF
+LDU 64
+LDU 64
+LDU 64
+LDDICT
+LDU 16
+LDU 16
+LDU 16
+ROLLREV 10
+TUPLE 10
+SWAP
+LDU 8
+LDU 16
+LDREF
+LDU 64
+LDU 64
+LDU 64
+LDREF
+ENDS
+CTOS
+LDDICT
+LDU 16
+LDU 16
+LDU 16
+ROLLREV 10
+TUPLE 10
+SWAP
+LDMSGADDR
+ENDS
+SETGLOB 17
+SETGLOB 16
+SETGLOB 15
+SETGLOB 14
+SETGLOB 13
+SETGLOB 12
+SETGLOB 11
+SETGLOB 10
+SETGLOB 3
+SETGLOB 2
+
+.macro c4_to_c7_with_init_storage
+PUSHROOT
+CTOS
+SBITS
+GTINT 1
+PUSHCONT {
+	PUSHINT 0
+	PUSHROOT
+	CTOS
+	PLDDICT ; D
+	PUSHINT 1
+	OVER
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PUSHREFSLICE {
+			.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+		}
+	}
+	IFNOT
+	PUSHINT 2
+	PUSH S2
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PUSHREFSLICE {
+			.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+		}
+	}
+	IFNOT
+	PUSHINT 3
+	PUSH S3
+	PUSHINT 64
+	DICTUGETREF
+	PUSHCONT {
+		PUSHREF {
+		}
+	}
+	IFNOT
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 2, 0
+	TUPLE 4
+	PUSHINT 0
+	BLKPUSH 4, 0
+	TUPLE 5
+	PUSHINT 0
+	DUP
+	PUSHREF {
+	}
+	PUSHINT 0
+	BLKPUSH 2, 0
+	NEWDICT
+	PUSHINT 0
+	BLKPUSH 2, 0
+	TUPLE 10
+	DUP
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	SETGLOB 17
+	SETGLOB 16
+	SETGLOB 15
+	SETGLOB 14
+	SETGLOB 13
+	SETGLOB 12
+	SETGLOB 11
+	SETGLOB 10
+	PUSHINT 64
+	DICTUGET
+	THROWIFNOT 61
+	PLDU 256
+	SETGLOB 2
+	PUSHINT 0 ; timestamp
+	SETGLOB 3
+}
+IFREFELSE {
+	CALL $c4_to_c7$
+}
+
+.macro c7_to_c4
+GETGLOB 17
+GETGLOB 16
+GETGLOB 15
+GETGLOB 14
+GETGLOB 13
+GETGLOB 12
+GETGLOB 11
+GETGLOB 10
+GETGLOB 3
+GETGLOB 2
+NEWC
+STU 256
+STU 64
+STONE
+STSLICE
+ROLLREV 7
+NEWC
+STSLICE
+STREF
+SWAP
+UNTUPLE 4
+REVERSE 5, 0
+STREF
+STU 8
+STU 32
+STU 128
+SWAP
+UNTUPLE 5
+REVERSE 6, 0
+STU 128
+STU 64
+ROLLREV 6
+NEWC
+STU 128
+STU 128
+STU 128
+SWAP
+UNTUPLE 10
+REVERSE 11, 0
+STU 8
+STU 16
+STREF
+STU 64
+STU 64
+STU 64
+STDICT
+STU 16
+STU 16
+STU 16
+SWAP
+UNTUPLE 10
+REVERSE 11, 0
+STU 8
+STU 16
+STREF
+STU 64
+STU 64
+STU 64
+ROLLREV 5
+NEWC
+STDICT
+STU 16
+STU 16
+STU 16
+STSLICE
+STBREFR
+STBREFR
+STBREFR
+ENDC
+POPROOT
+
+.macro upd_only_time_in_c4
+PUSHROOT
+CTOS
+LDU 256
+LDU 64
+NIP
+GETGLOB 3
+ROT
+NEWC
+STU 256
+STU 64
+STSLICE
+ENDC
+POPROOT
+
+.internal-alias :main_internal, 0
+.internal :main_internal
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSH S2
+CTOS
+LDU 4 ; bounced tail
+LDMSGADDR ; bounced src tail
+DROP
+SETGLOB 9
+MODPOW2 1
+IFRET
+OVER
+SEMPTY ; isEmpty
+IFJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+OVER
+LDUQ 32  ; [funcId] body' ok
+THROWIFNOT 60
+OVER
+IFNOTJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.internal-alias :main_external, -1
+.internal :main_external
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSHREFSLICE {
+	.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+}
+SETGLOB 9
+OVER
+CALLREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+LDU 1 ; haveSign msgSlice
+SWAP
+PUSHCONT {
+	PUSHPOW2 9
+	LDSLICEX
+	DUP
+	MYADDR
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	HASHCU
+	ROT
+	GETGLOB 2
+	CHKSIGNU
+	THROWIFNOT 40
+}
+IF
+LDU 64 ; timestamp msgSlice
+SWAP
+CALL $replay_protection_macro$
+LDU 32 ; funcId body
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.macro _factory
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 10
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000b1382609
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _owner
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 11
+OVER
+PUSHCONT {
+	PUSHSLICE xc00000000000000000000000008fd860ac
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _name
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 12
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000b0d4d5ef
+	NEWC
+	STSLICE
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _taskSettings
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 13
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000a1176c67
+	NEWC
+	STSLICE
+	SWAP
+	UNTUPLE 4
+	REVERSE 5, 0
+	STREF
+	STU 8
+	STU 32
+	STU 128
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _factorySettings
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 14
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000cee49d69
+	NEWC
+	STSLICE
+	SWAP
+	UNTUPLE 5
+	REVERSE 6, 0
+	STU 128
+	STU 64
+	STU 128
+	STU 128
+	STU 128
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _currElectionState
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 15
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000a9a9a302
+	NEWC
+	STSLICE
+	SWAP
+	UNTUPLE 10
+	REVERSE 11, 0
+	STU 8
+	STU 16
+	STREF
+	STU 64
+	STU 64
+	STU 64
+	STDICT
+	STU 16
+	STU 16
+	STU 16
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _prevElectionState
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 16
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000c1747fa1
+	NEWC
+	STSLICE
+	SWAP
+	UNTUPLE 10
+	REVERSE 11, 0
+	STU 8
+	STU 16
+	STREF
+	STU 64
+	STU 64
+	STU 64
+	STDICT
+	STU 16
+	STU 16
+	STU 16
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _storage
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 17
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000b43f2a4f
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.globl	TvmCellExtension_with_obj_isEmpty_cd8fe089
+.type	TvmCellExtension_with_obj_isEmpty_cd8fe089, @function
+CALL $TvmCellExtension_with_obj_isEmpty_cd8fe089_macro$
+
+.macro TvmCellExtension_with_obj_isEmpty_cd8fe089_macro
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 16
+PUSHREF {
+}
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 18
+OVER
+HASHCU
+SWAP
+HASHCU
+EQUAL
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 0
+
+.globl	TvmCellExtension_no_obj_isEmpty_cd8fe089
+.type	TvmCellExtension_no_obj_isEmpty_cd8fe089, @function
+CALL $TvmCellExtension_no_obj_isEmpty_cd8fe089_macro$
+
+.macro TvmCellExtension_no_obj_isEmpty_cd8fe089_macro
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 16
+PUSHREF {
+}
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 18
+SWAP
+HASHCU
+SWAP
+HASHCU
+EQUAL
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 0
+
+.macro public_function_selector
+DUP
+PUSHINT 1182468934
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 439999999
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 240147605
+		EQUAL
+		IFJMPREF {
+			CALL $constructor$
+		}
+		DUP
+		PUSHINT 265838764
+		EQUAL
+		IFJMPREF {
+			CALL $_owner$
+		}
+		DUP
+		PUSHINT 304455091
+		EQUAL
+		IFJMPREF {
+			CALL $updateResponse$
+		}
+		DUP
+		PUSHINT 439999999
+		EQUAL
+		IFJMPREF {
+			CALL $requestFactorySettingsUpdate$
+		}
+	}
+	DUP
+	PUSHINT 819254767
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 555103430
+		EQUAL
+		IFJMPREF {
+			CALL $setTaskDetails$
+		}
+		DUP
+		PUSHINT 555183207
+		EQUAL
+		IFJMPREF {
+			CALL $_taskSettings$
+		}
+		DUP
+		PUSHINT 698983170
+		EQUAL
+		IFJMPREF {
+			CALL $_currElectionState$
+		}
+		DUP
+		PUSHINT 819254767
+		EQUAL
+		IFJMPREF {
+			CALL $_name$
+		}
+	}
+	DUP
+	PUSHINT 1024686990
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 825763337
+		EQUAL
+		IFJMPREF {
+			CALL $_factory$
+		}
+		DUP
+		PUSHINT 876554831
+		EQUAL
+		IFJMPREF {
+			CALL $_storage$
+		}
+		DUP
+		PUSHINT 883694594
+		EQUAL
+		IFJMPREF {
+			CALL $onReveal$
+		}
+		DUP
+		PUSHINT 1024686990
+		EQUAL
+		IFJMPREF {
+			CALL $onUpdateFactorySettingsResponse$
+		}
+	}
+	DUP
+	PUSHINT 1182468934
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 1055898257
+		EQUAL
+		IFJMPREF {
+			CALL $preciseFeedRequest$
+		}
+		DUP
+		PUSHINT 1064751969
+		EQUAL
+		IFJMPREF {
+			CALL $onRequestRevealPhase$
+		}
+		DUP
+		PUSHINT 1098153889
+		EQUAL
+		IFJMPREF {
+			CALL $_prevElectionState$
+		}
+		DUP
+		PUSHINT 1182468934
+		EQUAL
+		IFJMPREF {
+			CALL $acceptLockResult$
+		}
+	}
+}
+DUP
+PUSHINT 2100106954
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 2041087751
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 1323605353
+		EQUAL
+		IFJMPREF {
+			CALL $_factorySettings$
+		}
+		DUP
+		PUSHINT 1634491967
+		EQUAL
+		IFJMPREF {
+			CALL $onRequestFinalPhase$
+		}
+		DUP
+		PUSHINT 1879676111
+		EQUAL
+		IFJMPREF {
+			CALL $onReceivedTransfer$
+		}
+		DUP
+		PUSHINT 2041087751
+		EQUAL
+		IFJMPREF {
+			CALL $setStorage$
+		}
+	}
+	DUP
+	PUSHINT 2100106954
+	EQUAL
+	IFJMPREF {
+		CALL $onCommit$
+	}
+}
+

@@ -1,0 +1,8 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+/// @title Receives a response as a PRECISE answer
+interface IPreciseConsumer {
+    function preciseCallback(
+        TvmCell response_) external internalMsg;
+}

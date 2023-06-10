@@ -1,0 +1,141 @@
+plugins {
+    id "java-library"
+    id "maven-publish"
+}
+
+group v_groupId
+version v_version
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/gen/java']
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+
+    // RUNTIME **************************
+
+    api "tech.deplant.java4ever:java4ever-framework:$java4everVersion" // java4ever SDK for Everscale
+    implementation "org.slf4j:slf4j-jdk-platform-logging:$slf4jVersion" // SLF4J Bridge to JDK9 System.Logger
+
+    // TEST **************************
+
+    // SLF4J (Simple provider for tests)
+    testImplementation "org.slf4j:slf4j-simple:$slf4jVersion"
+
+    // JUnit 5
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/deplant/iris-contracts-core")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("GH_PACKAGES_UPLOAD_TOKEN")
+            }
+        }
+        maven {
+            name = "Sonatype"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+    publications {
+        framework(MavenPublication) {
+            groupId = v_groupId
+            artifactId = v_artifactId
+            version = v_version
+
+            from components.java
+
+            pom {
+                name = v_title
+                description = v_description
+                url = v_repository
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = v_developerId
+                        name = v_developerName
+                        email = v_developerEmail
+                        organization = v_org
+                        organizationUrl = v_url
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/deplant/iris-contracts-core.git'
+                    developerConnection = 'scm:git:ssh://github.com/deplant/iris-contracts-core.git'
+                    url = 'http://github.com/deplant/iris-contracts-core'
+                }
+            }
+        }
+    }
+}
+
+javadoc {
+    options.addBooleanOption('html5', true)
+    options.addBooleanOption('-enable-preview', true)
+    options.addStringOption('-release', '19')
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_19
+    targetCompatibility = JavaVersion.VERSION_19
+}
+
+test {
+    useJUnitPlatform {
+        //includeTags 'integration', 'feature-168'
+        //excludeTags 'compile'//, 'deploy', 'config'
+    }
+    jvmArgs += "--enable-preview"
+    jvmArgs += "--add-modules=jdk.incubator.concurrent"
+    jvmArgs += "--enable-native-access=ALL-UNNAMED"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += "--enable-preview"
+    options.compilerArgs += "--add-modules=jdk.incubator.concurrent"
+}
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs += "--enable-preview"
+    jvmArgs += "--add-modules=jdk.incubator.concurrent"
+    jvmArgs += "--enable-native-access=ALL-UNNAMED"
+}
+
+tasks.withType(Test) {
+    jvmArgs += "--enable-preview"
+    jvmArgs += "--add-modules=jdk.incubator.concurrent"
+    jvmArgs += "--enable-native-access=ALL-UNNAMED"
+
+    systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}

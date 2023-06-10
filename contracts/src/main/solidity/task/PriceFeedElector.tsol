@@ -1,0 +1,134 @@
+pragma ever-solidity ^0.64;
+
+import "../contracts-common/std/MathLib.tsol";
+import "../interface/OsirisInterfaces.tsol";
+import "./AbstractElection.tsol";
+
+contract PriceFeedElector is
+AbstractElection /* extends IElector, Types, InternallyOwned, GasManagement */,
+IPriceFeed,
+MathLib
+{
+
+    struct PriceResponse {
+        address participant;
+        uint128 priceResponse;
+    }
+
+    constructor(Task task_, ElectionSettings settings_) public onlyFactory {
+        _task = task_;
+        _electionSettings = settings_;
+    }
+
+    // ****************************************************************
+    // External (IPriceFeed)
+    // ****************************************************************
+    function priceFeedRequest(address payerAddress_, bool notifyPayer_, uint128 maxPayment_) override external responsible internalMsg reserveGas returnAllUnreserved returns (uint128) {
+        // abiDecode shouldn't fail as we check the same operation in the _responseCheck() function throughout the election
+        return abi.decode(_prevElectionState.response, uint128);
+    }
+
+    // ****************************************************************
+    // Internal (AbstractElection)
+    // ****************************************************************
+    function _stageSwitchBounty(address participantAddr_) override internal inline {
+        _currElectionState.participants[participantAddr_].bountyValue += _electionSettings.bountyStageSwitch;
+    }
+
+
+    function _stageMissSlash(address participantAddr_) override internal inline {
+        _currElectionState.participants[participantAddr_].slashValue += _electionSettings.slashMissedStage;
+    }
+
+
+    ///@dev PriceFeed implementation checks if exception will be thrown on decode of TvmCell
+    function _responseCheck(TvmCell response) override internal inline pure {
+        abi.decode(response, uint128);
+    }
+
+    struct Limits {uint l; uint r;}
+
+
+    function _makeConsensus() override internal returns (TvmCell) {
+        ParticipantData[] participantsArray = _currElectionState.participants.values();
+        // get array from map
+        (uint sortedLength, PriceResponse[] sortedResponses) = _qSortPriceResponses(participantsArray);
+        // qsort
+        (PriceResponse resp25, /*PriceResponse resp50*/, PriceResponse resp75) = _quartileValues(sortedLength, sortedResponses);
+        // find quartiles
+        PriceResponse medianResponse = _medianResponse(sortedLength, sortedResponses);
+        // calculate median
+        // create TvmCell with final median response
+        TvmBuilder builder;
+        builder.store(medianResponse.priceResponse);
+        return builder.toCell();
+    }
+
+    function _medianResponse(uint length_, PriceResponse[] sortedResponses_) internal pure returns (PriceResponse) {
+        //sort(array, 0, length);
+        return length_ % 2 == 0
+        ?
+        $avg(sortedResponses_[length_ / 2 - 1], sortedResponses_[length_ / 2])
+        :
+        sortedResponses_[length_ / 2];
+    }
+
+    ///@dev responses should be sorted before getting this
+    function _quartileValues(uint length_, PriceResponse[] sortedResponses_) internal inline pure returns (PriceResponse v25, PriceResponse v50, PriceResponse v75) {
+        return (sortedResponses_[(length_ - 1) / 4],
+        sortedResponses_[length_ / 2],
+        sortedResponses_[(3 * (length_ - 1)) / 4]);
+    }
+
+    function _qSortPriceResponses(ParticipantData[] participantsArray) internal pure returns (uint, PriceResponse[] sortedResponses) {
+
+        // find zeroes
+        for ((address source,/**/,/**/,uint128 price,/**/,/**/) : participantsArray) {
+            if (price != 0) {
+                sortedResponses.push(PriceResponse(source, price));
+            }
+        }
+
+        vector(Limits) s;
+        s.push(Limits(0, sortedResponses.length - 1));
+
+        uint l;
+        uint r;
+        uint i;
+        uint j;
+        PriceResponse none;
+        uint128 v;
+
+        while (!s.empty()) {
+            (l, r) = s.pop().unpack();
+            if (r > l) {
+                v = sortedResponses[(l + r) / 2].value;
+                i = l;
+                j = r;
+                while (i <= j) {
+                    while (sortedResponses[i].value < v) {
+                        i++;
+                    }
+                    while (sortedResponses[j].value > v) {
+                        j--;
+                    }
+                    if (i >= j)
+                        break;
+                    none = sortedResponses[i];
+                    sortedResponses[i] = sortedResponses[j];
+                    sortedResponses[j] = none;
+                    i++;
+                    j--;
+                }
+                i = j;
+
+                s.push(Limits(i + 1, r));
+                s.push(Limits(l, i));
+            }
+        }
+
+        return (sortedResponses, sortedResponses.length);
+
+    }
+
+}

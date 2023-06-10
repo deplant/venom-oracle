@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+interface IBankStorage {
+
+    function addAllowance(address consumer_, address task_, uint128 valueAmount_, uint128 tokenAmount_) external internalMsg ;
+
+    function removeAllowance(address consumer_) external internalMsg;
+
+    function depositValue(uint128 deposit_) external internalMsg;
+
+    function withdrawValue(uint128 withdraw_) external internalMsg;
+
+    function withdrawToken(uint128 amount_) external internalMsg;
+
+    function transfer(address recipient_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_, bool notifyOwner_) external internalMsg;
+
+    function requestTransfer(address payer_, address task_, address consumer_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_) external internalMsg;
+
+    function acceptRequestTransfer(address task_, address consumer_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_) external internalMsg;
+
+    function redeployTokenWallet() external internalMsg;
+
+}

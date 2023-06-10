@@ -1,0 +1,250 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"owner_","type":"address"},
+				{"name":"type_","type":"uint8"},
+				{"name":"initialDeposit_","type":"uint128"},
+				{"name":"token_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onTokenRootCallback",
+			"inputs": [
+				{"name":"tokenWallet_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "addAllowance",
+			"inputs": [
+				{"name":"consumer_","type":"address"},
+				{"name":"task_","type":"address"},
+				{"name":"valueAmount_","type":"uint128"},
+				{"name":"tokenAmount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "removeAllowance",
+			"inputs": [
+				{"name":"consumer_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "transfer",
+			"inputs": [
+				{"name":"recipient_","type":"address"},
+				{"name":"type_","type":"uint8"},
+				{"name":"valueAmount_","type":"uint128"},
+				{"name":"tokenAmount_","type":"uint128"},
+				{"name":"notifyOwner_","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "requestTransfer",
+			"inputs": [
+				{"name":"payer_","type":"address"},
+				{"name":"task_","type":"address"},
+				{"name":"consumer_","type":"address"},
+				{"name":"type_","type":"uint8"},
+				{"name":"valueAmount_","type":"uint128"},
+				{"name":"tokenAmount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "redeployTokenWallet",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "depositValue",
+			"inputs": [
+				{"name":"amount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "withdrawValue",
+			"inputs": [
+				{"name":"amount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "withdrawToken",
+			"inputs": [
+				{"name":"amount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptRequestTransfer",
+			"inputs": [
+				{"name":"task_","type":"address"},
+				{"name":"consumer_","type":"address"},
+				{"name":"type_","type":"uint8"},
+				{"name":"valueAmount_","type":"uint128"},
+				{"name":"tokenAmount_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onAcceptTokensTransfer",
+			"inputs": [
+				{"name":"value0","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"sender","type":"address"},
+				{"name":"value3","type":"address"},
+				{"name":"value4","type":"address"},
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "_bank",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_bank","type":"address"}
+			]
+		},
+		{
+			"name": "_owner",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_owner","type":"address"}
+			]
+		},
+		{
+			"name": "_type",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_type","type":"uint8"}
+			]
+		},
+		{
+			"name": "_valueBalance",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_valueBalance","type":"uint128"}
+			]
+		},
+		{
+			"name": "_tokenBalance",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_tokenBalance","type":"uint128"}
+			]
+		},
+		{
+			"name": "_tokenWallet",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_tokenWallet","type":"address"}
+			]
+		},
+		{
+			"name": "_token",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_token","type":"address"}
+			]
+		},
+		{
+			"name": "_lockedBalances",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_lockedBalances","type":"map(uint64,uint128)"}
+			]
+		},
+		{
+			"name": "_lockedTokens",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_lockedTokens","type":"map(uint64,uint128)"}
+			]
+		},
+		{
+			"name": "_allowanceMap",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"task","type":"address"},{"name":"maxValue","type":"uint128"},{"name":"maxToken","type":"uint256"}],"name":"_allowanceMap","type":"map(address,tuple)"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_bank","type":"address"},
+		{"key":2,"name":"_owner","type":"address"},
+		{"key":3,"name":"_type","type":"uint8"}
+	],
+	"events": [
+		{
+			"name": "depositIncrease",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"valueAmount","type":"uint128"},
+				{"name":"tokenAmount","type":"uint128"},
+				{"name":"assetType","type":"uint8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "depositDecrease",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"valueAmount","type":"uint128"},
+				{"name":"tokenAmount","type":"uint128"},
+				{"name":"assetType","type":"uint8"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_bank","type":"address"},
+		{"name":"_owner","type":"address"},
+		{"name":"_type","type":"uint8"},
+		{"name":"_valueBalance","type":"uint128"},
+		{"name":"_tokenBalance","type":"uint128"},
+		{"name":"_tokenWallet","type":"address"},
+		{"name":"_token","type":"address"},
+		{"name":"_lockedBalances","type":"map(uint64,uint128)"},
+		{"name":"_lockedTokens","type":"map(uint64,uint128)"},
+		{"components":[{"name":"task","type":"address"},{"name":"maxValue","type":"uint128"},{"name":"maxToken","type":"uint256"}],"name":"_allowanceMap","type":"map(address,tuple)"}
+	]
+}

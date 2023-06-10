@@ -1,0 +1,22 @@
+pragma ever-solidity ^0.64;
+
+abstract contract FactoryConfig {
+	uint128 constant SUBSCR_DEPLOY_GAS = 100_000; // 0.1 EVER currently
+	uint128 constant SUBSCR_CANCEL_GAS = 50_000;  // 0.01 EVER currently	
+}
+
+abstract contract SubscriptionsConfig {
+	uint128 constant SUBSCR_DEPLOY_GAS = 100_000; // 0.1 EVER currently
+	uint128 constant SUBSCR_CANCEL_GAS = 50_000;  // 0.05 EVER currently	
+}
+
+abstract contract ValidatorConfig {
+	uint128 constant COMMIT_MSG_GAS = 50_000;  // 0.05 EVER currently	
+	uint128 constant REVEAL_REQ_GAS = 50_000;  // 0.05 EVER currently
+	uint128 constant REVEAL_MSG_GAS = 50_000;  // 0.05 EVER currently	
+	uint128 constant FINALIZE_REQ_GAS = 200_000;  // 0.05 EVER currently	
+}
+
+abstract contract BankConfig {
+	uint128 constant WALLET_DEPLOY_VALUE = 100_000; // 0.1 EVER currently
+}

@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+interface IStorageOwner {
+    function acceptLockResult(address owner_, uint8 type_, bool hasLocked_) external internalMsg;
+    function onReceivedTransfer(address sender_, address consumer_, uint128 valueAmount_, uint128 tokenAmount_) external internalMsg;
+}

@@ -1,0 +1,1257 @@
+.version sol 0.64.0
+
+.macro constructor
+DROP
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+GETGLOB 6
+THROWIF 51
+LDREF
+LDREF
+ENDS
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc OracleValidator.tsol, 30
+SWAP
+SETGLOB 11
+.loc OracleValidator.tsol, 31
+SETGLOB 12
+.loc ../contracts-common/std/ExternallyOwned.tsol, 0
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro commit
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc OracleValidator.tsol, 37
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDU 256
+ENDS
+.loc OracleValidator.tsol, 0
+CALLREF {
+	CALL $commit_84bf1535_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro commit_84bf1535_internal_macro
+.loc OracleValidator.tsol, 37
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc OracleValidator.tsol, 38
+OVER
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 301
+.loc OracleValidator.tsol, 39
+DUP
+THROWIFNOT 300
+.loc OracleValidator.tsol, 40
+PUSHINT 50000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+ROT
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 1
+STUR 107
+SWAP
+NEWC
+STSLICECONST x7d2d16ca
+STU 256
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc OracleValidator.tsol, 0
+
+.macro reveal
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc OracleValidator.tsol, 43
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDREF
+LDU 256
+ENDS
+.loc OracleValidator.tsol, 0
+CALLREF {
+	CALL $reveal_a061c07c_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro reveal_a061c07c_internal_macro
+.loc OracleValidator.tsol, 43
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc OracleValidator.tsol, 44
+PUSH S2
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 301
+.loc OracleValidator.tsol, 45
+SWAP
+PUSHINT 50000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+ROLL 3
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 1
+STUR 107
+ROTREV
+NEWC
+STSLICECONST x34ac1c02
+STREF
+STU 256
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc OracleValidator.tsol, 0
+
+.macro requestRevealPhase
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc OracleValidator.tsol, 48
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc OracleValidator.tsol, 0
+CALLREF {
+	CALL $requestRevealPhase_ad83131e_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro requestRevealPhase_ad83131e_internal_macro
+.loc OracleValidator.tsol, 48
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc OracleValidator.tsol, 49
+DUP
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 301
+.loc OracleValidator.tsol, 50
+PUSHINT 50000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+SWAP
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 1064751969
+STUR 139
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc OracleValidator.tsol, 0
+
+.macro requestFinalPhase
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc OracleValidator.tsol, 53
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc OracleValidator.tsol, 0
+CALLREF {
+	CALL $requestFinalPhase_9ce9dbb5_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro requestFinalPhase_9ce9dbb5_internal_macro
+.loc OracleValidator.tsol, 53
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc OracleValidator.tsol, 54
+DUP
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 301
+.loc OracleValidator.tsol, 55
+PUSHINT 200000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+SWAP
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 1634491967
+STUR 139
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc OracleValidator.tsol, 0
+
+.macro getCommitHash
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc OracleValidator.tsol, 61
+LDREF
+LDU 256
+ENDS
+.loc OracleValidator.tsol, 0
+CALLREF {
+	CALL $getCommitHash_b6fa0788_internal_macro$
+}
+OVER
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 3509375189
+	STUR 130
+	STU 256
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	DROP
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro getCommitHash_b6fa0788_internal_macro
+.loc OracleValidator.tsol, 75
+SWAP
+NEWC
+STREF
+.loc OracleValidator.tsol, 76
+STU 256
+.loc OracleValidator.tsol, 77
+ENDC
+.loc OracleValidator.tsol, 78
+HASHCU
+.loc OracleValidator.tsol, 0
+
+.macro subscribe
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc Subscriptions.tsol, 18
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDU 64
+ENDS
+.loc Subscriptions.tsol, 0
+CALLREF {
+	CALL $subscribe_77130d4c_internal_macro$
+}
+OVER
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 1
+	STUR 98
+	SWAP
+	NEWC
+	STSLICECONST xa6007d0f
+	STSLICE
+	STBREFR
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	DROP
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro subscribe_77130d4c_internal_macro
+.loc Subscriptions.tsol, 18
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc Subscriptions.tsol, 19
+OVER
+GETGLOB 2
+NEWC
+STU 256
+PUSHINT 0
+NEWDICT
+PUSHINT 64
+DICTUSETB
+ROLL 3
+PUSHINT 1
+ROT
+PUSHINT 64
+DICTUSET
+MYADDR
+PUSHINT 2
+ROT
+PUSHINT 64
+DICTUSET
+NEWC
+STDICT
+ENDC
+GETGLOB 10
+NEWC
+STSLICECONST x2_
+STOPTREF
+STOPTREF
+STZERO
+ENDC
+DUP
+HASHCU
+NEWC
+STSLICECONST x801_
+STU 256
+ENDC
+CTOS
+ROLLREV 3
+PUSHINT 100000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+PUSH S4
+NEWC
+STSLICECONST x62_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 3
+STUR 107
+OVER
+CALLREF {
+	CTOS
+	LDI 1
+	SWAP
+	PUSHCONT {
+		LDI 5
+		NIP
+	}
+	IF
+	LDI 1
+	SWAP
+	PUSHCONT {
+		LDI 2
+		NIP
+	}
+	IF
+	LDOPTREF
+	LDOPTREF
+	LDDICT
+	ENDS
+	BLKDROP 3
+}
+STREF
+STSLICECONST 1
+ROTREV
+NEWC
+STSLICECONST x0d0fdeac
+STSLICE
+STU 64
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc Subscriptions.tsol, 0
+
+.macro unsubscribe
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc Subscriptions.tsol, 31
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc Subscriptions.tsol, 0
+CALLREF {
+	CALL $unsubscribe_7262561c_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro unsubscribe_7262561c_internal_macro
+.loc Subscriptions.tsol, 31
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc Subscriptions.tsol, 32
+CALLREF {
+	CALL $_calcSubscriptAddress_b00b42df_internal_macro$
+}
+DROP
+.loc Subscriptions.tsol, 33
+PUSHINT 50000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+SWAP
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 215644141
+STUR 139
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc Subscriptions.tsol, 0
+
+.macro saveRequestTx
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc Subscriptions.tsol, 36
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDU 64
+ENDS
+.loc Subscriptions.tsol, 0
+CALLREF {
+	CALL $saveRequestTx_8fe3de49_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro saveRequestTx_8fe3de49_internal_macro
+.loc Subscriptions.tsol, 36
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc Subscriptions.tsol, 37
+SWAP
+CALLREF {
+	CALL $_calcSubscriptAddress_b00b42df_internal_macro$
+}
+DROP
+.loc Subscriptions.tsol, 38
+SWAP
+PUSHINT 50000
+.loc ../contracts-common/std/GasManagement.tsol, 24
+MYADDR
+PARSEMSGADDR
+THIRD
+CALLREF {
+	CALL $__gasToTon_macro$
+}
+.loc ../contracts-common/std/GasManagement.tsol, 0
+ROT
+TRUE
+NEWC
+STSLICECONST x6_
+STI 1
+STSLICECONST x1_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 1459110482
+STUR 139
+STU 64
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc Subscriptions.tsol, 0
+
+.macro setSubscriptionCode
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc Subscriptions.tsol, 41
+LDREF
+ENDS
+.loc Subscriptions.tsol, 0
+CALLREF {
+	CALL $setSubscriptionCode_287e32b7_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro setSubscriptionCode_287e32b7_internal_macro
+.loc Subscriptions.tsol, 41
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc Subscriptions.tsol, 43
+MYADDR
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEWC
+STU 256
+.loc Subscriptions.tsol, 44
+SWAP
+CTOS
+SWAP
+ENDC
+
+CALLREF {
+	PUSH S1
+	PUSHSLICE x8adb35
+	SDEQ
+	PUSHREFCONT {
+		SWAP      ; salt sliceCode
+		LDREF
+		LDREF
+		DROP         ; salt selfCallCode usualSelector
+		XCHG S1, S2  ; selfCallCode salt usualSelector
+		CTOS         ; selfCallCode salt usualSelector
+		CALLREF {
+			
+			LDREFRTOS  ; selfCallCode salt restUsualSelector intSelector
+
+			PUSHSLICE xF4A4_
+			SDBEGINSX
+			LDDICT     ; selfCallCode salt restUsualSelector dict intSelector
+			LDU 10
+			NIP
+			DUP
+			SREFS      ; selfCallCode salt restUsualSelector dict intSelector refs
+			PUSHCONT {
+				LDREF
+			}
+			PUSHCONT {
+				PUSHREF {
+				}
+				SWAP
+			}
+			IFELSE
+		                ; selfCallCode salt restUsualSelector dict version intSelector
+			PUSHSLICE xF4A1
+			SDBEGINSX
+			DROP
+			            ; selfCallCode salt restUsualSelector dict version
+			SWAP        ; selfCallCode salt restUsualSelector version dict
+			NEWC        ; selfCallCode salt restUsualSelector version dict builder
+			STSLICECONST xF4A4_ ; DICTPUSHCONST
+			STDICT
+			PUSHINT 32
+			STUR 10
+			STSLICECONST xF4A1 ; DICTUGETJMP
+			STREF       ; selfCallCode salt restUsualSelector builder
+			XCHG S1, S2 ; selfCallCode restUsualSelector salt builder
+			STREF       ; selfCallCode restUsualSelector builder
+			NEWC        ; selfCallCode restUsualSelector builder usualBuilder
+			STBREF      ; selfCallCode restUsualSelector usualBuilder
+			STSLICE     ; selfCallCode usualBuilder
+
+		}
+		NEWC        ; selfCallCode usualBuilder mainBuilder
+		STSLICECONST x8adb35
+		XCHG S1, S2 ; usualBuilder selfCallCode mainBuilder
+		STREF
+		STBREF
+		ENDC
+	}
+	PUSHREFCONT {
+		SWAP
+		CALLREF {
+			
+			LDREFRTOS  ; selfCallCode salt restUsualSelector intSelector
+
+			PUSHSLICE xF4A4_
+			SDBEGINSX
+			LDDICT     ; selfCallCode salt restUsualSelector dict intSelector
+			LDU 10
+			NIP
+			DUP
+			SREFS      ; selfCallCode salt restUsualSelector dict intSelector refs
+			PUSHCONT {
+				LDREF
+			}
+			PUSHCONT {
+				PUSHREF {
+				}
+				SWAP
+			}
+			IFELSE
+		                ; selfCallCode salt restUsualSelector dict version intSelector
+			PUSHSLICE xF4A1
+			SDBEGINSX
+			DROP
+			            ; selfCallCode salt restUsualSelector dict version
+			SWAP        ; selfCallCode salt restUsualSelector version dict
+			NEWC        ; selfCallCode salt restUsualSelector version dict builder
+			STSLICECONST xF4A4_ ; DICTPUSHCONST
+			STDICT
+			PUSHINT 32
+			STUR 10
+			STSLICECONST xF4A1 ; DICTUGETJMP
+			STREF       ; selfCallCode salt restUsualSelector builder
+			XCHG S1, S2 ; selfCallCode restUsualSelector salt builder
+			STREF       ; selfCallCode restUsualSelector builder
+			NEWC        ; selfCallCode restUsualSelector builder usualBuilder
+			STBREF      ; selfCallCode restUsualSelector usualBuilder
+			STSLICE     ; selfCallCode usualBuilder
+
+		}
+		ENDC
+	}
+	IFELSE
+}
+.loc Subscriptions.tsol, 45
+SETGLOB 10
+.loc Subscriptions.tsol, 0
+
+.macro getSubscriptionCodeHash
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc Subscriptions.tsol, 51
+ENDS
+.loc Subscriptions.tsol, 0
+CALLREF {
+	CALL $getSubscriptionCodeHash_86a81f47_internal_macro$
+}
+OVER
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 4240528426
+	STUR 130
+	STU 256
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	DROP
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro getSubscriptionCodeHash_86a81f47_internal_macro
+.loc Subscriptions.tsol, 51
+DEPTH
+ADDCONST -5
+PICK
+EQINT -1
+THROWIFNOT 71
+.loc ../contracts-common/std/ExternallyOwned.tsol, 24
+ACCEPT
+.loc Subscriptions.tsol, 52
+GETGLOB 10
+HASHCU
+.loc Subscriptions.tsol, 0
+
+.globl	_calcSubscriptAddress_b00b42df_internal
+.type	_calcSubscriptAddress_b00b42df_internal, @function
+CALL $_calcSubscriptAddress_b00b42df_internal_macro$
+
+.macro _calcSubscriptAddress_b00b42df_internal_macro
+.loc Subscriptions.tsol, 59
+GETGLOB 2
+NEWC
+STU 256
+PUSHINT 0
+NEWDICT
+PUSHINT 64
+DICTUSETB
+SWAP
+PUSHINT 1
+ROT
+PUSHINT 64
+DICTUSET
+MYADDR
+PUSHINT 2
+ROT
+PUSHINT 64
+DICTUSET
+NEWC
+STDICT
+ENDC
+GETGLOB 10
+NEWC
+STSLICECONST x2_
+STOPTREF
+STOPTREF
+STZERO
+ENDC
+.loc Subscriptions.tsol, 69
+CALLREF {
+	CALL $TvmCellExtension_with_obj_toAddress_3689215d_macro$
+}
+SWAP
+.loc Subscriptions.tsol, 0
+
+.macro c4_to_c7
+PUSHROOT
+CTOS
+LDU 256 ; pubkey c4
+LDU 64 ; pubkey timestamp c4
+LDU 1 ; ctor flag
+NIP
+LDREF
+LDREF
+LDREF
+ENDS
+SETGLOB 12
+SETGLOB 11
+SETGLOB 10
+SETGLOB 3
+SETGLOB 2
+
+.macro c4_to_c7_with_init_storage
+PUSHROOT
+CTOS
+SBITS
+GTINT 1
+PUSHCONT {
+	PUSHINT 0
+	PUSHROOT
+	CTOS
+	PLDDICT ; D
+	PUSHINT 1
+	OVER
+	PUSHINT 64
+	DICTUGETREF
+	PUSHCONT {
+		PUSHREF {
+		}
+	}
+	IFNOT
+	PUSHREF {
+	}
+	DUP
+	SETGLOB 12
+	SETGLOB 11
+	SETGLOB 10
+	PUSHINT 64
+	DICTUGET
+	THROWIFNOT 61
+	PLDU 256
+	SETGLOB 2
+	PUSHINT 0 ; timestamp
+	SETGLOB 3
+}
+IFREFELSE {
+	CALL $c4_to_c7$
+}
+
+.macro c7_to_c4
+GETGLOB 12
+GETGLOB 11
+GETGLOB 10
+GETGLOB 3
+GETGLOB 2
+NEWC
+STU 256
+STU 64
+STONE
+STREF
+STREF
+STREF
+ENDC
+POPROOT
+
+.macro upd_only_time_in_c4
+PUSHROOT
+CTOS
+LDU 256
+LDU 64
+NIP
+GETGLOB 3
+ROT
+NEWC
+STU 256
+STU 64
+STSLICE
+ENDC
+POPROOT
+
+.internal-alias :main_internal, 0
+.internal :main_internal
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSH S2
+CTOS
+LDU 4 ; bounced tail
+LDMSGADDR ; bounced src tail
+DROP
+SETGLOB 9
+MODPOW2 1
+IFRET
+OVER
+SEMPTY ; isEmpty
+IFJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+OVER
+LDUQ 32  ; [funcId] body' ok
+THROWIFNOT 60
+OVER
+IFNOTJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.internal-alias :main_external, -1
+.internal :main_external
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+SETGLOB 9
+OVER
+CALLREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+LDU 1 ; haveSign msgSlice
+SWAP
+PUSHCONT {
+	PUSHPOW2 9
+	LDSLICEX
+	DUP
+	MYADDR
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	HASHCU
+	ROT
+	GETGLOB 2
+	DUP
+	SETGLOB 5
+	CHKSIGNU
+	THROWIFNOT 40
+}
+IF
+LDU 64 ; timestamp msgSlice
+SWAP
+CALL $replay_protection_macro$
+LDU 32 ; expireAt msgSlice
+SWAP
+NOW ; msgSlice expireAt now
+GREATER ; msgSlice expireAt>now
+THROWIFNOT 57
+LDU 32 ; funcId body
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.macro _subscriptionCode
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 10
+OVER
+PUSHCONT {
+	PUSHSLICE xc00000000000000000000000009f73038a
+	NEWC
+	STSLICE
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _name
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 11
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000b0d4d5ef
+	NEWC
+	STSLICE
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro _logo
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 12
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000e0a77268
+	NEWC
+	STSLICE
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.globl	TvmCellExtension_with_obj_toAddress_3689215d
+.type	TvmCellExtension_with_obj_toAddress_3689215d, @function
+CALL $TvmCellExtension_with_obj_toAddress_3689215d_macro$
+
+.macro TvmCellExtension_with_obj_toAddress_3689215d_macro
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 7
+DUP
+HASHCU
+NEWC
+STSLICECONST x801_
+STU 256
+ENDC
+CTOS
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 0
+
+.globl	TvmCellExtension_no_obj_toAddress_3689215d
+.type	TvmCellExtension_no_obj_toAddress_3689215d, @function
+CALL $TvmCellExtension_no_obj_toAddress_3689215d_macro$
+
+.macro TvmCellExtension_no_obj_toAddress_3689215d_macro
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 7
+HASHCU
+NEWC
+STSLICECONST x801_
+STU 256
+ENDC
+CTOS
+.loc ../contracts-common/extensions/TvmCellExtension.tsol, 0
+
+.macro public_function_selector
+DUP
+PUSHINT 637566223
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 473398499
+	EQUAL
+	IFJMPREF {
+		CALL $requestRevealPhase$
+	}
+	DUP
+	PUSHINT 478354521
+	EQUAL
+	IFJMPREF {
+		CALL $reveal$
+	}
+	DUP
+	PUSHINT 527631242
+	EQUAL
+	IFJMPREF {
+		CALL $_subscriptionCode$
+	}
+	DUP
+	PUSHINT 637566223
+	EQUAL
+	IFJMPREF {
+		CALL $subscribe$
+	}
+}
+DUP
+PUSHINT 1361891541
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 707280661
+	EQUAL
+	IFJMPREF {
+		CALL $constructor$
+	}
+	DUP
+	PUSHINT 805581008
+	EQUAL
+	IFJMPREF {
+		CALL $setSubscriptionCode$
+	}
+	DUP
+	PUSHINT 819254767
+	EQUAL
+	IFJMPREF {
+		CALL $_name$
+	}
+	DUP
+	PUSHINT 1361891541
+	EQUAL
+	IFJMPREF {
+		CALL $getCommitHash$
+	}
+}
+DUP
+PUSHINT 2036900798
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 1409108257
+	EQUAL
+	IFJMPREF {
+		CALL $unsubscribe$
+	}
+	DUP
+	PUSHINT 1621586536
+	EQUAL
+	IFJMPREF {
+		CALL $_logo$
+	}
+	DUP
+	PUSHINT 1954758558
+	EQUAL
+	IFJMPREF {
+		CALL $saveRequestTx$
+	}
+	DUP
+	PUSHINT 2036900798
+	EQUAL
+	IFJMPREF {
+		CALL $requestFinalPhase$
+	}
+}
+DUP
+PUSHINT 2118814704
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 2093044778
+	EQUAL
+	IFJMPREF {
+		CALL $getSubscriptionCodeHash$
+	}
+	DUP
+	PUSHINT 2118814704
+	EQUAL
+	IFJMPREF {
+		CALL $commit$
+	}
+}
+

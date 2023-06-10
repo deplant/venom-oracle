@@ -1,0 +1,100 @@
+pragma ever-solidity ^0.64;
+
+abstract contract Types {
+
+    enum StorageAssetType {
+        GAS,
+        TOKEN
+    }
+
+    /// @title Storage Owner Type Enum
+    uint8 constant CONSUMER_STORAGE = 0;
+    uint8 constant VALIDATOR_STORAGE = 1;
+    uint8 constant TASK_STORAGE = 2;
+
+    /// @title Task Variants Enum
+    uint8 constant PRECISE_IMMEDIATE = 0; // Consensus is built around equal answer from all Oracles
+    uint8 constant MEDIAN_IMMEDIATE = 1; // Consensus is built around medianized Schelling point
+    uint8 constant PRECISE_FEED = 2; // Consensus is built around equal answer from all Oracles
+    uint8 constant MEDIAN_FEED = 3; // Consensus is built around medianized Schelling point
+
+    /// @title Trigger Type Enum
+    uint8 constant IMMEDIATE = 0; // Executes a task upon explicit request made by a user. The request is detected via checking events from a contract.
+    uint8 constant SCHEDULE = 1;  // Executes a task on a schedule. Does not rely on any kind of external trigger.
+    uint8 constant VALUE_FEED = 2;  // Constant data feed that updates on deviations
+
+    /// @title Consensus Type Enum
+    uint8 constant PRECISE = 0; // Consensus is built around equal answer from all Oracles
+    uint8 constant MEDIAN = 1; // Consensus is built around medianized Schelling point
+
+    /// @title Election Phase Enum
+    uint8 constant FAILURE = 0;
+    uint8 constant READY = 1;
+    uint8 constant COMMIT = 2;
+    uint8 constant REVEAL = 3;
+    uint8 constant SUCCESS = 4;
+
+    struct FactorySettings {
+        uint128 minStake; // how much OSIRIS tokens OracleValidator should have
+        uint64 electionTimeout; // how much time validators have to post their answers (then phase will switch)
+        uint128 bountyStageSwitch;
+        uint128 slashMissedStage;
+        uint128 slashBadResponse;
+    }
+
+    /// @title Structure for task settings (without election part)
+    struct TaskSettings {
+        string body; // here the actual task is stored
+        uint8 consensusType;
+        uint32 minValidators; // how much validators should post answers for success
+        uint128 executionFee; // how much OSIRIS should be paid
+    }
+
+    struct AllowanceData {
+        address task;
+        uint128 maxValue;
+        uint256 maxToken;
+    }
+
+    struct ParticipantData {
+        address validator;
+        uint128 enterStake;
+        uint256 commitHash;
+        TvmCell revealResponse;
+        uint128 bountyValue;
+        uint128 slashValue;
+        bool    committed;
+        bool    revealed;
+    }
+
+    struct ElectionState {
+        uint8 status; // current status of elections
+        uint16 failureReason; // if elections failed, write code
+        TvmCell response; // consensus response
+        uint64 commitStartTimestamp;
+        uint64 revealStartTimestamp;
+        uint64 responseTimestamp; // consensus response time
+        mapping(address => ParticipantData) participants; // participating validators
+        uint16 commitedCount;
+        uint16 revealedCount;
+        uint16 acceptedCount;
+    }
+
+    // ****************************************************************
+    // Errors
+    // ****************************************************************
+
+    uint16 constant NOT_MY_VALIDATOR = 302;
+    uint16 constant NOT_MY_FACTORY = 303;
+    uint16 constant WRONG_ELECTION_STAGE = 304;
+    uint16 constant WRONG_REVEAL_VALUE = 305;
+    uint16 constant UNKNOWN_ARGUMENT = 306;
+    uint16 constant WRONG_SETTINGS = 307;
+    uint16 constant PHASE_NOT_ENDED = 308;
+    uint16 constant NOT_MY_BANK = 309;
+    uint16 constant NOT_MY_WALLET = 310;
+    uint16 constant NOT_ENOUGH_FUNDS = 311;
+    uint16 constant NO_DEPLOYED_WALLET = 312;
+    uint16 constant NOT_MY_STORAGE = 313;
+
+}

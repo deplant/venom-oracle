@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "../../config/Types.tsol";
+
+interface ITask {
+
+    function onCommit(uint256 commitHash_) external internalMsg;
+    function onReveal(TvmCell revealValue_, uint256 revealSalt_) external internalMsg;
+    function onRequestRevealPhase() external internalMsg;
+    function onRequestFinalPhase() external internalMsg;
+    function onUpdateFactorySettingsResponse(Types.FactorySettings factorySettings_) external internalMsg;
+
+}

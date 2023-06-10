@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+interface IBankRoot {
+    function deployStorage(uint128 deployWalletValue_) external internalMsg;
+
+    function deployStorageTo(address owner_, uint8 type_, uint128 deployWalletValue_) external internalMsg;
+
+    function setStorageCode(TvmCell storageCode_) external internalMsg;
+
+    function setFactory(address factory_) external internalMsg;
+
+//    function onLockCheckRequest(address owner_, uint8 type_, uint128 valueAmount_, uint128 tokenAmount_, uint64 until_, address requester_, uint8 requesterType_) external internalMsg;
+//
+//    function onLockCheckResult(address owner_, uint8 type_, address requester_, uint8 requesterType_, bool hasLocked_) external internalMsg;
+}

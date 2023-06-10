@@ -1,0 +1,24 @@
+pragma ever-solidity ^0.64;
+
+import "../CustomTaskElector.tsol";
+
+/// @dev Test contract for CustomTaskElector
+contract T$CustomTaskElector is CustomTaskElector {
+
+    constructor(Task task_, ElectionSettings settings_) public onlyFactory returnAllUnreservedTo(_owner) {
+        _task = task_;
+        _electionSettings = settings_;
+    }
+
+    // ****************************************************************
+    // Test
+    // ****************************************************************
+    function setCurrentState(ElectionState electionState_) external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+        _currElectionState = electionState_;
+    }
+
+    function setPreviousState(ElectionState electionState_) external internalMsg onlyFactory reserveGas returnAllUnreserved {
+        _prevElectionState = electionState_;
+    }
+
+}

@@ -1,0 +1,68 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma ever-solidity >= 0.62.0;
+
+import "../consumer/int/IMedianizedConsumer.tsol";
+import "./int/IMedianizedOnRequest.tsol";
+import "./ConsensusMedianized.tsol";
+
+contract TaskMedianizedOnRequest is ConsensusMedianized, IMedianizedOnRequest, IStorageOwner {
+
+    address _currentRequester;
+    TvmCell _requestParams;
+
+    // ****************************************************************
+    // Events
+    // ****************************************************************
+    event requestReceived(address requester, TvmCell requestParams); // main event that is monitored by subscribed Oracles
+
+    // ****************************************************************
+    // Constructor
+    // ****************************************************************
+    constructor(TaskSettings taskSettings_, Types.FactorySettings factorySettings_) public onlyFactory returnAllUnreservedTo(_owner) {
+        _taskSettings = taskSettings_;
+        _factorySettings = factorySettings_;
+    }
+
+    // ****************************************************************
+    // External - from Consumer
+    // ****************************************************************
+    function medianizedTaskRequest(address payerAddress_, TvmCell requestParams_) override external internalMsg reserveGas returnAllUnreserved onlyStage(READY) {
+        _currentRequester = msg.sender;
+        _requestParams = requestParams_;
+        _transferFeeFromRequesterToFeed(msg.sender, payerAddress_, _taskSettings.executionFee, _taskSettings.executionFee);
+    }
+
+    function onReceivedTransfer(address sender_, address /*consumer_*/, uint128 valueAmount_, uint128 tokenAmount_) override external internalMsg onlyStorage reserveGas returnAllUnreservedTo(sender_) {
+        if (valueAmount_ >= _taskSettings.executionFee && tokenAmount_ >= _taskSettings.executionFee) {
+            // LET'S START CONSENSUS!!!
+            _currElectionState.status = COMMIT;
+            _currElectionState.commitStartTimestamp = now;
+            emit requestReceived(_currentRequester, _requestParams);
+        } else {
+            TvmCell empty;
+            _currentRequester = address(0);
+            _requestParams = empty;
+        }
+    }
+
+    function acceptLockResult(address owner_, uint8 type_, bool hasLocked_) override external internalMsg {
+
+    }
+
+    // ****************************************************************
+    // Internal
+    // ****************************************************************
+    function _sendResponse() override internal onlyStage(SUCCESS) {
+        require(_prevElectionState.status == SUCCESS && _currElectionState.status == READY, PHASE_NOT_ENDED);
+        //uint16 validators = _prevElectionState.acceptedCount;
+        for (ParticipantData participant : _prevElectionState.participants.values()) {
+            if (participant.slashValue == 0) {
+                _transferFeeFromFeedToValidator(participant.validator, participant.bountyValue, participant.bountyValue);
+            }
+        }
+        uint128 uintResponse = abi.decode(_prevElectionState.response, uint128);
+        IMedianizedConsumer(_currentRequester).medianizedCallback(uintResponse);
+    }
+
+
+}

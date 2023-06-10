@@ -1,0 +1,96 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "calculatePreciseOnRequest",
+			"inputs": [
+				{"name":"taskAddress_","type":"address"},
+				{"name":"payerAddress_","type":"address"},
+				{"name":"params_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "calculateMedianizedOnRequest",
+			"inputs": [
+				{"name":"taskAddress_","type":"address"},
+				{"name":"payerAddress_","type":"address"},
+				{"name":"params_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "calculatePreciseFeed",
+			"inputs": [
+				{"name":"taskAddress_","type":"address"},
+				{"name":"payerAddress_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "calculateMedianizedFeed",
+			"inputs": [
+				{"name":"taskAddress_","type":"address"},
+				{"name":"payerAddress_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPreciseResult",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"cell"}
+			]
+		},
+		{
+			"name": "getMedianizedResult",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "preciseCallback",
+			"inputs": [
+				{"name":"response_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "medianizedCallback",
+			"inputs": [
+				{"name":"response_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_preciseResult","type":"cell"},
+		{"name":"_medianizedResult","type":"uint128"},
+		{"name":"_currentTask","type":"address"}
+	]
+}

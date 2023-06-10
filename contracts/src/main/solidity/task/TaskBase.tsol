@@ -1,0 +1,236 @@
+pragma ever-solidity ^0.64;
+
+import "../bank/int/IBankStorage.tsol";
+import "../bank/int/IStorageOwner.tsol";
+import "../config/Types.tsol";
+import "../contracts-common/std/GasManagement.tsol";
+import "../contracts-common/std/InternallyOwned.tsol";
+import "./int/ITask.tsol";
+import "./int/IFactory.tsol";
+import "../contracts-common/extensions/TvmCellExtension.tsol";
+
+abstract contract TaskBase is ITask, Types, InternallyOwned, GasManagement {
+
+    using TvmCellExtension for TvmCell;
+
+    // ****************************************************************
+    // VarInit
+    // ****************************************************************
+    address public static _factory;
+    address public static _owner;
+    string public static _name;
+
+    // ****************************************************************
+    // State Variables
+    // ****************************************************************
+    TaskSettings public _taskSettings; // controlled by task internal owner
+    FactorySettings public _factorySettings; // controlled by TaskFactory
+    ElectionState public _currElectionState;
+    ElectionState public _prevElectionState;
+    address public _storage;
+
+    // ****************************************************************
+    // External - From Owner
+    // ****************************************************************
+    function setTaskDetails(TaskSettings taskSettings_) external internalMsg onlyIntOwner reserveGas returnAllUnreserved {
+		_taskSettings = taskSettings_;
+    }
+
+	function requestFactorySettingsUpdate() external view internalMsg onlyIntOwner reserveGas {
+		IFactory(_factory).acceptFactorySettingsUpdate{value: 0, bounce: true, flag: ALL_UNRESERVED}();
+	}
+
+    // ****************************************************************
+    // External - from factory
+    // ****************************************************************
+    function setStorage(address storage_) external internalMsg onlyFactory reserveGas returnAllUnreserved {
+        _storage = storage_;
+    }
+
+	function onUpdateFactorySettingsResponse(FactorySettings factorySettings_) override external internalMsg onlyFactory reserveGas returnAllUnreservedTo(_owner) {
+		_factorySettings = factorySettings_;
+	}
+
+    // ****************************************************************
+    // External - From Any
+    // ****************************************************************
+
+    // COMMIT PHASE
+    function onCommit(uint256 commitHash_) override external internalMsg reserveGas /*onlyValidator(sign_)*/ onlyStage(COMMIT) returnAllUnreserved {
+        _currElectionState.participants[msg.sender].commitHash = commitHash_;
+        _currElectionState.participants[msg.sender].validator = msg.sender;
+        _checkValidatorStake(msg.sender, _factorySettings.minStake, $allElectionTimeout());
+        _currElectionState.participants[msg.sender].committed = true;
+		_currElectionState.commitedCount++;
+    }
+
+	// ****************************************************************
+	// External - From Pariticipant
+	// ****************************************************************
+
+    /// @dev COMMIT PHASE
+    function onRequestRevealPhase() override external internalMsg reserveGas onlyParticipant onlyStage(COMMIT) returnAllUnreserved {
+        require(now - _currElectionState.commitStartTimestamp > _factorySettings.electionTimeout, PHASE_NOT_ENDED, "Commit phase active, no timeout signaled");
+        // checks if we have enough commited answers
+        if (_currElectionState.commitedCount >= _taskSettings.minValidators) {
+            _stageSwitchBounty(msg.sender);
+            // bounty increase for being the first to switch expired stage
+            _currElectionState.status = REVEAL;
+            // switch phase
+            _currElectionState.revealStartTimestamp = now;
+        } else {
+            _currElectionState.status = FAILURE;
+            _prevElectionState = _currElectionState;
+            // clear current state
+            ElectionState emptyState;
+            _currElectionState = emptyState;
+        }
+    }
+
+	/// @dev REVEAL PHASE
+    function onReveal(TvmCell revealValue_, uint256 revealSalt_) override external internalMsg reserveGas onlyStage(REVEAL) returnAllUnreserved {
+        // we do not check with onlyParticipant modifier
+        // to not access map 2 times
+        optional(ParticipantData) optionalParticipant = _currElectionState.participants.fetch(msg.sender);
+        require(optionalParticipant.hasValue(), NOT_MY_VALIDATOR);
+        ParticipantData participant = optionalParticipant.get();
+        require(_revealHash(revealValue_, revealSalt_) == participant.commitHash, WRONG_REVEAL_VALUE);
+        _responseCheck(revealValue_);
+        // elector-specific checks (like decode possibility for PriceFeedElector)
+        _currElectionState.participants[msg.sender].revealResponse = revealValue_;
+        _currElectionState.participants[msg.sender].revealed = true;
+        _currElectionState.revealedCount++;
+    }
+
+    // REVEAL PHASE
+
+    function onRequestFinalPhase() override external internalMsg reserveGas onlyStage(REVEAL) onlyParticipant returnAllUnreserved {
+        require(now - _currElectionState.revealStartTimestamp > _factorySettings.electionTimeout, PHASE_NOT_ENDED, "Reveal phase active, no timeout signaled");
+        // checks if we have enough revealed answers
+        if (_currElectionState.revealedCount >= _taskSettings.minValidators) {
+            // bounty for being the first to switch expired stage
+            _stageSwitchBounty(msg.sender);
+            // check if there are commited but not revealed responses and slash them
+
+            // fill latest state vars, starting from consensus
+            (_currElectionState.response, _currElectionState.status) = _makeConsensus();
+            _currElectionState.responseTimestamp = now;
+            // move state to previous
+            _prevElectionState = _currElectionState;
+            // clear current state
+            ElectionState emptyState;
+            _currElectionState = emptyState;
+            _currElectionState.status = READY;
+            // finish with response sending
+            _sendResponse();
+        } else {
+            _currElectionState.status = FAILURE;
+            _prevElectionState = _currElectionState;
+            // clear current state
+            ElectionState emptyState;
+            _currElectionState = emptyState;
+            _currElectionState.status = READY;
+        }
+    }
+
+    // ****************************************************************
+    // Abstract
+    // ****************************************************************
+
+    function _responseCheck(TvmCell response) virtual internal inline pure;
+
+    function _makeConsensus() virtual internal returns (TvmCell, uint8);
+
+    function _sendResponse() virtual internal;
+
+    // ****************************************************************
+    // Internal
+    // ****************************************************************
+    //function $requester() virtual internal inline view returns (address);
+
+    function $phaseStart(uint8 phase) internal inline view returns (uint64) {
+        if (phase == COMMIT) {
+            return _currElectionState.commitStartTimestamp;
+        } else if (phase == REVEAL) {
+            return _currElectionState.revealStartTimestamp;
+        } else {
+            return 0;
+        }
+    }
+
+    function $allElectionTimeout() internal inline view returns (uint64) {
+        return _currElectionState.commitStartTimestamp + _factorySettings.electionTimeout + _factorySettings.electionTimeout + _factorySettings.electionTimeout;
+    }
+
+    function _stageSwitchBounty(address participantAddr_) internal inline {
+        _currElectionState.participants[participantAddr_].bountyValue += _factorySettings.bountyStageSwitch;
+    }
+
+    function _stageMissSlash(address participantAddr_) internal inline {
+        _currElectionState.participants[participantAddr_].slashValue += _factorySettings.slashMissedStage;
+    }
+
+    function _revealHash(TvmCell revealValue_, uint256 salt_) internal pure inline returns (uint256) {
+        TvmBuilder builder;
+        builder.store(revealValue_);
+        builder.store(salt_);
+        TvmCell cell = builder.toCell();
+        return tvm.hash(cell);
+    }
+
+    function _isStage(uint8 neededStage_) internal inline view returns (bool) {
+        return neededStage_ == _currElectionState.status;
+    }
+
+    /// @dev System of personal storages check internally locked sums
+    function _checkValidatorStake(address validator_, uint128 amount_, uint64 electionExpireEnd_) internal view {
+        //IBankStorage(_storage).checkLocked(validator_, VALIDATOR_STORAGE, _factorySettings.minStake, electionExpireEnd_, StorageAssetType.TOKEN);
+    }
+
+    // @dev for feeds - fee is paid by requester to feed
+    function _transferFeeFromRequesterToFeed(address requester_, address payer_, uint128 valueAmount_, uint128 tokenAmount_) internal view {
+        IBankStorage(_storage).requestTransfer(payer_, address(this), requester_, TASK_STORAGE, valueAmount_, tokenAmount_);
+    }
+
+    // @dev for feeds - fee is paid by feed owner to validators
+    function _transferFeeFromFeedToValidator(address validator_, uint128 valueAmount_, uint128 tokenAmount_) internal view {
+        IBankStorage(_storage).transfer(validator_, VALIDATOR_STORAGE, valueAmount_, tokenAmount_, false);
+    }
+
+    // ****************************************************************
+    // Internal (std)
+    // ****************************************************************
+    // this function provides owner field for InternallyOwned
+    function $intOwner() override internal inline view returns (address owner) {
+        return _owner;
+    }
+
+    // this function sets gas floor for contract
+    function $gasFloor() override internal inline view returns (uint128 gasAmount) {
+        return DEFAULT_GAS_FLOOR;
+    }
+
+    // ****************************************************************
+    // Modifiers
+    // ****************************************************************
+    modifier onlyStage(uint8 neededStage_) {
+        require(_isStage(neededStage_), WRONG_ELECTION_STAGE);
+        _;
+    }
+
+    modifier onlyStorage {
+        require(_storage == msg.sender && msg.sender.value != 0, NOT_MY_STORAGE);
+        _;
+    }
+
+    modifier onlyFactory {
+        require(_factory == msg.sender && msg.sender.value != 0, NOT_MY_FACTORY);
+        _;
+    }
+
+    modifier onlyParticipant {
+        require(_currElectionState.participants.exists(msg.sender) && msg.sender.value != 0, NOT_MY_VALIDATOR);
+        _;
+    }
+
+}
