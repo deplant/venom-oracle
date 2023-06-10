@@ -14,9 +14,9 @@ run-on-request, as schedules or data feeds with deviation thresholds.
 
 ## Demo
 
-- [Video Demo](?)
+- [Video Demo](https://www.youtube.com/watch?v=roAym088vT0)
 - [Web3 Demo App](http://chip3.deplant.tech)
-- [T-Sol Contracts](https://github.com/deplant/venom-oracle/contracts/src/main/solidity)
+- [T-Sol Contracts](https://github.com/deplant/venom-oracle/tree/master/contracts/src/main/solidity)
 
 ## Quick Resources
 
@@ -26,12 +26,27 @@ run-on-request, as schedules or data feeds with deviation thresholds.
 
 ## Contract Architecture
 
+Oracle protocol constists of following entities:
+
+- **Consumer** - smart-contract that makes requests or awaits responses from Oracle
+- **Payer** - Owner of Bank deposit, that allowed spending to Consumer contract 
+- **Bank** - Collection of Payer deposits, Task deposits and Validator deposits, managed in a distributed way
+- **Task** - Sequence of actions that Validator Node should execute and provide answer, wrapped in a smart-contract. Also, every Task is an Elector that processes Validators consensus.
+- **Validator** - smart-contract that is used by Node to send answers to Tasks and stakes to Bank
+
 ![contract_architecture.png](contract_architecture.png)
+
+You check deployed contracts in the Venom DevNet here:
+
+- **Token Root**: 0:a3682fd1814f293cbf7ba69f5678533bc8576d226a369b6fa07a66073d1d54b1
+- **Test Faucet**: 0:9cae4d2963605798616a325f2d8a19603acc1d98990be664a8a39a19798f0f5e
+- **Bank Root**: 0:0e026e6eace4f079e974af51f6aa376e03bd7c7da8f9ccfcec0404c9ccab3401
+- **Task Factory**: 0:77e851d143521d08797586d100732344b59d427827967d81b7b290555b4165b1
 
 ## Tech Resources
 
-- [T-Sol Contracts](https://github.com/deplant/venom-oracle/contracts/src/main/solidity)
-- [Contract Deployment Artifacts](https://github.com/deplant/venom-oracle/contracts/src/main/resources/artifacts)
+- [T-Sol Contracts](https://github.com/deplant/venom-oracle/tree/master/contracts/src/main/solidity)
+- [Contract Deployment Artifacts](https://github.com/deplant/venom-oracle/tree/master/contracts/src/main/resources/artifacts)
 - [JDK Framework Github](https://github.com/deplant/java4ever-framework)
 
 ## Connect your contract
