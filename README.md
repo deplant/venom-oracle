@@ -24,11 +24,13 @@ run-on-request, as schedules or data feeds with deviation thresholds.
 - [Github](https://github.com/deplant/venom-oracle)
 - [Support](https://t.me/Laugan)
 
+## Contract Architecture
+
+![contract_architecture.png](contract_architecture.png)
+
 ## Tech Resources
 
 - [T-Sol Contracts](https://github.com/deplant/venom-oracle/contracts/src/main/solidity)
-- [Contract Architecture] (https://drive.google.com/file/d/1rxtQwLuv9SqOeh2havGQ00YI0Oi6eI5G/view?usp=sharing)
-- [Stack Architecture](https://drive.google.com/file/d/1YBhphnmrBLZtRuDFFG1n5qsZmSlgvf_j/view?usp=sharing)
 - [Contract Deployment Artifacts](https://github.com/deplant/venom-oracle/contracts/src/main/resources/artifacts)
 - [JDK Framework Github](https://github.com/deplant/java4ever-framework)
 
@@ -83,6 +85,10 @@ contract ExampleConsumerTest is IMedianizedConsumer {
 
 }	
 ```
+
+## Tech Stack
+
+![stack.png](stack.png)
 
 ## Tests
 
