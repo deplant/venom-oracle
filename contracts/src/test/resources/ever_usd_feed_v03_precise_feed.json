@@ -1,0 +1,192 @@
+{
+  "version" : 1,
+  "name" : "ever_usd_feed_v03_precise_feed",
+  "consensus" : {
+    "type" : "MEDIAN",
+    "finalActionId" : "12",
+    "minValidators" : 3,
+    "maxFee" : 500000000
+  },
+  "trigger" : {
+    "type" : "VALUE_FEED",
+    "pctThreshold" : 0.1,
+    "absoluteThreshold" : 5000000,
+    "timerThreshold" : 3600
+  },
+  "externalId" : "",
+  "actions" : [ {
+    "type" : "HTTP",
+    "id" : "1",
+    "responseType" : "STRING",
+    "method" : {
+      "type" : "VAL",
+      "val" : "GET",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "uri" : {
+      "type" : "VAL",
+      "val" : "https://data.gateapi.io/api2/1/ticker/ETH_USDT",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "body" : {
+      "type" : "VAL",
+      "val" : "",
+      "responseType" : "STRING",
+      "nullable" : true
+    },
+    "headers" : [ {
+      "type" : "VAL",
+      "val" : "Content-Type: application/json",
+      "responseType" : "STRING",
+      "nullable" : true
+    } ]
+  }, {
+    "type" : "HTTP",
+    "id" : "2",
+    "responseType" : "STRING",
+    "method" : {
+      "type" : "VAL",
+      "val" : "GET",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "uri" : {
+      "type" : "VAL",
+      "val" : "https://api.kucoin.com/api/v1/market/orderbook/level1?symbol=ETH-USDT",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "body" : {
+      "type" : "VAL",
+      "val" : "",
+      "responseType" : "STRING",
+      "nullable" : true
+    },
+    "headers" : [ {
+      "type" : "VAL",
+      "val" : "Content-Type: application/json",
+      "responseType" : "STRING",
+      "nullable" : true
+    } ]
+  }, {
+    "type" : "HTTP",
+    "id" : "3",
+    "responseType" : "STRING",
+    "method" : {
+      "type" : "VAL",
+      "val" : "GET",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "uri" : {
+      "type" : "VAL",
+      "val" : "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "body" : {
+      "type" : "VAL",
+      "val" : "",
+      "responseType" : "STRING",
+      "nullable" : true
+    },
+    "headers" : [ {
+      "type" : "VAL",
+      "val" : "Content-Type: application/json",
+      "responseType" : "STRING",
+      "nullable" : true
+    } ]
+  }, {
+    "type" : "JSON_PARSE",
+    "id" : "5",
+    "responseType" : "STRING",
+    "data" : {
+      "type" : "REF",
+      "ref" : "1"
+    },
+    "path" : {
+      "type" : "VAL",
+      "val" : "/last",
+      "responseType" : "STRING",
+      "nullable" : false
+    }
+  }, {
+    "type" : "JSON_PARSE",
+    "id" : "6",
+    "responseType" : "STRING",
+    "data" : {
+      "type" : "REF",
+      "ref" : "2"
+    },
+    "path" : {
+      "type" : "VAL",
+      "val" : "/data/price",
+      "responseType" : "STRING",
+      "nullable" : false
+    }
+  }, {
+    "type" : "JSON_PARSE",
+    "id" : "7",
+    "responseType" : "STRING",
+    "data" : {
+      "type" : "REF",
+      "ref" : "3"
+    },
+    "path" : {
+      "type" : "VAL",
+      "val" : "/ethereum/usd",
+      "responseType" : "STRING",
+      "nullable" : false
+    }
+  }, {
+    "type" : "AVERAGE_MEDIAN",
+    "id" : "8",
+    "responseType" : "STRING",
+    "precision" : {
+      "type" : "VAL",
+      "val" : "6",
+      "responseType" : "STRING",
+      "nullable" : false
+    },
+    "values" : [ {
+      "type" : "REF",
+      "ref" : "5"
+    }, {
+      "type" : "REF",
+      "ref" : "6"
+    }, {
+      "type" : "REF",
+      "ref" : "7"
+    } ]
+  }, {
+    "type" : "MULTIPLY",
+    "id" : "10",
+    "responseType" : "STRING",
+    "first" : {
+      "type" : "REF",
+      "ref" : "8"
+    },
+    "second" : {
+      "type" : "VAL",
+      "val" : "1000000000",
+      "responseType" : "STRING",
+      "nullable" : false
+    }
+  }, {
+    "type" : "ABI_ENCODE",
+    "id" : "11",
+    "storeList" : [ {
+      "type" : "REF",
+      "ref" : "8"
+    } ]
+  }, {
+    "type" : "ABI_ENCODE",
+    "id" : "12",
+    "storeList" : [ {
+      "type" : "REF",
+      "ref" : "8"
+    } ]
+  } ]
+}

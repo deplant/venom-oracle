@@ -1,0 +1,41 @@
+pragma ever-solidity ^0.64;
+
+import "./int/IMedianizedConsumer.tsol";
+import "../task/int/IMedianizedFeed.tsol";
+
+contract ExampleConsumerTest is IMedianizedConsumer {
+
+    uint128 _medianizedResult;
+    address _currentTask;
+
+    constructor() public {
+        require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+        tvm.accept();
+    }
+
+    // ****************************************************************
+    // Getter
+    // ****************************************************************
+
+    function getMedianizedResult() external view returns (uint128) {
+        return _medianizedResult;
+    }
+
+    // ****************************************************************
+    // External
+    // ****************************************************************
+
+    function calculateMedianizedFeed(address taskAddress_, address payerAddress_) external {
+        require(taskAddress_.value != 0, 444);
+        require(msg.pubkey() == tvm.pubkey(), 199); //NOT_MY_OWNER
+        tvm.accept();
+        _currentTask = taskAddress_;
+        IMedianizedFeed(taskAddress_).medianizedFeedRequest{value: 500_000_000, flag: 1, bounce: true}(payerAddress_);
+    }
+
+    function medianizedCallback(uint128 response_) override external internalMsg {
+        require(msg.sender == _currentTask && msg.sender.value != 0, 198); // NOT_AWAITED_TASK
+        _medianizedResult = response_;
+    }
+
+}

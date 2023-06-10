@@ -1,0 +1,50 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getMedianizedResult",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "calculateMedianizedFeed",
+			"inputs": [
+				{"name":"taskAddress_","type":"address"},
+				{"name":"payerAddress_","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "medianizedCallback",
+			"inputs": [
+				{"name":"response_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_medianizedResult","type":"uint128"},
+		{"name":"_currentTask","type":"address"}
+	]
+}
